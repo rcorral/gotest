@@ -25,4 +25,10 @@ $_controller = $app->input->get( 'controller', '' );
 require 'components/test/' .($_controller ? 'controllers/' . $_controller : 'controller') . '.php';
 $_controller = 'TestController' . ucfirst( $_controller );
 $controller = new $_controller();
-echo $controller->execute();
+$body = $controller->execute();
+
+if ( 'component' == $app->input->get( 'tmpl', false ) ) {
+	echo $body;
+} else {
+	require 'themes/system/index.php';
+}

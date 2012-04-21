@@ -13,11 +13,9 @@ class TestModelQuestion extends JModelDatabase
 
 		$query = $this->db->getQuery(true)
 			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`,
-				qt.`title` AS `question_type`,
-				t.`title` AS `test_title`, t.`sub_title` AS `test_sub_title`' )
+				qt.`title` AS `question_type`' )
 			->from( '`questions` AS q' )
 			->leftjoin( '`question_types` AS qt ON qt.`id` = q.`question_type`' )
-			->leftjoin( '`tests` AS t ON t.`id` = q.`test_id`' )
 			->where( 'q.`test_id` = ' . (int) $app->input->get( 'test_id' ) )
 			->where( 'q.`order` >= ' . (int) $question_id )
 			->order( 'q.`order` ASC' )
