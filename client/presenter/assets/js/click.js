@@ -21,31 +21,42 @@ XClick = (function() {
 			question = eval( '(' + data.question + ')' );
 			template = templates.parse( question.question_type, question );
 
-			document.getElementById('next_question').value = Number( question.order ) + 1;
+			document.getElementById('question-order').value = Number( question.order );
 			document.getElementById('form-data').innerHTML = template;
 			document.getElementById('form-static').style.display = '';
+
+			if ( question.order > 1 ) {
+				document.getElementById('btn-previous').style.display = '';
+			} else {
+				document.getElementById('btn-previous').style.display = 'none';
+			}
 		});
 
 		return socket;
 	};
 
-	XClick.prototype.submit = function(form) {
-		test_id = document.getElementById( 'test_id' ).value;
-		question_id = document.getElementById( 'next_question' ).value;
-		xclick.next_question( test_id, question_id );
+	XClick.prototype.submit = function(btn) {
+		if ( 'next' == btn.name ) {
+			question_order = Number( document.getElementById( 'question-order' ).value ) + 1
+		} else {
+			question_order = Number( document.getElementById( 'question-order' ).value ) - 1;
+		}
+
+		test_id = document.getElementById( 'test-id' ).value;
+		xclick.next_question( test_id, question_order );
 
 		return false;
 	};
 
-	XClick.prototype.next_question = function( test_id, question_id ) {
+	XClick.prototype.next_question = function( test_id, question_order ) {
 		msg = {};
 
 		if ( test_id ) {
 			msg.test_id = test_id;
 		};
 
-		if ( question_id ) {
-			msg.question_id = question_id;
+		if ( question_order ) {
+			msg.question_id = question_order;
 		};
 
 		if ( !this._object_empty( msg ) ) {

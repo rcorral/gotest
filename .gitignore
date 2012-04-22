@@ -1,3 +1,4 @@
 /node_modules/
 .DS_Store
 /client/libraries/config.php
+/client/assets/js/my.conf.js
