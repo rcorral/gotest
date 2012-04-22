@@ -8,14 +8,12 @@
 defined('JPATH_PLATFORM') or die;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
-	<link rel="stylesheet" type="text/css" href="../assets/css/template.css" />
-	<script type="text/javascript" src="../assets/js/my.conf.js"></script>
-	<script type="text/javascript" src="assets/js/click.js"></script>
-	<script type="text/javascript" src="../assets/js/templates.js"></script>
+	<jdoc:include type="head" />
 </head>
 <body class="contentpane">
-	<?php echo $body; ?>
+	<?php /* <jdoc:include type="message" /> */ ?>
+	<jdoc:include type="component" />
 </body>
 </html>

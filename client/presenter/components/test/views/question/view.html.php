@@ -1,7 +1,7 @@
 <?php
 defined('JPATH_PLATFORM') or die;
 
-class TestViewQuestion extends JViewHtml
+class TestViewQuestion extends JViewDisplay
 {
 	function render()
 	{
