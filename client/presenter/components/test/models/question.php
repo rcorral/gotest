@@ -12,7 +12,7 @@ class TestModelQuestion extends JModelDatabase
 		}
 
 		$query = $this->db->getQuery(true)
-			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`,
+			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`, q.`order`,
 				qt.`title` AS `question_type`' )
 			->from( '`questions` AS q' )
 			->leftjoin( '`question_types` AS qt ON qt.`id` = q.`question_type`' )

@@ -10,7 +10,10 @@ defined('JPATH_PLATFORM') or die;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	
+	<link rel="stylesheet" type="text/css" href="../assets/css/template.css" />
+	<script type="text/javascript" src="../assets/js/my.conf.js"></script>
+	<script type="text/javascript" src="assets/js/click.js"></script>
+	<script type="text/javascript" src="../assets/js/templates.js"></script>
 </head>
 <body class="contentpane">
 	<?php echo $body; ?>

@@ -20,7 +20,6 @@ JFactory::$application = $app;
  * This needs to be completely redone, but some of the MVC structure is there,
  * but themes and other things are needed
  */
-$app->input->set( 'test_id', 1 );
 $_controller = $app->input->get( 'controller', '' );
 require 'components/test/' .($_controller ? 'controllers/' . $_controller : 'controller') . '.php';
 $_controller = 'TestController' . ucfirst( $_controller );
