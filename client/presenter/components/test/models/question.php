@@ -12,7 +12,7 @@ class TestModelQuestion extends JModelDatabase
 		}
 
 		$query = $this->db->getQuery(true)
-			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`, q.`order`,
+			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`, q.`order`, q.`test_id`,
 				qt.`title` AS `question_type`' )
 			->from( '`questions` AS q' )
 			->leftjoin( '`question_types` AS qt ON qt.`id` = q.`question_type`' )
@@ -25,6 +25,10 @@ class TestModelQuestion extends JModelDatabase
 
 	public function get_answers( $question_id )
 	{
+		if ( !$question_id ) {
+			return array();
+		}
+
 		$query = $this->db->getQuery(true)
 			->select( 'qa.`id`, qa.`title`' )
 			->from( '`question_possible_answers` AS qa' )
@@ -32,5 +36,19 @@ class TestModelQuestion extends JModelDatabase
 			->order( 'qa.`id` ASC' )
 			;
 		return $this->db->setQuery( $query )->loadObjectList();
+	}
+
+	public function max_order( $test_id )
+	{
+		if ( !$test_id ) {
+			return 0;
+		}
+
+		$query = $this->db->getQuery(true)
+			->select( 'MAX( `order` ) AS `order`' )
+			->from( '`questions` AS q' )
+			->where( 'q.`test_id` = ' . (int) $test_id )
+			;
+		return $this->db->setQuery( $query )->loadResult();
 	}
 }

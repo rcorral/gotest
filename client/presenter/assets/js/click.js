@@ -14,11 +14,12 @@ XClick = (function() {
 				console.log('Next question:', data);
 			}
 
-			if ( !data || !data.question ) {
+			question = eval( '(' + data.question + ')' );
+
+			if ( !data || !data.question || !question.id ) {
 				return;
 			}
 
-			question = eval( '(' + data.question + ')' );
 			template = templates.parse( question.question_type, question );
 
 			document.getElementById('question-order').value = Number( question.order );
@@ -29,6 +30,12 @@ XClick = (function() {
 				document.getElementById('btn-previous').style.display = '';
 			} else {
 				document.getElementById('btn-previous').style.display = 'none';
+			}
+
+			if ( question.order == question.max_order ) {
+				document.getElementById('btn-next').style.display = 'none';
+			} else {
+				document.getElementById('btn-next').style.display = '';
 			}
 		});
 

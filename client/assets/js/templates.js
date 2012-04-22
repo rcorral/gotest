@@ -63,7 +63,51 @@ Templates = (function() {
 
 		html += '<div class="answers-wrapper">';
 		html += '<span class="answer">';
-		html += '<input type="text" name="answer" value="" id="answer" /> ';
+		html += '<input type="text" name="answer" value="" id="answer" />';
+		html += '</span>';
+		html += '</div>';
+
+		return html;
+	};
+
+	Templates.prototype.fitbma = function( question ) {
+		html = '';
+
+		html += '<h3>' + question.title + '</h3>';
+		// Assume that every media is an image for now...
+		if ( question.media ) {
+			if ( -1 != question.media.indexOf( 'http' ) ) {
+				html += '<img src="' + question.media + '" />';
+			} else {
+				html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+			}
+		};
+
+		html += '<div class="answers-wrapper">';
+		html += '<span class="answer">';
+		html += '<input type="text" name="answer" value="" id="answer" />';
+		html += '</span>';
+		html += '</div>';
+
+		return html;
+	};
+
+	Templates.prototype.essay = function( question ) {
+		html = '';
+
+		html += '<h3>' + question.title + '</h3>';
+		// Assume that every media is an image for now...
+		if ( question.media ) {
+			if ( -1 != question.media.indexOf( 'http' ) ) {
+				html += '<img src="' + question.media + '" />';
+			} else {
+				html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+			}
+		};
+
+		html += '<div class="answers-wrapper">';
+		html += '<span class="answer">';
+		html += '<textarea name="answer" id="answer"></textarea>';
 		html += '</span>';
 		html += '</div>';
 
@@ -85,9 +129,11 @@ Templates = (function() {
 				break;
 
 			case 'fitbma':
+				return this.fitbma( question );
 				break;
 
 			case 'essay':
+				return this.essay( question );
 				break;
 
 			default:
