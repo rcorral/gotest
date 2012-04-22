@@ -48,7 +48,7 @@ io.sockets.on('connection', function (socket) {
 
 			var site = http.createClient(80, 'localhost');
 			var path = '/clicker/presenter/?controller=question&test_id='
-				+ data.test_id + '&tmpl=component';
+				+ data.test_id + '&ajax=1';
 
 			if ( data.question_id ) {
 				path += '&question_id=' + data.question_id;

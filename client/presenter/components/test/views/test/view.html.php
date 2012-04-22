@@ -7,11 +7,11 @@ class TestViewTest extends JViewDisplay
 	{
 		$this->test = $this->model->get_test();
 
-		$document = JFactory::getDocument();
-		$document->addStyleSheet( '../assets/css/template.css' );
-		$document->addScript( '../assets/js/my.conf.js' );
-		$document->addScript( 'assets/js/click.js' );
-		$document->addScript( '../assets/js/templates.js' );
+		$this->document = JFactory::getDocument();
+		$this->document->addStyleSheet( '../assets/css/template.css' );
+		$this->document->addScript( '../assets/js/my.conf.js' );
+		$this->document->addScript( 'assets/js/click.js' );
+		$this->document->addScript( '../assets/js/templates.js' );
 
 		return parent::render();
 	}

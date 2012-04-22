@@ -17,6 +17,6 @@ class TestControllerQuestion extends JControllerBase
 		$paths->insert( JPATH_BASE . '/components/test/views/question/tmpl', 1 );
 		$model = new TestModelQuestion();
 		$view = new TestViewQuestion( $model, $paths );
-		return $view->render();
+		$view->display();
 	}
 }

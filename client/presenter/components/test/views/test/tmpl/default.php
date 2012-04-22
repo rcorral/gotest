@@ -14,7 +14,8 @@ defined('JPATH_PLATFORM') or die;
 	</div>
 </form>
 
-<script type="text/javascript">
+<?php
+$this->document->addScriptDeclaration("
 var live_iste = '../';
 var xclick_interval = window.setInterval(function() {
 	if (xclick) {
@@ -23,4 +24,4 @@ var xclick_interval = window.setInterval(function() {
 		xclick.next_question( test_id );
 	}
 }, 500);
-</script>
+");
