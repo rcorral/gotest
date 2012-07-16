@@ -26,6 +26,7 @@ click = require('./server/click');
 activetests = click.activetests.setup();
 lang = click.language.setup();
 client = click.client.setup();
+var current_question = [];
 
 io.sockets.on('connection', function (socket) {
 	socket.on('next_question', function (data, fn) {
@@ -74,11 +75,19 @@ io.sockets.on('connection', function (socket) {
 				});
 
 				response.on('end', function() {
+					current_question[data.test_id] = body;
 					io.sockets.emit('next_question', { type: 'question', question: body });
-					// socket.emit('next_question', { type: 'question', question: body });
 				});
 			});
 		}
+	});
+
+	socket.on('current_question', function (data, fn) {
+		body = '';
+		if ( current_question[data.test_id] ) {
+			body = current_question[data.test_id];
+		};
+		socket.emit('current_question', { type: 'question', question: body });
 	});
 
 	socket.on('disconnect', function () {

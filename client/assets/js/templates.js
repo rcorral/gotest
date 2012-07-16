@@ -10,7 +10,7 @@ Templates = (function() {
 		html += '<h3>' + question.title + '</h3>';
 		// Assume that every media is an image for now...
 		if ( question.media ) {
-			html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+			html += '<img src="' + live_site + 'media/' + question.media + '" />';
 		};
 
 		html += '<div class="answers-wrapper">';
@@ -32,7 +32,7 @@ Templates = (function() {
 		html += '<h3>' + question.title + '</h3>';
 		// Assume that every media is an image for now...
 		if ( question.media ) {
-			html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+			html += '<img src="' + live_site + 'media/' + question.media + '" />';
 		};
 
 		html += '<div class="answers-wrapper">';
@@ -57,7 +57,7 @@ Templates = (function() {
 			if ( -1 != question.media.indexOf( 'http' ) ) {
 				html += '<img src="' + question.media + '" />';
 			} else {
-				html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+				html += '<img src="' + live_site + 'media/' + question.media + '" />';
 			}
 		};
 
@@ -79,7 +79,7 @@ Templates = (function() {
 			if ( -1 != question.media.indexOf( 'http' ) ) {
 				html += '<img src="' + question.media + '" />';
 			} else {
-				html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+				html += '<img src="' + live_site + 'media/' + question.media + '" />';
 			}
 		};
 
@@ -101,7 +101,7 @@ Templates = (function() {
 			if ( -1 != question.media.indexOf( 'http' ) ) {
 				html += '<img src="' + question.media + '" />';
 			} else {
-				html += '<img src="' + live_iste + 'media/' + question.media + '" />';
+				html += '<img src="' + live_site + 'media/' + question.media + '" />';
 			}
 		};
 

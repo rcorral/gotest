@@ -14,11 +14,15 @@ XClick = (function() {
 				console.log('Next question:', data);
 			}
 
-			question = eval( '(' + data.question + ')' );
-
-			if ( !data || !data.question || !question.id ) {
+			if ( !data || !data.question ) {
 				return;
 			}
+
+			question = eval( '(' + data.question + ')' );
+
+			if ( !question.id ) {
+				return;
+			};
 
 			template = templates.parse( question.question_type, question );
 

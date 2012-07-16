@@ -10,6 +10,17 @@ class JClickApplication extends JApplicationWeb
 
 		return parent::__construct( null, $config );
 	}
+
+	public function loadDocument( JDocument $document = null )
+	{
+		$this->document = ( $document === null ) ?
+			( $this->input->get( 'ajax', false ) ? JDocument::getInstance( 'raw' )
+				: JFactory::getDocument() )
+			: $document;
+
+		return $this;
+	}
+
 	/**
 	 * Display the application.
 	 */
