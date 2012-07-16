@@ -32,6 +32,7 @@ io.sockets.on('connection', function (socket) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
 		if ( !( data instanceof Object ) ) {
 			socket.disconnect();
+			return;
 		}
 
 		if ( !fn ) {
