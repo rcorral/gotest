@@ -30,7 +30,8 @@ client = click.client.setup();
 io.sockets.on('connection', function (socket) {
 	socket.on('next_question', function (data, fn) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
-		if ( !( data instanceof Object ) ) {
+
+		if ( !( data instanceof Object ) || !data.is_presenter ) {
 			socket.disconnect();
 			return;
 		}
@@ -73,7 +74,8 @@ io.sockets.on('connection', function (socket) {
 				});
 
 				response.on('end', function() {
-					socket.emit('next_question', { type: 'question', question: body });
+					io.sockets.emit('next_question', { type: 'question', question: body });
+					// socket.emit('next_question', { type: 'question', question: body });
 				});
 			});
 		}

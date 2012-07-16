@@ -76,6 +76,8 @@ XClick = (function() {
 			console.log('Emit:', data);
 		}
 
+		data.is_presenter = 1;
+
 		socket.emit(event, data, function( type, data ){
 			// This callback is mostly for errors only
 			console.log('Callback:', type, data);
