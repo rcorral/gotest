@@ -22,7 +22,7 @@ function handler (req, res) {
 // 	console.log(_client);
 // }
 
-click = require('./server/click');
+click = require('./app-files/click');
 activetests = click.activetests.setup();
 lang = click.language.setup();
 client = click.client.setup();
