@@ -1,22 +1,25 @@
 <?php
-defined('JPATH_PLATFORM') or die;
+/**
+ * @copyright	Copyright (C) 2012 Rafael Corral. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+// No direct access
+defined('_JEXEC') or die;
+
+jimport('joomla.application.component.controller');
 
 /**
- * This needs to be re-done to be more mvc, but this is a start
+ * Tests master display controller.
+ *
+ * @package		Joomla.Administrator
+ * @subpackage	com_users
+ * @since		1.6
  */
-jimport( 'joomla.controller.base' );
-
-class TestController extends JControllerBase
+class TestsController extends JController
 {
-	public function execute()
+	public function display()
 	{
-		require JPATH_BASE . '/components/test/models/test.php';
-		require JPATH_BASE . '/components/test/views/test/view.html.php';
-
-		$paths = new SplPriorityQueue();
-		$paths->insert( JPATH_BASE . '/components/test/views/test/tmpl', 1 );
-		$model = new TestModelTest();
-		$view = new TestViewTest( $model, $paths );
-		$view->display();
+		return parent::display();
 	}
 }

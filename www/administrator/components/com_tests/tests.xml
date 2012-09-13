@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+	<name>com_tests</name>
+	<author>Rafael Corral</author>
+	<creationDate>September 2012</creationDate>
+	<copyright>(C) 2012 Rafael Corral. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see	LICENSE.txt</license>
+	<authorEmail>rx.corral@gmail.com</authorEmail>
+	<authorUrl>www.rafaelcorral.com</authorUrl>
+	<version>0.01</version>
+	<description>COM_TESTS_XML_DESCRIPTION</description>
+
+	<files folder="site">
+		<filename>controller.php</filename>
+		<filename>index.html</filename>
+		<filename>tests.php</filename>
+		<folder>assets</folder>
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+	</files>
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB.com_tests.ini
+		</language>
+	</languages>
+
+	<administration>
+		<files folder="admin">
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>tests.php</filename>
+			<folder>assets</folder>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>views</folder>
+		</files>
+
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB.com_tests.ini
+			</language>
+		</languages>
+	</administration>
+</extension>
