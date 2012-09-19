@@ -41,6 +41,13 @@ class TestsViewTests extends JView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::help( 'JHELP_USERS_USER_MANAGER' );
+		JToolBarHelper::title('Manage Tests');
+
+		JToolBarHelper::addNew('test_edit.add');
+		JToolBarHelper::editList('test_edit.edit');
+		JToolBarHelper::divider();
+		JToolBarHelper::deleteList('', 'tests.delete');
+		JToolBarHelper::divider();
+		JToolBarHelper::preferences('com_menus');
 	}
 }
