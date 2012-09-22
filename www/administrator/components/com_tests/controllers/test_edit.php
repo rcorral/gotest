@@ -17,6 +17,12 @@ jimport( 'joomla.application.component.controllerform' );
  */
 class TestsControllerTest_Edit extends JControllerForm
 {
+
+	public function __construct($config = array())
+	{
+		$this->view_list = 'tests';
+		parent::__construct($config);
+	}
 	/**
 	 * Method to save a test_edit item.
 	 *
