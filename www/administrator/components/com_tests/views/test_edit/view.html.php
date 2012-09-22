@@ -29,12 +29,15 @@ class TestsViewTest_Edit extends JView
 		$this->form  = $this->get('Form');
 		$this->item  = $this->get('Item');
 		$this->state = $this->get('State');
+		$this->questions = array();
 
 		// Check for errors.
 		if ( count( $errors = $this->get('Errors') ) ) {
 			JError::raiseError( 500, implode( "\n", $errors ) );
 			return false;
 		}
+
+		Tests::add_script( array( 'jquery', 'colorbox', 'core' ) );
 
 		parent::display( $tpl );
 		$this->addToolbar();

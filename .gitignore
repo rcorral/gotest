@@ -2,3 +2,4 @@
 .DS_Store
 /client/libraries/config.php
 /client/assets/js/my.conf.js
+/www/plugins/system/tests/development.php

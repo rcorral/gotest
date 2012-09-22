@@ -7,8 +7,156 @@
 
 defined('JPATH_BASE') or die;
 
+include 'development.php';
+if ( !defined( 'TESTS_DEVELOPMENT' ) ) {
+	define( 'TESTS_DEVELOPMENT', false );
+}
+
 class Tests
 {
+	/**
+	 * String containing all script declarations
+	 */
+	public static $_script_declaration = array();
+
+	/**
+	 * String containing all jquery code
+	 */
+	public static $_jquery_declaration = '';
+
+	/**
+	 * Script files
+	 * 
+	 * This array is used in the combiner.php file to generate a single css and js file.
+	 * When adding new scripts, test the combiner.php file to ensure there will be no problems
+	 */
+	public static $_scripts = array(
+		'jquery' => array(
+			'js' => "TEMPLATEPATH/js/jquery.min.js"
+			),
+		'colorbox' => array(
+			'js' => "TEMPLATEPATH/js/jquery.colorbox.js",
+			'css' => "TEMPLATEPATH/css/colorbox.css"
+			),
+		'core' => array(
+			'js' => "TEMPLATEPATH/js/core.js"
+			)
+		);
+
+	function add_script( $scripts = array() )
+	{
+		static $called = false;
+
+		$doc = JFactory::getDocument();
+		$site_path = JURI::root();
+		$app = JFactory::getApplication();
+		$tmpl = isset( $_REQUEST['tmpl'] );
+		$template_path = JURI::root() . 'templates/clicker';
+		self::js_variables();
+		$_scripts = self::$_scripts;
+
+		if ( !TESTS_DEVELOPMENT && $app->isSite() && !$tmpl ) {
+			if ( !$called ) {
+				// Need to write some code here look at ppwell project
+			}
+		} else {
+			foreach ( (array) $scripts as $script ) {
+				if ( !isset( $_scripts[$script] ) || true === $_scripts[$script] ) {
+					continue;
+				}
+
+				foreach ( $_scripts[$script] as $type => $files ) {
+					if ( 'js' == $type ) {
+						foreach ( (array) $files as $file ) {
+							$file = str_replace( array( 'TEMPLATEPATH', 'SITE' ),
+								array( $template_path, $site_path ), $file );
+							$doc->addScript( $file );
+						}
+					} elseif ( 'css' == $type ) {
+						foreach ( (array) $files as $file ) {
+							$file = str_replace( array( 'TEMPLATEPATH', 'SITE' ),
+								array( $template_path, $site_path ), $file );
+							$doc->addStyleSheet( $file );
+						}
+					}
+				}
+
+				if ( 'jquery' == $script ) {
+					self::addScriptDeclaration( ';jQuery.noConflict();' );
+				}
+
+				$_scripts[$script] = true;
+			}
+		}
+	}
+
+	function js_variables()
+	{
+		static $done;
+
+		if ( true === $done ) {
+			return;
+		}
+
+		$js = 'var live_site = \'' .JURI::root(). '\';';
+
+		if ( JFactory::getApplication()->isAdmin() ) {
+			$js .= "\nvar community_token = '14f3bb75e8b6bcdc84f341c8872f68fe57c4023e';";
+		} else {
+			$active = JFactory::getApplication()->getMenu()->getActive();
+			$user = JFactory::getUser();
+			$loggedin = ( $user->id ) ? 1 : 0;
+
+			if ( $active ) {
+				$home = $active->home;
+			} else {
+				$home = 0;
+			}
+			$js .= "\nvar is_home={$home};";
+			$js .= "\nvar is_loggedin={$loggedin};";
+		}
+
+		self::addScriptDeclaration( $js );
+
+		$done = true;
+	}
+
+	/**
+	 * Proxy method for JDocument::addScriptDeclaration
+	 */
+	function addScriptDeclaration( $content, $type = 'text/javascript' )
+	{
+		$app = JFactory::getApplication();
+
+		if ( TESTS_DEVELOPMENT || !$app->isSite() ) {
+			$doc = JFactory::getDocument();
+			$doc->addScriptDeclaration( $content, $type );
+		} else {
+			if ( !isset( self::$_script_declaration[$type] ) ) {
+				self::$_script_declaration[$type] = '';
+			}
+
+			self::$_script_declaration[$type] .= $content . ';';
+		}
+	}
+
+	/**
+	 * Method to add jquery declaration that need to be wrapped in jQuery(document).ready
+	 */
+	function add_jquery( $content )
+	{
+		$doc = JFactory::getDocument();
+		$app = JFactory::getApplication();
+
+		if ( TESTS_DEVELOPMENT || !$app->isSite() ) {
+			$pre = 'jQuery(document).ready(function(){';
+			$post = '});';
+			$doc->addScriptDeclaration( $pre . $content . $post );
+		} else {
+			self::$_jquery_declaration .= $content . ';';
+		}
+	}
+
 	function get_field( $type, $attributes = array(), $field_value = '' ) {
 		static $types = null;
 
