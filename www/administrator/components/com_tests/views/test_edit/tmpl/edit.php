@@ -22,16 +22,66 @@ JHtml::_('behavior.formvalidation');
 
 	jQuery(document).ready(function(){
 		jQuery('.add-question').on('click', function(){
-			tests.inline_popup( '<p>Select type of question:</p><form class="question-selection"><p><ul><li><input type="radio" name="question_type" value="mcsa" /> <label>Multiple choice single answer</label></li><li><input type="radio" name="question_type" value="mcma" /> <label>Multiple choice multiple answer</label></li><li><input type="radio" name="question_type" value="fitb" /> <label>Fill in the blank</label></li><li><input type="radio" name="question_type" value="fitbma" /> <label>Fill in the blank multiple answer</label></li><li><input type="radio" name="question_type" value="essay" /> <label>Essay</label></li></ul><input type="submit" name="select" value="Select" /></form></p>' );
+			tests.inline_popup( '<p>Select type of question:</p><form class="question-selection"><p><ul><li><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> <label for="type-mcsa">Multiple choice single answer</label></li><li><input type="radio" name="question_type" value="mcma" id="type-mcma" /> <label for="type-mcma">Multiple choice multiple answer</label></li><li><input type="radio" name="question_type" value="fitb" id="type-fitb" /> <label for="type-fitb">Fill in the blank</label></li><li><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> <label for="type-fitbma">Fill in the blank multiple answer</label></li><li><input type="radio" name="question_type" value="essay" id="type-essay" /> <label for="type-essay">Essay</label></li></ul><input type="submit" name="select" value="Select" /></form></p>' );
+		});
+
+		// Add new answer rows
+		jQuery('#questions-wrapper').on('click', '.add-new-answer', function(){
+			// Increase auto increment of answers
+			var cel = jQuery(this).parent().parent().parent().parent();
+			var val_counter = Number( cel.attr('a:count') ) + 1;
+			cel.attr('a:count', val_counter);
+
+			// Get old value for replacement later
+			var val_old = jQuery(this).parent().parent().find('input.val-auto-increment').val();
+
+			// Clone answers row
+			var nel = jQuery(this).parent().parent().clone();
+			nel.hide();
+			nel.find('input.val-auto-increment').val( val_counter );
+			nel.find('input.input-increment').each(function(){
+				var re = new RegExp('\\[' +val_old+ '\\]');
+				jQuery(this).attr('name',
+					jQuery(this).attr('name').replace(re, '[' +val_counter+ ']')
+				);
+			});
+			nel.find('input.clear-input').val('');
+			nel.insertAfter(jQuery(this).parent().parent()).css('display', '');
+		});
+
+		// Remove answer row
+		jQuery('#questions-wrapper').on('click', '.remove-answer', function(){
+			el = jQuery(this).parent().parent();
+
+			// Check to see if it is the last answer on the questions
+			if ( el.siblings()[0] ) {
+				el.slideUp().remove();
+			} else {
+				el.parent().parent().parent().parent()
+					.slideUp().remove();
+			}
 		});
 
 		jQuery(document).on('submit', '.question-selection', function(){
-			value = jQuery('form.question-selection input[name="question_type"]:checked').val();
+			type = jQuery('form.question-selection input[name="question_type"]:checked').val();
 
-			if ( !value ) {
+			if ( !type ) {
 				_alert( 'Please make a selection.' );
 				return false;
 			};
+
+			// Ajax call to com_api to get code to add question
+			tests._ajax({
+				app: 'tests',
+				resource: 'questiontemplate',
+				type: type,
+				key: community_token
+			}, function( data ) {
+				if ( data.success ) {
+					jQuery('#questions-wrapper').append( data.html );
+					jQuery.colorbox.close();
+				};
+			}, {type: 'POST'});
 
 			return false;
 		});

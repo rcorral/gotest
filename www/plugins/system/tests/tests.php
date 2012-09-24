@@ -101,7 +101,7 @@ class Tests
 		$js = 'var live_site = \'' .JURI::root(). '\';';
 
 		if ( JFactory::getApplication()->isAdmin() ) {
-			$js .= "\nvar community_token = '14f3bb75e8b6bcdc84f341c8872f68fe57c4023e';";
+			$js .= "\nvar community_token = 'ae548d19b6a7af79812708a2496c6f72ae8e5cd8';";
 		} else {
 			$active = JFactory::getApplication()->getMenu()->getActive();
 			$user = JFactory::getUser();

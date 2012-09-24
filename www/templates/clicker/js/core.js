@@ -21,12 +21,8 @@ tests_class.prototype._ajax = function( data, success, opts ) {
 		type: 'GET',
 		dataType: 'json',
 		error: function(jxhr){
-			ppw._stop_loader();
+			tests._stop_loader();
 			if ( typeof jxhr.responseText == 'undefined' || !jxhr.responseText ) {
-				if ( ppw._check_device_connection() ) {
-					// Show error if device connected to internet but no connection to server
-					_alert( 'An error ocurred: There was no response from the server. 444.' );
-				}
 				return;
 			}
 
@@ -170,7 +166,7 @@ function _populate_select( selector, obj, _key, _value, opts ) {
 	};
 
 	if ( typeof opts != 'undefined' ) {
-		options = ppw._merge_objects( options, opts );
+		options = tests._merge_objects( options, opts );
 	}
 
 	el = jQuery(selector);

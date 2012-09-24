@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.7" type="plugin" group="api" method="upgrade">
+	<name>PLG_API_TESTS</name>
+	<version>1.0</version>
+	<creationDate>September 2012</creationDate>
+	<author>Rafael Corral</author>
+	<authorEmail>rafael@corephp.com</authorEmail>
+	<authorUrl>http://www.rafaelcorral.com</authorUrl>
+	<copyright>2012 Rafael Corral, All Rights Reserved</copyright>
+	<license>GNU General Public License v2</license>
+	<description>PLG_API_TESTS_XML_DESCRIPTION</description>
+
+	<files>
+		<filename plugin="tests">tests.php</filename>
+		<folder>resources</folder>
+	</files>
+
+	<languages folder="languages">
+		<language tag="en-GB">en-GB.plg_api_tests.ini</language>
+		<language tag="en-GB">en-GB.plg_api_tests.sys.ini</language>
+	</languages>
+	
+	<config>
+	</config>
+</extension>
