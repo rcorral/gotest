@@ -1,0 +1,38 @@
+<div class="question-wrapper">
+	<h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>
+	<input type="hidden" name="questions[new][QID][type_id]" value="TYPE_ID" />
+	<label for="question-QID">Question: </label>
+	<input type="text" name="questions[new][QID][question]" value="" id="question-QID" />
+	<label for="seconds-QID">Seconds: </label>
+	<input type="text" name="questions[new][QID][seconds]" value="" id="seconds-QID" />
+	<div clas="clr"></div>
+	Answers:
+	<div clas="clr"></div>
+	<div class="answers">
+		<table a:count="COUNTER_START">
+			<thead>
+				<tr>
+					<th>Answer</th>
+					<th>Correct Answer</th>
+					<th colspan="2">&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<input type="text" name="answer[QID][COUNTER_START]" value="" class="input-increment clear-input" />
+					</td>
+					<td>
+						<input type="radio" name="answer[QID][correct]" value="1" class="val-auto-increment" />
+					</td>
+					<td>
+						<button class="add-new-answer">Add</button>
+					</td>
+					<td>
+						<button class="remove-answer">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -55,6 +55,11 @@ JHtml::_('behavior.formvalidation');
 			nel.insertAfter(jQuery(this).parent().parent()).css('display', '');
 		});
 
+		// Remove question
+		jQuery('#questions-wrapper').on('click', '.remove-question', function(){
+			el = jQuery(this).parent().slideUp().remove();
+		});
+
 		// Remove answer row
 		jQuery('#questions-wrapper').on('click', '.remove-answer', function(){
 			el = jQuery(this).parent().parent();

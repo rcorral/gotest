@@ -31,18 +31,21 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 
 		// Lets check that this type actually exists
 		$query = $db->getQuery( true )
-			->select( '`html`' )
+			->select( '`id`, `title`, `html`' )
 			->from( '#__test_question_types' )
 			->where( '`type` = ' . $db->q( $type ) )
 			;
-		$html = $db->setQuery( $query )->loadResult();
+		$row = $db->setQuery( $query )->loadObject();
 
-		if ( !$html ) {
+		if ( !$row || empty( $row ) ) {
 			throw new JException( JText::_('PLG_API_TESTS_QUESTION_UNAVAILABLE') );
 		}
 
 		$rand = substr( md5( uniqid( rand(), true ) ), 0, 5 );
-		$html = str_replace( array( 'QID', 'COUNTER_START' ), array( $rand, 1 ), $html );
+		$html = str_replace(
+			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'COUNTER_START' ),
+			array( $row->id, $row->title, $rand, 1 ),
+			$row->html );
 
 		$response = $this->getSuccessResponse( 200 );
 		$response->html = $html;
