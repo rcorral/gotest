@@ -35,6 +35,12 @@ JHtml::_('behavior.formvalidation');
 			// Get old value for replacement later
 			var val_old = jQuery(this).parent().parent().find('input.val-auto-increment').val();
 
+			// Find it a different way
+			if ( !val_old ) {
+				val_old = jQuery(this).parent().parent().find('input.input-increment:first')
+					.attr('name').match(/.*\[.*\]\[(\d)\]\[.*\]/)[1];
+			};
+
 			// Clone answers row
 			var nel = jQuery(this).parent().parent().clone();
 			nel.hide();
