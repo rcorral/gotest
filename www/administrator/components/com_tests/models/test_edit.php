@@ -163,12 +163,18 @@ class TestsModelTest_Edit extends JModelAdmin
 
 		$order = 1;
 		foreach ( $data as $question_id => $question ) {
+			$question['question'] = trim( $question['question'] );
+			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] ) {
+				continue;
+			}
+
 			$table = JTable::getInstance( 'Questions', 'TestsTable' );
 			$_data = array(
 				'title' => $question['question'],
 				'test_id' => $test_id,
 				'question_type' => $question['type_id'],
 				'seconds' => $question['seconds'],
+				'min_answers' => @$question['min_answers'],
 				'media' => '',
 				'order' => $order
 				);
@@ -189,24 +195,28 @@ class TestsModelTest_Edit extends JModelAdmin
 			// Lets add all the options
 			$tuples = array();
 
-			foreach ( $question['options'] as $option_id => $option ) {
-				$option = trim( $option );
-				if ( empty( $option ) ) {
-					continue;
-				}
+			if ( isset( $question['options'] ) && !empty( $question['options'] ) ) {
+				foreach ( $question['options'] as $option_id => $option ) {
+					$option = trim( $option );
+					if ( empty( $option ) ) {
+						continue;
+					}
 
-				$opt_table = JTable::getInstance( 'QuestionOptions', 'TestsTable' );
-				$_data = array(
-					'question_id' => $qid,
-					'title' => $option,
-					'valid' => in_array( $option_id, $question['answers'] )
-					);
+					$opt_table = JTable::getInstance( 'QuestionOptions', 'TestsTable' );
+					$_data = array(
+						'question_id' => $qid,
+						'title' => $option,
+						'valid' => in_array( $option_id, $question['answers'] )
+						);
 
-				if ( !$opt_table->save( $_data ) ) {
-					$errors[] = "Some answers weren't saved on question #{$order}";
-					continue;
+					if ( !$opt_table->save( $_data ) ) {
+						$errors[] = "Some answers weren't saved on question #{$order}";
+						continue;
+					}
 				}
 			}
+
+			$order++;
 		}
 
 		if ( !empty( $errors ) ) {
