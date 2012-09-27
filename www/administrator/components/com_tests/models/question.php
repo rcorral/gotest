@@ -31,7 +31,7 @@ class TestModelQuestion extends JModelDatabase
 
 		$query = $this->db->getQuery(true)
 			->select( 'qa.`id`, qa.`title`' )
-			->from( '`question_possible_answers` AS qa' )
+			->from( '`question_options` AS qa' )
 			->where( 'qa.`question_id` = ' . (int) $question_id )
 			->order( 'qa.`id` ASC' )
 			;

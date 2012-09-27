@@ -86,8 +86,6 @@ $loggeduser = JFactory::getUser();
 					<?php else : ?>
 						<?php echo $this->escape( $item->title ); ?>
 					<?php endif; ?>
-					<p class="smallsub">
-						<?php echo JText::sprintf( 'JGLOBAL_LIST_ALIAS', $this->escape( $item->alias ) );?></p>
 				</td>
 				<td>
 					<?php echo $this->escape( $item->sub_title ); ?>

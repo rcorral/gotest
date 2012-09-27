@@ -152,6 +152,71 @@ class TestsModelTest_Edit extends JModelAdmin
 	}
 
 	/**
+	 * Saves questions that are submitted when editing a test
+	 * It saves questions in order and updates or adds questions if new
+	 */
+	public function add_test_questions( $data, $test_id )
+	{
+		if ( empty( $data ) ) {
+			return true;
+		}
+
+		$order = 1;
+		foreach ( $data as $question_id => $question ) {
+			$table = JTable::getInstance( 'Questions', 'TestsTable' );
+			$_data = array(
+				'title' => $question['question'],
+				'test_id' => $test_id,
+				'question_type' => $question['type_id'],
+				'seconds' => $question['seconds'],
+				'media' => '',
+				'order' => $order
+				);
+
+			// This means that this question already exists so lets add the id to the array
+			if ( substr( $question_id, 0, 1 ) != 'n' ) {
+				$_data['id'] = (int) $question_id;
+			}
+
+			// Should we abort completely? or just continue?
+			if ( !$table->save( $_data ) ) {
+				$errors[] = "Question there was an error with question #{$order}";
+				continue;
+			}
+
+			$qid = $table->get('id');
+
+			// Lets add all the options
+			$tuples = array();
+
+			foreach ( $question['options'] as $option_id => $option ) {
+				$option = trim( $option );
+				if ( empty( $option ) ) {
+					continue;
+				}
+
+				$opt_table = JTable::getInstance( 'QuestionOptions', 'TestsTable' );
+				$_data = array(
+					'question_id' => $qid,
+					'title' => $option,
+					'valid' => in_array( $option_id, $question['answers'] )
+					);
+
+				if ( !$opt_table->save( $_data ) ) {
+					$errors[] = "Some answers weren't saved on question #{$order}";
+					continue;
+				}
+			}
+		}
+
+		if ( !empty( $errors ) ) {
+			JError::raiseWarning( 400, implode( "\n", $errors ) );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Method to delete groups.
 	 *
 	 * @param	array	An array of item ids.

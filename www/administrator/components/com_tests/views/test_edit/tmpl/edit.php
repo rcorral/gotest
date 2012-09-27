@@ -23,6 +23,7 @@ JHtml::_('behavior.formvalidation');
 	jQuery(document).ready(function(){
 		jQuery('.add-question').on('click', function(){
 			tests.inline_popup( '<p>Select type of question:</p><form class="question-selection"><p><ul><li><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> <label for="type-mcsa">Multiple choice single answer</label></li><li><input type="radio" name="question_type" value="mcma" id="type-mcma" /> <label for="type-mcma">Multiple choice multiple answer</label></li><li><input type="radio" name="question_type" value="fitb" id="type-fitb" /> <label for="type-fitb">Fill in the blank</label></li><li><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> <label for="type-fitbma">Fill in the blank multiple answer</label></li><li><input type="radio" name="question_type" value="essay" id="type-essay" /> <label for="type-essay">Essay</label></li></ul><input type="submit" name="select" value="Select" /></form></p>' );
+			return false;
 		});
 
 		// Add new answer rows
@@ -53,11 +54,15 @@ JHtml::_('behavior.formvalidation');
 			});
 			nel.find('input.clear-input').val('');
 			nel.insertAfter(jQuery(this).parent().parent()).css('display', '');
+
+			return false;
 		});
 
 		// Remove question
 		jQuery('#questions-wrapper').on('click', '.remove-question', function(){
 			el = jQuery(this).parent().slideUp().remove();
+
+			return false;
 		});
 
 		// Remove answer row
@@ -71,6 +76,8 @@ JHtml::_('behavior.formvalidation');
 				el.parent().parent().parent().parent()
 					.slideUp().remove();
 			}
+
+			return false;
 		});
 
 		jQuery(document).on('submit', '.question-selection', function(){
@@ -114,22 +121,22 @@ JHtml::_('behavior.formvalidation');
 				<?php echo $this->form->getInput('published'); ?></li>
 			</ul>
 	</fieldset>
+	</div>
+	<div class="clr"></div>
+
+	<h2>Questions</h2>
+	<?php if ( empty( $this->questions ) ): ?>
+		<button class="add-question">Add new question</button>
+	<?php endif; ?>
+	<div id="questions-wrapper">
+	<?php if ( empty( $this->questions ) ): ?>
+	<?php foreach ( $this->questions as $key => $value ): ?>
+		
+	<?php endforeach; ?>
+	<?php endif; ?>
+	</div>
 
 	<?php echo $this->form->getInput('id'); ?>
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_('form.token'); ?>
-	</div>
 </form>
-<div class="clr"></div>
-
-<h2>Questions</h2>
-<?php if ( empty( $this->questions ) ): ?>
-	<button class="add-question">Add new question</button>
-<?php endif; ?>
-<div id="questions-wrapper">
-<?php if ( empty( $this->questions ) ): ?>
-<?php foreach ( $this->questions as $key => $value ): ?>
-	
-<?php endforeach; ?>
-<?php endif; ?>
-</div>

@@ -41,7 +41,8 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 			throw new JException( JText::_('PLG_API_TESTS_QUESTION_UNAVAILABLE') );
 		}
 
-		$rand = substr( md5( uniqid( rand(), true ) ), 0, 5 );
+		// The 'n' determines that it is a new question
+		$rand = 'n' . substr( md5( uniqid( rand(), true ) ), 0, 5 );
 		$html = str_replace(
 			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'COUNTER_START' ),
 			array( $row->id, $row->title, $rand, 1 ),
