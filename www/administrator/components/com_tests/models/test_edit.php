@@ -253,4 +253,47 @@ class TestsModelTest_Edit extends JModelAdmin
 
 		return true;
 	}
+
+	public function getQuestions( $test_id = null )
+	{
+		if ( !$test_id ) {
+			$test_id = $this->getState( 'test.id' );
+		}
+
+		$query = $this->_db->getQuery( true )
+			->select( 'tq.*, tqt.`type` AS `tqt_type`' )
+			->from( '#__test_questions AS tq' )
+			->leftjoin( '#__test_question_types AS tqt ON tqt.`id` = tq.`question_type`')
+			->where( 'tq.`test_id` = ' . (int) $test_id )
+			->order( 'tq.`order` ASC' )
+			;
+		$questions = $this->_db->setQuery( $query )->loadObjectList();
+
+		foreach ( $questions as &$question ) {
+			$query = $this->_db->getQuery( true )
+				->select( 'tqo.*' )
+				->from( '#__test_question_options AS tqo' )
+				->where( 'tqo.`question_id` = ' . $question->id )
+				;
+			$question->options = $this->_db->setQuery( $query )->loadObjectList();
+		}
+
+		return $questions;
+	}
+
+	public function getTemplates()
+	{
+		$query = $this->_db->getQuery( true )
+			->select( 'tqt.`type`' )
+			->from( '#__test_question_types AS tqt' )
+			;
+		$types = $this->_db->setQuery( $query )->loadColumn();
+
+		$templates = array();
+		foreach ( $types as $type ) {
+			$templates[$type] = TestsHelper::get_question_type( $type );
+		}
+
+		return (object) $templates;
+	}
 }

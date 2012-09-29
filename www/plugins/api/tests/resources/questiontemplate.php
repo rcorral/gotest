@@ -39,8 +39,12 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 		// The 'n' determines that it is a new question
 		$rand = 'n' . substr( md5( uniqid( rand(), true ) ), 0, 5 );
 		$html = str_replace(
-			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'COUNTER_START' ),
-			array( $row->id, $row->title, $rand, 1 ),
+			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'QUESTION_TITLE',
+				'QUESTION_SECONDS', 'QUESTION_MIN_ANSWERS', 'COUNTER_START', 'COUNTER',
+				'OPTION_TITLE', 'OPTION_VALID', '{OPTION_START}', '{OPTION_END}' ),
+			array( $row->id, $row->title, $rand, '',
+				'', '', 1, 1,
+				'', '', '', '' ),
 			$row->html );
 
 		$response = $this->getSuccessResponse( 200 );

@@ -2,9 +2,9 @@
 	<h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>
 	<input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />
 	<label for="question-QID">Question: </label>
-	<input type="text" name="questions[QID][question]" value="" id="question-QID" />
+	<input type="text" name="questions[QID][question]" value="QUESTION_TITLE" id="question-QID" />
 	<label for="seconds-QID">Seconds: </label>
-	<input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />
+	<input type="text" name="questions[QID][seconds]" value="QUESTION_SECONDS" id="seconds-QID" />
 	<div clas="clr"></div>
 	Answers:
 	<div clas="clr"></div>
@@ -18,12 +18,13 @@
 				</tr>
 			</thead>
 			<tbody>
+				{OPTION_START}
 				<tr>
 					<td>
-						<input type="text" name="questions[QID][options][COUNTER_START]" value="" class="input-increment clear-input" />
+						<input type="text" name="questions[QID][options][COUNTER]" value="OPTION_TITLE" class="input-increment clear-input" />
 					</td>
 					<td>
-						<input type="radio" name="questions[QID][answers][]" value="1" class="val-auto-increment" />
+						<input type="radio" name="questions[QID][answers][]" value="COUNTER" class="val-auto-increment" OPTION_VALID />
 					</td>
 					<td>
 						<button class="add-new-answer">Add</button>
@@ -32,6 +33,7 @@
 						<button class="remove-answer">Remove</button>
 					</td>
 				</tr>
+				{OPTION_END}
 			</tbody>
 		</table>
 	</div>

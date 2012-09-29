@@ -26,10 +26,11 @@ class TestsViewTest_Edit extends JView
 	 */
 	public function display( $tpl = null )
 	{
-		$this->form  = $this->get('Form');
-		$this->item  = $this->get('Item');
-		$this->state = $this->get('State');
-		$this->questions = array();
+		$this->form      = $this->get('Form');
+		$this->item      = $this->get('Item');
+		$this->state     = $this->get('State');
+		$this->questions = $this->get('Questions');
+		$this->templates = $this->get('Templates');
 
 		// Check for errors.
 		if ( count( $errors = $this->get('Errors') ) ) {

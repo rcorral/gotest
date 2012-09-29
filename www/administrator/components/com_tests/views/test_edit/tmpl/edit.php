@@ -125,13 +125,48 @@ JHtml::_('behavior.formvalidation');
 	<div class="clr"></div>
 
 	<h2>Questions</h2>
-	<?php if ( empty( $this->questions ) ): ?>
-		<button class="add-question">Add new question</button>
-	<?php endif; ?>
+
+	<button class="add-question">Add new question</button>
+
 	<div id="questions-wrapper">
-	<?php if ( empty( $this->questions ) ): ?>
-	<?php foreach ( $this->questions as $key => $value ): ?>
-		
+	<?php if ( !empty( $this->questions ) ): ?>
+	<?php foreach ( $this->questions as $question ): ?>
+		<?php
+		$template = $this->templates->{$question->tqt_type};
+
+		// Do all replacements that only need to happen once
+		$html = str_replace(
+			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'QUESTION_TITLE',
+				'QUESTION_SECONDS', 'QUESTION_MIN_ANSWERS', 'COUNTER_START' ),
+			array( $template->id, $template->title, $question->id, $question->title,
+				$question->seconds, $question->min_answers, count( $question->options ) ),
+			$template->html );
+
+		preg_match( '/\{OPTION_START\}(.*)\{OPTION_END\}/sm', $html, $matches );
+
+		if ( !isset( $matches[1] ) || empty( $matches[1] ) ) {
+			echo $html;
+			continue;
+		}
+
+		$html = preg_replace( '/\{OPTION_START\}(.*)\{OPTION_END\}/sm', 'OPTIONS_INSERT', $html );
+
+		$option_template = $matches[1];
+		$options_html = '';
+		$counter = 1;
+		foreach ( $question->options as $option ) {
+			$options_html .= str_replace(
+				array( 'COUNTER', 'OPTION_TITLE',
+					'OPTION_VALID' ),
+				array( $counter, $option->title,
+					( $option->valid ? 'checked="checked"' : '' ) ),
+				$option_template );
+			$counter++;
+		}
+		$html = str_replace( 'OPTIONS_INSERT', $options_html, $html );
+
+		echo $html;
+		?>
 	<?php endforeach; ?>
 	<?php endif; ?>
 	</div>
