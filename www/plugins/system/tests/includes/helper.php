@@ -12,6 +12,33 @@ defined('JPATH_BASE') or die;
  */
 class TestsHelper
 {
+	/**
+	 * Gets a question template
+	 */
+	function get_question_type( $type, $from = 'file' )
+	{
+		if ( !$type ) {
+			return '';
+		}
+
+		$db = JFactory::getDBO();
+
+		$query = $db->getQuery( true )
+			->select( '`id`, `title`, `html`' )
+			->from( '#__test_question_types' )
+			->where( '`type` = ' . $db->q( $type ) )
+			;
+		$row = $db->setQuery( $query )->loadObject();
+
+		if ( 'file' == $from ) {
+			$row->html = JFile::read( JPATH_ADMINISTRATOR
+				. '/components/com_tests/assets/question_templates/'
+				. JFile::makeSafe( $type ) . '.tmpl' );
+		}
+
+		return $row;
+	}
+
 	function stripslashes_deep( $value )
 	{
 		if ( is_array( $value ) ) {

@@ -30,12 +30,7 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 		}
 
 		// Lets check that this type actually exists
-		$query = $db->getQuery( true )
-			->select( '`id`, `title`, `html`' )
-			->from( '#__test_question_types' )
-			->where( '`type` = ' . $db->q( $type ) )
-			;
-		$row = $db->setQuery( $query )->loadObject();
+		$row = TestsHelper::get_question_type( $type );
 
 		if ( !$row || empty( $row ) ) {
 			throw new JException( JText::_('PLG_API_TESTS_QUESTION_UNAVAILABLE') );
