@@ -60,7 +60,7 @@ JHtml::_('behavior.formvalidation');
 
 		// Remove question
 		jQuery('#questions-wrapper').on('click', '.remove-question', function(){
-			el = jQuery(this).parent().slideUp().remove();
+			jQuery(this).parent().parent().slideUp('slow', function(){ jQuery(this).remove(); });
 
 			return false;
 		});
@@ -71,10 +71,10 @@ JHtml::_('behavior.formvalidation');
 
 			// Check to see if it is the last answer on the questions
 			if ( el.siblings()[0] ) {
-				el.slideUp().remove();
+				el.slideUp('slow', function(){ jQuery(this).remove(); });
 			} else {
 				el.parent().parent().parent().parent()
-					.slideUp().remove();
+					.slideUp('slow', function(){ jQuery(this).remove(); });
 			}
 
 			return false;

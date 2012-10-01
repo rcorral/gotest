@@ -161,7 +161,7 @@ class TestsModelTest_Edit extends JModelAdmin
 			return true;
 		}
 
-		$order = 1;
+		$question_ids = array();
 		foreach ( $data as $question_id => $question ) {
 			$question['question'] = trim( $question['question'] );
 			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] ) {
@@ -175,27 +175,42 @@ class TestsModelTest_Edit extends JModelAdmin
 				'question_type' => $question['type_id'],
 				'seconds' => $question['seconds'],
 				'min_answers' => @$question['min_answers'],
-				'media' => '',
-				'order' => $order
+				'media' => ''
 				);
 
 			// This means that this question already exists so lets add the id to the array
 			if ( substr( $question_id, 0, 1 ) != 'n' ) {
 				$_data['id'] = (int) $question_id;
+			} else {
+				$query = $this->_db->getQuery( true )
+					->select( 'MAX( tq.`order` ) AS `max_order`' )
+					->from( '#__test_questions AS tq' )
+					->where( 'tq.`test_id` = ' . (int) $test_id )
+					;
+				$_data['order'] = (int) $this->_db->setQuery( $query )->loadResult() + 1;
 			}
 
 			// Should we abort completely? or just continue?
 			if ( !$table->save( $_data ) ) {
-				$errors[] = "Question there was an error with question #{$order}";
+				$errors[] = "Question there was an error with question: {$question['question']}";
 				continue;
 			}
 
 			$qid = $table->get('id');
+			$question_ids[] = $qid;
 
 			// Lets add all the options
 			$tuples = array();
 
 			if ( isset( $question['options'] ) && !empty( $question['options'] ) ) {
+
+				// Delete all previous question options
+				$query = $this->_db->getQuery( true )
+					->delete( '#__test_question_options' )
+					->where( '`question_id` = ' . (int) $qid )
+					;
+				$this->_db->setQuery( $query )->query();
+
 				foreach ( $question['options'] as $option_id => $option ) {
 					$option = trim( $option );
 					if ( empty( $option ) ) {
@@ -206,18 +221,25 @@ class TestsModelTest_Edit extends JModelAdmin
 					$_data = array(
 						'question_id' => $qid,
 						'title' => $option,
-						'valid' => in_array( $option_id, $question['answers'] )
+						'valid' => @in_array( $option_id, @$question['answers'] )
 						);
 
 					if ( !$opt_table->save( $_data ) ) {
-						$errors[] = "Some answers weren't saved on question #{$order}";
+						$errors[]
+							= "Some answers weren't saved on question: {$question['question']}";
 						continue;
 					}
 				}
 			}
-
-			$order++;
 		}
+
+		// Delete all questions that are not on request
+		$query = $this->_db->getQuery( true )
+			->delete( '#__test_questions' )
+			->where( '`test_id` = ' . (int) $test_id )
+			->where( '`id` NOT IN (' .implode( ',', $question_ids ). ')')
+			;
+		$this->_db->setQuery( $query )->query();
 
 		if ( !empty( $errors ) ) {
 			JError::raiseWarning( 400, implode( "\n", $errors ) );
