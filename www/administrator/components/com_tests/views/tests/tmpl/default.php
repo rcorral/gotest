@@ -86,6 +86,7 @@ $loggeduser = JFactory::getUser();
 					<?php else : ?>
 						<?php echo $this->escape( $item->title ); ?>
 					<?php endif; ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_tests&view=test&test_id=' . $item->id . '&tmpl=component');?>" target="_blank">[administer]</a>
 				</td>
 				<td>
 					<?php echo $this->escape( $item->sub_title ); ?>

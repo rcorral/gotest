@@ -8,13 +8,6 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
-/**
- * The HTML Menus Menu Item View.
- *
- * @package		Joomla.Administrator
- * @subpackage	com_menus
- * @since		1.6
- */
 class TestsViewTest_Edit extends JView
 {
 	protected $form;

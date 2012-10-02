@@ -1,18 +1,32 @@
 <?php
-defined('JPATH_PLATFORM') or die;
+/**
+ * @copyright	Copyright (C) 2012 Rafael Corral. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-class TestViewTest extends JViewDisplay
+defined('_JEXEC') or die;
+
+jimport('joomla.application.component.view');
+
+class TestsViewTest extends JView
 {
-	function render()
+	/**
+	 * Display the view
+	 */
+	public function display( $tpl = null )
 	{
-		$this->test = $this->model->get_test();
+		$this->test = $this->get('Test');
+
+		if ( empty( $this->test ) ) {
+			JError::raiseError( 500, 'Test does\'t exist.' );
+			return false;
+		}
 
 		$this->document = JFactory::getDocument();
-		$this->document->addStyleSheet( '../assets/css/template.css' );
-		$this->document->addScript( '../assets/js/my.conf.js' );
-		$this->document->addScript( 'assets/js/click.js' );
-		$this->document->addScript( '../assets/js/templates.js' );
+		$this->document->addStyleSheet( JURI::root()
+			. 'components/com_tests/assets/css/template.css' );
+		Tests::add_script( array( 'click', 'templates' ) );
 
-		return parent::render();
+		parent::display( $tpl );
 	}
 }

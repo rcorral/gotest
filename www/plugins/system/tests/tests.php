@@ -40,6 +40,15 @@ class Tests
 			),
 		'core' => array(
 			'js' => "TEMPLATEPATH/js/core.js"
+			),
+		'templates' => array(
+			'js' => 'SITEcomponents/com_tests/assets/js/templates.js'
+			),
+		'click' => array(
+			'js' => array(
+				'BASEcomponents/com_tests/assets/js/click.js',
+				'SITEcomponents/com_tests/assets/js/my.conf.js'
+				)
 			)
 		);
 
@@ -49,6 +58,7 @@ class Tests
 
 		$doc = JFactory::getDocument();
 		$site_path = JURI::root();
+		$base_path = JURI::base();
 		$app = JFactory::getApplication();
 		$tmpl = isset( $_REQUEST['tmpl'] );
 		$template_path = JURI::root() . 'templates/clicker';
@@ -68,14 +78,14 @@ class Tests
 				foreach ( $_scripts[$script] as $type => $files ) {
 					if ( 'js' == $type ) {
 						foreach ( (array) $files as $file ) {
-							$file = str_replace( array( 'TEMPLATEPATH', 'SITE' ),
-								array( $template_path, $site_path ), $file );
+							$file = str_replace( array( 'TEMPLATEPATH', 'SITE', 'BASE' ),
+								array( $template_path, $site_path, $base_path ), $file );
 							$doc->addScript( $file );
 						}
 					} elseif ( 'css' == $type ) {
 						foreach ( (array) $files as $file ) {
-							$file = str_replace( array( 'TEMPLATEPATH', 'SITE' ),
-								array( $template_path, $site_path ), $file );
+							$file = str_replace( array( 'TEMPLATEPATH', 'SITE', 'BASE' ),
+								array( $template_path, $site_path, $base_path ), $file );
 							$doc->addStyleSheet( $file );
 						}
 					}

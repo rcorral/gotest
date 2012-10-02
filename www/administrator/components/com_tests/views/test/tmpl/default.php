@@ -1,5 +1,5 @@
 <?php
-defined('JPATH_PLATFORM') or die;
+defined('_JEXEC') or die;
 ?>
 <h1><?php echo $this->test->title; ?></h1>
 <h2><?php echo $this->test->sub_title; ?></h2>
@@ -15,8 +15,7 @@ defined('JPATH_PLATFORM') or die;
 </form>
 
 <?php
-$this->document->addScriptDeclaration("
-var live_site = '../';
+Tests::addScriptDeclaration("
 var xclick_interval = window.setInterval(function() {
 	if (xclick) {
 		window.clearInterval(xclick_interval);
