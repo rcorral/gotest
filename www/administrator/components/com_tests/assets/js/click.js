@@ -71,6 +71,7 @@ XClick = (function() {
 		};
 
 		if ( !this._object_empty( msg ) ) {
+			msg.key = api_key;
 			this.emit('next_question', msg);
 		}
 	};
