@@ -39,6 +39,41 @@ class TestsHelper
 		return $row;
 	}
 
+	/**
+	 * Function will get api key for a given user or create one if requested
+	 */
+	function get_api_key( $user_id, $autogenerate = false )
+	{
+		$db = JFactory::getDBO();
+
+		if ( !$user_id ) {
+			$user = JFactory::getUser();
+			$user_id = $user->get('id');
+		}
+
+		$db->setQuery( "SELECT `hash`
+			FROM #__api_keys
+				WHERE `user_id` = " . (int) $user_id );
+		$key = $db->loadResult();
+
+		if ( !$key && $autogenerate ) {
+			JLoader::register( 'APIModel', JPATH_ROOT
+				. '/components/com_api/libraries/model.php' );
+			JModel::addIncludePath( JPATH_ROOT . '/components/com_api/models' );
+			JTable::addIncludePath( JPATH_ROOT . '/components/com_api/tables' );
+			$model = JModel::getInstance( 'Key', 'ApiModel' );
+
+			$data = array( 'id' => null, 'user_id' => $user_id, 'domain' => '', 'published' => 1 );
+			if ( !$return = $model->save( $data ) ) {
+				return false;
+			}
+
+			$key = $return->hash;
+		}
+
+		return $key;
+	}
+
 	function stripslashes_deep( $value )
 	{
 		if ( is_array( $value ) ) {
