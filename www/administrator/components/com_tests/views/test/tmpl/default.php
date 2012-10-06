@@ -45,7 +45,6 @@ defined('_JEXEC') or die;
 	</div>
 </div>
 
-<a href="#finish_modal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
 <!-- Finish Modal -->
 <div class="modal hide fade" id="finish_modal" tabindex="-1" role="dialog" aria-labelledby="finish_label" aria-hidden="true">
 	<div class="modal-header">
