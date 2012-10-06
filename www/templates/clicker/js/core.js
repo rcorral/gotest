@@ -123,6 +123,47 @@ core_class.prototype._format_date = function( date ) {
 	return ( date.getMonth() + 1 ) + '/' + date.getDate() + '/' + date.getFullYear();
 };
 
+/**
+ * Returns highest units of time that can be made out of the seconds provided
+ * Returns the time and the units for the seconds
+ **/
+core_class.prototype.seconds_to_readable_time = function( seconds, add_to_counter ) {
+	var _seconds = Number( seconds );
+
+	if ( typeof add_to_counter == "undefined" || add_to_counter ) {
+		add_to_counter = 1;
+	} else {
+		add_to_counter = 0;
+	}
+
+	// Check for minutes
+	seconds /= 60;
+
+	// We only have seconds
+	if ( seconds < 1 ) {
+		return { time: _seconds, units: 's' };
+	}
+
+	// Check for hours
+	seconds /= 60;
+
+	// We have minutes
+	if ( seconds < 1 ) {
+		return { time: Math.floor( _seconds / 60 ) + add_to_counter, units: 'm' };
+	};
+
+	// Check for days
+	seconds /= 24;
+
+	// We have hours
+	if ( seconds < 1 ) {
+		return { time: Math.floor( _seconds / 60 / 60 ) + add_to_counter, units: 'h' };
+	};
+
+	// We have days
+	return { time: Math.floor( _seconds / 60 / 60 / 24 ) + add_to_counter, units: 'd' };
+};
+
 var core;
 jQuery(document).ready(function(){
 	core = new core_class;

@@ -45,6 +45,9 @@ class Tests
 			'js' => "TEMPLATEPATH/js/jquery.colorbox.js",
 			'css' => "TEMPLATEPATH/css/colorbox.css"
 			),
+		'timer' => array(
+			'js' => 'TEMPLATEPATH/js/jquery.timer.js'
+			),
 		'core' => array(
 			'js' => "TEMPLATEPATH/js/core.js"
 			),
