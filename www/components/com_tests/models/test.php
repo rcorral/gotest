@@ -1,17 +1,25 @@
 <?php
-defined('JPATH_PLATFORM') or die;
+/**
+ * @package     Tests
+ * @copyright   Copyright (C) 2012 Rafael Corral. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-class TestModelTest extends JModelDatabase
+defined('_JEXEC') or die;
+
+jimport('joomla.application.component.model');
+
+class TestsModelTest extends JModel
 {
-	public function get_test()
+	public function getTest()
 	{
-		$app = JFactory::getApplication();
+		$test_id = JRequest::getInt( 'test_id' );
 
-		$query = $this->db->getQuery(true)
+		$query = $this->_db->getQuery(true)
 			->select( 't.*' )
-			->from( '`tests` AS t' )
-			->where( 't.`id` = ' . (int) $app->input->get( 'test_id' ) )
+			->from( '#__test_tests AS t' )
+			->where( 't.`id` = ' . $test_id )
 			;
-		return $this->db->setQuery( $query )->loadObject();
+		return $this->_db->setQuery( $query )->loadObject();
 	}
 }
