@@ -17,11 +17,4 @@ defined('_JEXEC') or die;
 <?php
 Tests::addScriptDeclaration("
 var api_key = '" .TestsHelper::get_api_key( null, true ). "';
-var xclick_interval = window.setInterval(function() {
-	if (xclick) {
-		window.clearInterval(xclick_interval);
-		test_id = document.getElementById( 'test-id' ).value;
-		xclick.next_question( test_id );
-	}
-}, 500);
 ");

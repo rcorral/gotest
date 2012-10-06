@@ -2,13 +2,13 @@ var socket, xclick;
 
 XClick = (function() {
 	function XClick() {
-		this.debug = true;
+		this.debug = in_development;
 		this.user = { channels: {} };
 		setup();
 	}
 
 	function setup() {
-		socket = io.connect('http://' + io_server + ':8000/');
+		socket = io.connect( io_server );
 		socket.on('next_question', function(data){
 			if ( xclick.debug ) {
 				console.log('Next question:', data);
@@ -70,7 +70,7 @@ XClick = (function() {
 			msg.question_id = question_order;
 		};
 
-		if ( !this._object_empty( msg ) ) {
+		if ( !core._object_empty( msg ) ) {
 			msg.key = api_key;
 			this.emit('next_question', msg);
 		}
@@ -81,21 +81,20 @@ XClick = (function() {
 			console.log('Emit:', data);
 		}
 
-		data.is_presenter = 1;
-
 		socket.emit(event, data, function( type, data ){
 			// This callback is mostly for errors only
 			console.log('Callback:', type, data);
 		});
 	};
 
-	XClick.prototype._object_empty = function( ob ) {
-		for ( var i in ob ) {
-			return false;
-		}
-
-		return true;
-	};
-
 	return XClick;
 })();
+
+jQuery(document).ready(function(){
+	if ( io ) {
+		xclick = new XClick;
+		xclick.next_question( jQuery('#test-id').val() );
+	} else {
+		// SOME_ERROR
+	}
+});

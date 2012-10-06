@@ -34,6 +34,10 @@ class Tests
 		'jquery' => array(
 			'js' => "TEMPLATEPATH/js/jquery.min.js"
 			),
+		'bootstrap' => array(
+			'js' => 'TEMPLATEPATH/bootstrap/js/bootstrap.min.js',
+			'css' => 'TEMPLATEPATH/bootstrap/css/bootstrap.min.css'
+			),
 		'colorbox' => array(
 			'js' => "TEMPLATEPATH/js/jquery.colorbox.js",
 			'css' => "TEMPLATEPATH/css/colorbox.css"
@@ -44,11 +48,11 @@ class Tests
 		'templates' => array(
 			'js' => 'SITEcomponents/com_tests/assets/js/templates.js'
 			),
+		'socket.io' => array(
+			'js' => 'http://SITE_HOST:8000/socket.io/socket.io.js'
+			),
 		'click' => array(
-			'js' => array(
-				'BASEcomponents/com_tests/assets/js/click.js',
-				'SITEcomponents/com_tests/assets/js/my.conf.js'
-				)
+			'js' => 'BASEcomponents/com_tests/assets/js/click.js'
 			)
 		);
 
@@ -59,6 +63,7 @@ class Tests
 		$doc = JFactory::getDocument();
 		$site_path = JURI::root();
 		$base_path = JURI::base();
+		$site_host = JURI::getInstance()->toString( array( 'host' ) );
 		$app = JFactory::getApplication();
 		$tmpl = isset( $_REQUEST['tmpl'] );
 		$template_path = JURI::root() . 'templates/clicker';
@@ -78,14 +83,18 @@ class Tests
 				foreach ( $_scripts[$script] as $type => $files ) {
 					if ( 'js' == $type ) {
 						foreach ( (array) $files as $file ) {
-							$file = str_replace( array( 'TEMPLATEPATH', 'SITE', 'BASE' ),
-								array( $template_path, $site_path, $base_path ), $file );
+							$file = str_replace(
+								array( 'TEMPLATEPATH', 'BASE', 'SITE_HOST', 'SITE' ),
+								array( $template_path, $base_path, $site_host, $site_path ),
+								$file );
 							$doc->addScript( $file );
 						}
 					} elseif ( 'css' == $type ) {
 						foreach ( (array) $files as $file ) {
-							$file = str_replace( array( 'TEMPLATEPATH', 'SITE', 'BASE' ),
-								array( $template_path, $site_path, $base_path ), $file );
+							$file = str_replace(
+								array( 'TEMPLATEPATH', 'BASE', 'SITE_HOST', 'SITE' ),
+								array( $template_path, $base_path, $site_host, $site_path ),
+								$file );
 							$doc->addStyleSheet( $file );
 						}
 					}
@@ -108,7 +117,11 @@ class Tests
 			return;
 		}
 
+		$host = JURI::getInstance()->toString( array( 'host' ) );
 		$js = 'var live_site = \'' .JURI::root(). '\';';
+		$js .= 'var site_host = \'' .$host. '\';';
+		$js .= 'var io_server = \'http://' .$host. ':8000/\';';
+		$js .= 'var in_development = ' . ( TESTS_DEVELOPMENT ? 1 : 0 ) . ';';
 
 		if ( JFactory::getApplication()->isAdmin() ) {
 			$js .= "\nvar community_token = 'ae548d19b6a7af79812708a2496c6f72ae8e5cd8';";

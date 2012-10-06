@@ -2,13 +2,13 @@ var socket, xclick;
 
 XClick = (function() {
 	function XClick() {
-		this.debug = true;
+		this.debug = in_development;
 		this.user = { channels: {} };
 		setup();
 	}
 
 	function setup() {
-		socket = io.connect('http://' + io_server + ':8000/');
+		socket = io.connect( io_server );
 		socket.on('current_question', update_question);
 		socket.on('next_question', update_question);
 
@@ -28,7 +28,7 @@ XClick = (function() {
 			msg.test_id = test_id;
 		};
 
-		if ( !this._object_empty( msg ) ) {
+		if ( !core._object_empty( msg ) ) {
 			this.emit('current_question', msg);
 		}
 	};
@@ -42,14 +42,6 @@ XClick = (function() {
 			// This callback is mostly for errors only
 			console.log('Callback:', type, data);
 		});
-	};
-
-	XClick.prototype._object_empty = function( ob ) {
-		for ( var i in ob ) {
-			return false;
-		}
-
-		return true;
 	};
 
 	return XClick;
@@ -75,3 +67,12 @@ function update_question( data ) {
 	document.getElementById('form-data').innerHTML = template;
 	document.getElementById('form-static').style.display = '';
 }
+
+jQuery(document).ready(function(){
+	if ( io ) {
+		xclick = new XClick;
+		xclick.current_question( jQuery('#test-id').val() );
+	} else {
+		// SOME_ERROR
+	}
+});

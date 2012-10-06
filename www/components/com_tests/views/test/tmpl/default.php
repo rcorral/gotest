@@ -11,14 +11,3 @@ defined('_JEXEC') or die;
 		<input type="submit" name="submit" value="Submit" onclick="xclick.submit(this);" id="btn-submit" />
 	</div>
 </form>
-
-<?php
-Tests::addScriptDeclaration("
-var xclick_interval = window.setInterval(function() {
-	if (xclick) {
-		window.clearInterval(xclick_interval);
-		test_id = document.getElementById( 'test-id' ).value;
-		xclick.current_question( test_id );
-	}
-}, 500);
-");

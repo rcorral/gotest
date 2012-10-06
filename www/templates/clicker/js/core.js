@@ -1,8 +1,8 @@
-var tests_class = function() {
+var core_class = function() {
 	this.site_url = live_site;
 }
 
-tests_class.prototype.inline_popup = function( msg, auto_close, complete_callback ) {
+core_class.prototype.inline_popup = function( msg, auto_close, complete_callback ) {
 	jQuery.colorbox({
 		innerWidth: '500px',
 		html: '<div id="inline_content">' +msg+ '</div>',
@@ -14,14 +14,14 @@ tests_class.prototype.inline_popup = function( msg, auto_close, complete_callbac
 	}
 };
 
-tests_class.prototype._ajax = function( data, success, opts ) {
+core_class.prototype._ajax = function( data, success, opts ) {
 	options = {
 		url: this.site_url + '?option=com_api',
 		async: true,
 		type: 'GET',
 		dataType: 'json',
 		error: function(jxhr){
-			tests._stop_loader();
+			core._stop_loader();
 			if ( typeof jxhr.responseText == 'undefined' || !jxhr.responseText ) {
 				return;
 			}
@@ -60,7 +60,7 @@ tests_class.prototype._ajax = function( data, success, opts ) {
 	}).responseText;
 };
 
-tests_class.prototype._object_empty = function( ob ) {
+core_class.prototype._object_empty = function( ob ) {
 	for ( var i in ob ) {
 		return false;
 	}
@@ -68,7 +68,7 @@ tests_class.prototype._object_empty = function( ob ) {
 	return true;
 };
 
-tests_class.prototype._merge_objects = function( obj1, obj2 ) {
+core_class.prototype._merge_objects = function( obj1, obj2 ) {
 	var obj3 = {};
 
 	for ( var attrname in obj1 ) { obj3[attrname] = obj1[attrname]; }
@@ -77,7 +77,7 @@ tests_class.prototype._merge_objects = function( obj1, obj2 ) {
 	return obj3;
 };
 
-tests_class.prototype._load_asset = function( filename, filetype, async ) {
+core_class.prototype._load_asset = function( filename, filetype, async ) {
 	if ( 'js' == filetype ) {
 		var sc = document.createElement('script');
 		sc.setAttribute( 'type', 'text/javascript' );
@@ -99,15 +99,15 @@ tests_class.prototype._load_asset = function( filename, filetype, async ) {
 		document.getElementsByTagName('head')[0].appendChild( sc );
 };
 
-tests_class.prototype._start_loader = function( msg, callback ) {
+core_class.prototype._start_loader = function( msg, callback ) {
 	return;
 };
 
-tests_class.prototype._stop_loader = function() {
+core_class.prototype._stop_loader = function() {
 	return;
 };
 
-tests_class.prototype._merge_objects = function( obj1, obj2 ) {
+core_class.prototype._merge_objects = function( obj1, obj2 ) {
 	var obj3 = {};
 
 	for ( var attrname in obj1 ) { obj3[attrname] = obj1[attrname]; }
@@ -119,13 +119,13 @@ tests_class.prototype._merge_objects = function( obj1, obj2 ) {
 /**
  * Expects date object as parameter
  */
-tests_class.prototype._format_date = function( date ) {
+core_class.prototype._format_date = function( date ) {
 	return ( date.getMonth() + 1 ) + '/' + date.getDate() + '/' + date.getFullYear();
 };
 
-var tests;
+var core;
 jQuery(document).ready(function(){
-	tests = new tests_class;
+	core = new core_class;
 });
 
 function _datetime_to_date( datetime ) {
@@ -166,7 +166,7 @@ function _populate_select( selector, obj, _key, _value, opts ) {
 	};
 
 	if ( typeof opts != 'undefined' ) {
-		options = tests._merge_objects( options, opts );
+		options = core._merge_objects( options, opts );
 	}
 
 	el = jQuery(selector);

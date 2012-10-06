@@ -32,7 +32,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('next_question', function (data, fn) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
 
-		if ( !( data instanceof Object ) || !data.is_presenter ) {
+		if ( !( data instanceof Object ) || !data.key ) {
 			socket.disconnect();
 			return;
 		}
