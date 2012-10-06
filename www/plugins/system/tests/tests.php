@@ -38,6 +38,9 @@ class Tests
 			'js' => 'TEMPLATEPATH/bootstrap/js/bootstrap.min.js',
 			'css' => 'TEMPLATEPATH/bootstrap/css/bootstrap.min.css'
 			),
+		'bootstrap-responsive' => array(
+			'css' => 'TEMPLATEPATH/bootstrap/css/bootstrap-responsive.min.css'
+			),
 		'colorbox' => array(
 			'js' => "TEMPLATEPATH/js/jquery.colorbox.js",
 			'css' => "TEMPLATEPATH/css/colorbox.css"
@@ -102,6 +105,10 @@ class Tests
 
 				if ( 'jquery' == $script ) {
 					self::addScriptDeclaration( ';jQuery.noConflict();' );
+				}
+
+				if ( 'bootstrap-responsive' == $script ) {
+					$doc->setMetaData( 'viewport', 'width=device-width, initial-scale=1.0' );
 				}
 
 				$_scripts[$script] = true;

@@ -28,18 +28,17 @@ XClick = (function() {
 
 			document.getElementById('question-order').value = Number( question.order );
 			document.getElementById('form-data').innerHTML = template;
-			document.getElementById('form-static').style.display = '';
 
 			if ( question.order > 1 ) {
-				document.getElementById('btn-previous').style.display = '';
+				jQuery('#btn-previous').removeClass('disabled').removeAttr('disabled');
 			} else {
-				document.getElementById('btn-previous').style.display = 'none';
+				jQuery('#btn-previous').addClass('disabled').attr('disabled', 'disabled');
 			}
 
 			if ( question.order == question.max_order ) {
-				document.getElementById('btn-next').style.display = 'none';
+				jQuery('#btn-next').addClass('disabled').attr('disabled', 'disabled');
 			} else {
-				document.getElementById('btn-next').style.display = '';
+				jQuery('#btn-next').removeClass('disabled').removeAttr('disabled');
 			}
 		});
 

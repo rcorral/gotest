@@ -22,7 +22,7 @@ class TestsApiResourceQuestion extends ApiResource
 		$model = JModel::getInstance( 'Question', 'TestsModel' );
 
 		$question = $model->get_question();
-		$question->answers = $model->get_options( @$question->id );
+		$question->options = $model->get_options( @$question->id );
 		$question->max_order = $model->max_order( @$question->test_id );
 
 		$this->plugin->setResponse( $question );

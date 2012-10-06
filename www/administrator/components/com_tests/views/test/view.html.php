@@ -22,11 +22,11 @@ class TestsViewTest extends JView
 			return false;
 		}
 
-		$this->document = JFactory::getDocument();
-		$this->document->addStyleSheet( JURI::root()
-			. 'components/com_tests/assets/css/template.css' );
-		Tests::add_script(
-			array( 'jquery', 'bootstrap', 'core', 'socket.io', 'click', 'templates' ) );
+		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'core',
+			'socket.io', 'click', 'templates' ) );
+
+		Tests::addScriptDeclaration( "var api_key = '"
+			. TestsHelper::get_api_key( null, true ). "';" );
 
 		parent::display( $tpl );
 	}
