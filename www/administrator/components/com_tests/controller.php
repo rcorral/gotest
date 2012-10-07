@@ -20,6 +20,16 @@ class TestsController extends JController
 {
 	public function display()
 	{
+		$view = JRequest::getCmd('view', 'tests');
+
+		// set default view if not set
+		JRequest::setVar('view', $view);
+
+		if ( JFactory::getApplication()->isAdmin() ) {
+			// Set the submenu
+			// TestsCHelper::addSubmenu($view);
+		}
+
 		return parent::display();
 	}
 }
