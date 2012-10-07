@@ -11,9 +11,13 @@ defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.file');
 
+if ( 'com_tests' == JRequest::getVar( 'option' ) ) {
+	require 'component-tests.php';
+	return;
+}
+
 $doc = JFactory::getDocument();
 
-if ( 'com_tests' != JRequest::getVar( 'option' ) ) {
 $doc->addStyleSheet('templates/system/css/system.css');
 $doc->addStyleSheet('templates/'.$this->template.'/css/template.css');
 
@@ -34,7 +38,6 @@ if ($this->params->get('textBig')) {
 
 if ($this->params->get('highContrast')) {
 	$doc->addStyleSheet('templates/'.$this->template.'/css/highcontrast.css');
-}
 }
 ?>
 <!DOCTYPE html>
