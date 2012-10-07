@@ -28,8 +28,8 @@ lang = click.language.setup();
 client = click.client.setup();
 var current_question = [];
 
-io.sockets.on('connection', function (socket) {
-	socket.on('next_question', function (data, fn) {
+io.sockets.on('connection', function( socket ) {
+	socket.on('next_question', function( data, fn ) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
 
 		if ( !( data instanceof Object ) || !data.key ) {
@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket) {
 				});
 
 				response.on('end', function() {
-					current_question[data.test_id] = { date: new Date() / 1000, question: body };
+					current_question[data.test_id] = { date: new Date(), question: body };
 					io.sockets.emit('next_question',
 						{ type: 'question', question: body, offset: 0 });
 				});
@@ -87,14 +87,55 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 
-	socket.on('current_question', function (data, fn) {
+	socket.on('current_question', function( data, fn ) {
 		body = '';
 		offset = 0;
 		if ( current_question[data.test_id] ) {
 			body = current_question[data.test_id].question;
-			offset = Math.floor( new Date() / 1000 - current_question[data.test_id].date );
+			timer_action = current_question[data.test_id].timer_action;
+
+			// If we have toggled the time then calculate the offset from the seconds left
+			if ( current_question[data.test_id].seconds_left ) {
+				_question = JSON.parse( current_question[data.test_id].question );
+				offset = Number( _question.seconds )
+					- Number( current_question[data.test_id].seconds_left );
+
+				// For debugging
+				by = 'seconds_left';
+			} else {
+				offset = Math.floor( new Date() / 1000
+					- current_question[data.test_id].date / 1000 );
+
+				// For debugging
+				by = 'current_date';
+			}
 		};
-		socket.emit('current_question', { type: 'question', question: body, offset: offset });
+
+		socket.emit('current_question', { type: 'question', question: body,
+			timer_action: timer_action, offset: offset, by: by });
+	});
+
+	socket.on('timer_toggle', function( data ) {
+		if ( !( data instanceof Object ) || !data.key ) {
+			socket.disconnect();
+			return;
+		}
+
+		if ( 'pause' == data.action ) {
+			current_question[data.test_id].seconds_left = data.seconds_left;
+		} else if ( 'play' == data.action ) {
+			delete current_question[data.test_id].seconds_left;
+			_question = JSON.parse( current_question[data.test_id].question );
+			offset = Number( _question.seconds ) - Number( data.seconds_left );
+			date = new Date();
+			date.setSeconds( date.getSeconds() - offset );
+			current_question[data.test_id].date = date;
+		}
+
+		current_question[data.test_id].timer_action = data.action;
+
+		socket.broadcast.emit('timer_toggle',
+			{ action: data.action, seconds_left: data.seconds_left });
 	});
 
 	socket.on('disconnect', function () {

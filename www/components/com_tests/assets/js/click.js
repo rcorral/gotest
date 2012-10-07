@@ -9,8 +9,64 @@ XClick = (function() {
 
 	function setup() {
 		socket = io.connect( io_server );
+
+		// Get current question function and listeners
+		update_question = function update_question( data ) {
+			if ( xclick.debug ) {
+				console.log('Current question:', data);
+			}
+
+			if ( xclick.timer ) {
+				xclick.timer.stop();
+			};
+			jQuery('#counter').removeClass('text-error').removeClass('text-success');
+
+			if ( !data || !data.question ) {
+				return;
+			}
+
+			question = eval( '(' + data.question + ')' );
+
+			if ( !question.id ) {
+				return;
+			};
+
+			template = templates.parse( question.question_type, question );
+			xclick.set_timer( question.seconds - data.offset, data.timer_action );
+
+			document.getElementById('form-data').innerHTML = template;
+			if ( question.seconds && ( question.seconds - data.offset ) > 0 ) {
+				jQuery('#btn-submit').slideDown();
+			};
+		}
 		socket.on('current_question', update_question);
 		socket.on('next_question', update_question);
+
+		// Toggle timer
+		socket.on('timer_toggle', function( data ) {
+			if ( !xclick.timer ) {
+				return;
+			}
+
+			if ( 'pause' == data.action ) {
+				xclick.timer.pause();
+				if ( xclick.seconds_left ) {
+					jQuery('#counter').addClass('text-error');
+				};
+			} else if ( 'play' == data.action ) {
+				xclick.timer.play();
+				if ( xclick.seconds_left ) {
+					jQuery('#counter').removeClass('text-error');
+					jQuery('#counter').addClass('text-success');
+					setTimeout("jQuery('#counter').removeClass('text-success');", 2000);
+					jQuery('#btn-submit').slideDown();
+				};
+			}
+
+			// Display the time
+			xclick.display_time( core.seconds_to_readable_time( data.seconds_left ) );
+			xclick.seconds_left = data.seconds_left;
+		});
 
 		return socket;
 	};
@@ -44,8 +100,9 @@ XClick = (function() {
 		});
 	};
 
-	XClick.prototype.set_timer = function( seconds ) {
+	XClick.prototype.set_timer = function( seconds, action ) {
 		this.question_seconds = Number( seconds );
+		this.seconds_left = this.question_seconds;
 
 		if ( !seconds ) {
 			jQuery('#counter').slideUp();
@@ -62,58 +119,43 @@ XClick = (function() {
 			jQuery('#counter').slideDown();
 		}
 
+		if ( 'pause' == action ) {
+			autostart = false;
+			jQuery('#counter').addClass('text-error');
+		} else {
+			autostart = true;
+		}
+
 		// Display the very original time
-		display_time = core.seconds_to_readable_time( this.question_seconds,
-			this.question_seconds % 60 );
-		jQuery('#counter span.digit').html( display_time.time );
-		jQuery('#counter span.units').html( display_time.units );
+		this.display_time( core.seconds_to_readable_time( this.question_seconds,
+			this.question_seconds % 60 ) );
 
-		// Get the timer going
+		// Initialize timer
 		this.timer = jQuery.timer(function(){
-			xclick.seconds_left = --xclick.question_seconds;
+			xclick.seconds_left--;
 
-			display_time = core.seconds_to_readable_time( xclick.seconds_left );
+			xclick.display_time( core.seconds_to_readable_time( xclick.seconds_left ) );
+		});
+
+		// Fire the timer up
+		this.timer.set({ time : 1000, autostart : autostart });
+	};
+
+	XClick.prototype.display_time = function( display_time ) {
+		// Here is where we take care of stopping the timer if we are out of time
+		// We also hide submit button here
+		if ( display_time.time < 0 ) {
+			jQuery('#btn-submit').slideUp();
+			xclick.timer.stop();
+		} else {
 			jQuery('#counter span.digit').html( display_time.time );
 			jQuery('#counter span.units').html( display_time.units );
-			if ( 0 == xclick.seconds_left ) {
-				// Hide question
-				jQuery('#btn-submit').slideUp();
-				xclick.timer.stop();
-			};
-		});
-		this.timer.set({ time : 1000, autostart : true });
+		}
 	};
 
 	return XClick;
 })();
 
-function update_question( data ) {
-	if ( xclick.debug ) {
-		console.log('Current question:', data);
-	}
-
-	if ( xclick.timer ) {
-		xclick.timer.stop();
-	};
-
-	if ( !data || !data.question ) {
-		return;
-	}
-
-	question = eval( '(' + data.question + ')' );
-
-	if ( !question.id ) {
-		return;
-	};
-
-	template = templates.parse( question.question_type, question );
-	xclick.set_timer( question.seconds - data.offset );
-
-	document.getElementById('form-data').innerHTML = template;
-	if ( question.seconds && ( question.seconds - data.offset ) > 0 ) {
-		jQuery('#btn-submit').slideDown();
-	};
-}
 
 jQuery(document).ready(function(){
 	if ( io ) {

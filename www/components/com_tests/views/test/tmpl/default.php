@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 ?>
 <style type="text/css">
-#counter { margin: 0; font-size: 44px; cursor: pointer; }
+#counter { margin: 0; font-size: 44px; }
 </style>
 <div class="container-fluid">
 	<div class="row-fluid">

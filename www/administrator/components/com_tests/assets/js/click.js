@@ -65,8 +65,7 @@ XClick = (function() {
 			question_order = Number( _question_order ) - 1;
 		}
 
-		test_id = document.getElementById( 'test-id' ).value;
-		xclick.next_question( test_id, question_order );
+		xclick.next_question( jQuery('#test-id').val(), question_order );
 
 		return false;
 	};
@@ -105,6 +104,7 @@ XClick = (function() {
 
 	XClick.prototype.set_timer = function( seconds ) {
 		this.question_seconds = Number( seconds );
+		this.seconds_left = this.question_seconds;
 
 		if ( !seconds ) {
 			jQuery('#counter').slideUp();
@@ -119,24 +119,25 @@ XClick = (function() {
 		jQuery('#counter').removeClass('text-error');
 
 		// Display the very original time
-		display_time = core.seconds_to_readable_time( this.question_seconds,
-			this.question_seconds % 60 );
-		jQuery('#counter span.digit').html( display_time.time );
-		jQuery('#counter span.units').html( display_time.units );
+		xclick.display_time( core.seconds_to_readable_time( this.seconds_left,
+			this.seconds_left % 60 ) );
 
 		// Get the timer going
 		this.timer = jQuery.timer(function(){
-			xclick.seconds_left = --xclick.question_seconds;
+			xclick.seconds_left--;
 
-			display_time = core.seconds_to_readable_time( xclick.seconds_left );
-			jQuery('#counter span.digit').html( display_time.time );
-			jQuery('#counter span.units').html( display_time.units );
+			xclick.display_time( core.seconds_to_readable_time( xclick.seconds_left ) );
 			if ( 0 == xclick.seconds_left ) {
 				// Change question
 				xclick.submit( 'next' );
 			};
 		});
 		this.timer.set({ time : 1000, autostart : true });
+	};
+
+	XClick.prototype.display_time = function( display_time ) {
+		jQuery('#counter span.digit').html( display_time.time );
+		jQuery('#counter span.units').html( display_time.units );
 	};
 
 	return XClick;
@@ -151,24 +152,37 @@ jQuery(document).ready(function(){
 	}
 
 	jQuery('#counter').on('click', function(){
+		if ( xclick.timer.isActive ) {
+			data = { action: 'pause' };
+		} else {
+			data = { action: 'play' };
+		}
+		data.seconds_left = xclick.seconds_left;
+		data.key = api_key;
+		data.test_id = jQuery('#test-id').val();
+
+		// Emit before the toggle in hopes that there is less of a time difference
+		// between client and presenter
+		xclick.emit( 'timer_toggle', data );
+
 		xclick.timer.toggle();
 	}).hover(
 		function(){
 			if ( xclick.timer.isActive ) {
-				jQuery(this).addClass('text-warning');
-				jQuery(this).removeClass('text-success');
+				jQuery(this).addClass('text-warning')
+					.removeClass('text-success');
 			} else {
-				jQuery(this).addClass('text-success');
-				jQuery(this).removeClass('text-error');
+				jQuery(this).addClass('text-success')
+					.removeClass('text-error');
 			}
 		}, function(){
 			if ( xclick.timer.isActive ) {
-				jQuery(this).removeClass('text-warning');
-				jQuery(this).removeClass('text-success');
+				jQuery(this).removeClass('text-warning')
+					.removeClass('text-success');
 			} else {
-				jQuery(this).addClass('text-error');
-				jQuery(this).removeClass('text-warning');
-				jQuery(this).removeClass('text-success');
+				jQuery(this).addClass('text-error')
+					.removeClass('text-warning')
+					.removeClass('text-success');
 			}
 		}
 	);
