@@ -22,7 +22,7 @@ class TestsViewTest extends JView
 			return false;
 		}
 
-		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'core',
+		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'timer', 'core',
 			'socket.io', 'click', 'templates' ) );
 
 		parent::display( $tpl );

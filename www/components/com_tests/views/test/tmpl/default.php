@@ -1,13 +1,41 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<h1><?php echo $this->test->title; ?></h1>
-<h2><?php echo $this->test->sub_title; ?></h2>
-
-<form id="presenter-form" onSubmit="return false;">
-	<div id="form-data"></div>
-	<div id="form-static" style="display:none;">
-		<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
-		<input type="submit" name="submit" value="Submit" onclick="xclick.submit(this);" id="btn-submit" />
+<style type="text/css">
+#counter { margin: 0; font-size: 44px; cursor: pointer; }
+</style>
+<div class="container-fluid">
+	<div class="row-fluid">
+	<div class="span12">
+		<form id="student-form" onSubmit="return false;">
+			<div class="row-fluid">
+			<div class="page-header span12">
+				<div class="row-fluid">
+				<div class="span10 clearfix">
+					<h1><?php echo $this->test->title; ?>
+					<?php if ( $this->test->sub_title ) { ?>
+					<small><?php echo $this->test->sub_title; ?></small>
+					<?php } ?>
+					</h1>
+				</div>
+				<div class="span2">
+					<div class="well well-large muted pull-left" id="counter" style="display:none;">
+						<span class="digit"></span><span class="units"></span>
+					</div>
+				</div>
+				</div>
+			</div>
+			</div>
+			<div class="row-fluid">
+				<div id="form-data" class="span12"></div>
+			</div>
+			<div class="row-fluid">
+			<div class="span4">
+				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
+				<button type="button" name="submit" onclick="xclick.submit(this);" id="btn-submit" class="btn btn-primary" style="display:none;">Submit</button>
+			</div>
+			</div>
+		</form>
 	</div>
-</form>
+	</div>
+</div>

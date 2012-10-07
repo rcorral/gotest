@@ -79,8 +79,9 @@ io.sockets.on('connection', function (socket) {
 				});
 
 				response.on('end', function() {
-					current_question[data.test_id] = body;
-					io.sockets.emit('next_question', { type: 'question', question: body });
+					current_question[data.test_id] = { date: new Date() / 1000, question: body };
+					io.sockets.emit('next_question',
+						{ type: 'question', question: body, offset: 0 });
 				});
 			});
 		}
@@ -88,10 +89,12 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('current_question', function (data, fn) {
 		body = '';
+		offset = 0;
 		if ( current_question[data.test_id] ) {
-			body = current_question[data.test_id];
+			body = current_question[data.test_id].question;
+			offset = Math.floor( new Date() / 1000 - current_question[data.test_id].date );
 		};
-		socket.emit('current_question', { type: 'question', question: body });
+		socket.emit('current_question', { type: 'question', question: body, offset: offset });
 	});
 
 	socket.on('disconnect', function () {

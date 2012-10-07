@@ -54,7 +54,7 @@ XClick = (function() {
 		};
 
 		_question_order = jQuery('#question-order').val();
-		if ( _question_order == xclick.current_question.max_order ) {
+		if ( 'next' == type && _question_order == xclick.current_question.max_order ) {
 			xclick.complete();
 			return;
 		}
@@ -114,6 +114,9 @@ XClick = (function() {
 		} else {
 			jQuery('#counter').slideDown();
 		}
+
+		// Reset color on counter
+		jQuery('#counter').removeClass('text-error');
 
 		// Display the very original time
 		display_time = core.seconds_to_readable_time( this.question_seconds,
