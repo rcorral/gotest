@@ -8,6 +8,21 @@
 	<label for="min-answers-QID">Minimum Answers: </label>
 	<input type="text" name="questions[QID][min_answers]" value="QUESTION_MIN_ANSWERS" id="min-answers-QID" />
 	<div clas="clr"></div>
+	Media:
+	<input type="text" name="questions[QID][media]" value="QUESTION_MEDIA" id="media-QID" />
+	<label>
+		<input type="radio" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK />
+		Link
+	</label>
+	<label>
+		<input type="radio" name="questions[QID][media_type]" value="image" OPTION_VALID_IMAGE />
+		Image
+	</label>
+	<label>
+		<input type="radio" name="questions[QID][media_type]" value="youtube" OPTION_VALID_YOUTUBE />
+		YouTube
+	</label>
+	<div clas="clr"></div>
 	Answers:
 	<div clas="clr"></div>
 	<div class="answers">

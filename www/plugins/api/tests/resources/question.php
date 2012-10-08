@@ -22,8 +22,16 @@ class TestsApiResourceQuestion extends ApiResource
 		$model = JModel::getInstance( 'Question', 'TestsModel' );
 
 		$question = $model->get_question();
-		$question->options = $model->get_options( @$question->id );
-		$question->max_order = $model->max_order( @$question->test_id );
+
+		if ( $question->id ) {
+			$question->options = $model->get_options( $question->id );
+			$question->max_order = $model->max_order( $question->test_id );
+
+			if ( 'youtube' == $question->media_type ) {
+				$url = JURI::getInstance( $question->media );
+				$question->media = $url->getVar( 'v', $question->media );
+			}
+		}
 
 		$this->plugin->setResponse( $question );
 	}

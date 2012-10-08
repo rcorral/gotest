@@ -32,10 +32,11 @@ XClick = (function() {
 			};
 
 			template = templates.parse( question.question_type, question );
-			xclick.set_timer( question.seconds - data.offset, data.timer_action );
+			xclick.set_timer( Number( question.seconds )
+				? ( question.seconds - data.offset ) : question.seconds, data.timer_action  );
 
 			document.getElementById('form-data').innerHTML = template;
-			if ( question.seconds && ( question.seconds - data.offset ) > 0 ) {
+			if ( 0 == question.seconds || ( question.seconds - data.offset ) > 0 ) {
 				jQuery('#btn-submit').slideDown();
 			};
 		}
@@ -89,7 +90,7 @@ XClick = (function() {
 		}
 	};
 
-	XClick.prototype.emit = function(event, data) {
+	XClick.prototype.emit = function( event, data ) {
 		if ( this.debug ) {
 			console.log('Emit:', data);
 		}
@@ -104,7 +105,7 @@ XClick = (function() {
 		this.question_seconds = Number( seconds );
 		this.seconds_left = this.question_seconds;
 
-		if ( !seconds ) {
+		if ( !seconds || 0 == seconds ) {
 			jQuery('#counter').slideUp();
 			jQuery('#counter span').html('');
 			delete this.timer;
@@ -155,7 +156,6 @@ XClick = (function() {
 
 	return XClick;
 })();
-
 
 jQuery(document).ready(function(){
 	if ( io ) {

@@ -175,7 +175,8 @@ class TestsModelTest_Edit extends JModelAdmin
 				'question_type' => $question['type_id'],
 				'seconds' => $question['seconds'],
 				'min_answers' => @$question['min_answers'],
-				'media' => ''
+				'media' => $this->clean_media_url( $question['media'], @$question['media_type'] ),
+				'media_type' => @$question['media_type']
 				);
 
 			// This means that this question already exists so lets add the id to the array
@@ -317,5 +318,24 @@ class TestsModelTest_Edit extends JModelAdmin
 		}
 
 		return (object) $templates;
+	}
+
+	public function clean_media_url( $url, $type )
+	{
+		if ( !$url ) {
+			return '';
+		}
+
+		if ( !$type ) {
+			$type = 'link';
+		}
+
+		$url_bak = $url;
+
+		// Clean URL
+		$_url = JURI::getInstance( $url );
+		$url = $_url->toString();
+
+		return $url;
 	}
 }

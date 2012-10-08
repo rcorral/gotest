@@ -3,6 +3,8 @@ defined('_JEXEC') or die;
 ?>
 <style type="text/css">
 #counter { margin: 0; font-size: 44px; cursor: pointer; }
+.video-container { height: 0; overflow: hidden; padding-bottom: 56.25%; padding-top: 30px; position: relative; margin-bottom: 12px; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 </style>
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -33,9 +35,7 @@ defined('_JEXEC') or die;
 				</div>
 			</div>
 			</div>
-			<div class="row-fluid">
-				<div id="form-data" class="span12"></div>
-			</div>
+			<div class="row-fluid" id="form-data"></div>
 			<div style="display:none;">
 				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
 				<input type="hidden" name="question_order" value="" id="question-order" />
