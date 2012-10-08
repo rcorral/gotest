@@ -137,10 +137,22 @@ JHtml::_('behavior.formvalidation');
 		// Do all replacements that only need to happen once
 		$html = str_replace(
 			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'QUESTION_TITLE',
-				'QUESTION_SECONDS', 'QUESTION_MIN_ANSWERS', 'COUNTER_START' ),
+				'QUESTION_SECONDS', 'QUESTION_MEDIA', 'QUESTION_MIN_ANSWERS',
+				'COUNTER_START' ),
 			array( $template->id, $template->title, $question->id, $question->title,
-				$question->seconds, $question->min_answers, count( $question->options ) ),
+				$question->seconds, $question->media, $question->min_answers,
+				count( $question->options ) ),
 			$template->html );
+
+		// See which media box is selected if any
+		foreach ( array( 'link', 'image', 'youtube' ) as $value ) {
+			$replace = '';
+			if ( $value == $question->media_type ) {
+				$replace = 'checked="checked"';
+			}
+
+			$html = str_replace( 'OPTION_VALID_' . strtoupper( $value ), $replace, $html );
+		}
 
 		preg_match( '/\{OPTION_START\}(.*)\{OPTION_END\}/sm', $html, $matches );
 

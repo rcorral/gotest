@@ -7,20 +7,21 @@ Templates = (function() {
 	Templates.prototype.mcsa = function( question ) {
 		html = '';
 
-		html += '<legend>' + question.title + '</legend>';
-		// Assume that every media is an image for now...
-		if ( question.media ) {
-			html += '<img src="' + live_site + 'media/' + question.media + '" class="img-polaroid" />';
-		};
+		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+
+		// Display media
+		html += this.render_media( question );
 
 		for ( var i = 0; i < question.options.length; i++ ) {
 			option = question.options[i];
 
+			html += '<div class="span12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="radio">';
 			html += '<input type="radio" name="option" value="' +option.id+ '" id="option_'
 				+ option.id + '" /> ';
 			html += option.title+ '</label>';
+			html += '</div>';
 			html += '</div>';
 		};
 
@@ -30,20 +31,21 @@ Templates = (function() {
 	Templates.prototype.mcma = function( question ) {
 		html = '';
 
-		html += '<legend>' + question.title + '</legend>';
-		// Assume that every media is an image for now...
-		if ( question.media ) {
-			html += '<img src="' + live_site + 'media/' + question.media + '" class="img-polaroid" />';
-		};
+		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+
+		// Display media
+		html += this.render_media( question );
 
 		for ( var i = 0; i < question.options.length; i++ ) {
 			option = question.options[i];
 
+			html += '<div class="span12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="checkbox">';
 			html += '<input type="checkbox" name="option" value="' +option.id+ '" id="option_'
 				+ option.id + '" /> ';
 			html += option.title+ '</label>';
+			html += '</div>';
 			html += '</div>';
 		};
 
@@ -53,18 +55,15 @@ Templates = (function() {
 	Templates.prototype.fitb = function( question ) {
 		html = '';
 
-		html += '<legend>' + question.title + '</legend>';
-		// Assume that every media is an image for now...
-		if ( question.media ) {
-			if ( -1 != question.media.indexOf( 'http' ) ) {
-				html += '<img src="' + question.media + '" class="img-polaroid" />';
-			} else {
-				html += '<img src="' + live_site + 'media/' + question.media + '" class="img-polaroid" />';
-			}
-		};
+		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
 
+		// Display media
+		html += this.render_media( question );
+
+		html += '<div class="span12">';
 		html += '<div class="control-group">';
 		html += '<input type="text" name="option" value="" placeholder="Answer..." class="input-xlarge" />';
+		html += '</div>';
 		html += '</div>';
 
 		return html;
@@ -73,18 +72,15 @@ Templates = (function() {
 	Templates.prototype.fitbma = function( question ) {
 		html = '';
 
-		html += '<legend>' + question.title + '</legend>';
-		// Assume that every media is an image for now...
-		if ( question.media ) {
-			if ( -1 != question.media.indexOf( 'http' ) ) {
-				html += '<img src="' + question.media + '" class="img-polaroid" />';
-			} else {
-				html += '<img src="' + live_site + 'media/' + question.media + '" class="img-polaroid" />';
-			}
-		};
+		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
 
+		// Display media
+		html += this.render_media( question );
+
+		html += '<div class="span12">';
 		html += '<div class="control-group">';
 		html += '<input type="text" name="option" value="" placeholder="Answer..." class="input-xlarge" />';
+		html += '</div>';
 		html += '</div>';
 
 		return html;
@@ -93,21 +89,51 @@ Templates = (function() {
 	Templates.prototype.essay = function( question ) {
 		html = '';
 
-		html += '<legend>' + question.title + '</legend>';
-		// Assume that every media is an image for now...
-		if ( question.media ) {
-			if ( -1 != question.media.indexOf( 'http' ) ) {
-				html += '<img src="' + question.media + '" class="img-polaroid" />';
-			} else {
-				html += '<img src="' + live_site + 'media/' + question.media + '" class="img-polaroid" />';
-			}
-		};
+		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
 
+		// Display media
+		html += this.render_media( question );
+
+		html += '<div class="span12">';
 		html += '<div class="control-group">';
 		html += '<textarea name="option" rows="10"></textarea>';
 		html += '</div>';
+		html += '</div>';
 
 		return html;
+	};
+
+	Templates.prototype.render_media = function( question ) {
+		if ( !question.media ) {
+			return '';
+		}
+
+		_return = '';
+		switch ( question.media_type ) {
+			case 'link':
+				_return = '<div class="span7"><p><a href="' + question.media + '">'
+					+ question.media + '</a></p></div>';
+				break;
+
+			case 'image':
+				_return = '<div class="span7"><p><img src="'
+					+ question.media + '" class="img-polaroid" /></p></div>';
+				break;
+
+			case 'youtube':
+				_return = '<div class="span7"><div class="video-container">'
+					+ '<iframe id="ytplayer" '
+					+ 'src="https://www.youtube.com/embed/' +question.media+ '" '
+					+ 'frameborder="0"></iframe>'
+					+ '</div></div>';
+				break;
+
+			default:
+				return '';
+				break;
+		}
+
+		return _return;
 	};
 
 	Templates.prototype.parse = function( type, question ) {

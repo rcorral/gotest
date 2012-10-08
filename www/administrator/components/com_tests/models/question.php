@@ -21,7 +21,8 @@ class TestsModelQuestion extends JModel
 		$test_id = JRequest::getInt( 'test_id' );
 
 		$query = $this->_db->getQuery(true)
-			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`, q.`order`, q.`test_id`,
+			->select( 'q.`id`, q.`title`, q.`seconds`, q.`media`, q.`media_type`, q.`order`,
+				q.`test_id`,
 				qt.`type` AS `question_type`' )
 			->from( '#__test_questions AS q' )
 			->leftjoin( '#__test_question_types AS qt ON qt.`id` = q.`question_type`' )

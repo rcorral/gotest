@@ -40,9 +40,11 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 		$rand = 'n' . substr( md5( uniqid( rand(), true ) ), 0, 5 );
 		$html = str_replace(
 			array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'QUESTION_TITLE',
-				'QUESTION_SECONDS', 'QUESTION_MIN_ANSWERS', 'COUNTER_START', 'COUNTER',
+				'QUESTION_SECONDS', 'QUESTION_MEDIA', 'OPTION_VALID_LINK', 'OPTION_VALID_IMAGE',
+				'OPTION_VALID_YOUTUBE', 'QUESTION_MIN_ANSWERS', 'COUNTER_START', 'COUNTER',
 				'OPTION_TITLE', 'OPTION_VALID', '{OPTION_START}', '{OPTION_END}' ),
 			array( $row->id, $row->title, $rand, '',
+				'', '', '', '',
 				'', '', 1, 1,
 				'', '', '', '' ),
 			$row->html );
