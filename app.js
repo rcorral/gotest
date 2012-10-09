@@ -88,8 +88,11 @@ io.sockets.on('connection', function( socket ) {
 	});
 
 	socket.on('current_question', function( data, fn ) {
-		body = '';
-		offset = 0;
+		var body = '',
+			offset = 0,
+			timer_action = '',
+			by = '';
+
 		if ( current_question[data.test_id] ) {
 			body = current_question[data.test_id].question;
 			timer_action = current_question[data.test_id].timer_action;
