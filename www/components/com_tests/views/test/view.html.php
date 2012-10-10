@@ -15,6 +15,17 @@ class TestsViewTest extends JView
 	 */
 	public function display( $tpl = null )
 	{
+		$model = $this->getModel();
+		$this->test_session = TestsHelper::get_test_session_id_from_url();
+
+		if ( !$this->test_session->test_id || !$this->test_session->unique_id ) {
+			Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive' ) );
+			parent::display( 'noexists' );
+			return;
+		}
+
+		$model->setState( 'test_session', $this->test_session );
+
 		$this->test = $this->get('Test');
 
 		if ( empty( $this->test ) ) {

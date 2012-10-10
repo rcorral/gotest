@@ -13,7 +13,7 @@ class TestsModelTest extends JModel
 {
 	public function getTest()
 	{
-		$test_id = JRequest::getInt( 'test_id' );
+		$test_id = (int) $this->getState( 'test_session' )->test_id;
 
 		$query = $this->_db->getQuery(true)
 			->select( 't.*' )

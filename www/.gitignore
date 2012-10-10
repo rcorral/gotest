@@ -471,3 +471,5 @@
 /templates/system/
 /tmp/
 /web.config.txt
+
+.htaccess

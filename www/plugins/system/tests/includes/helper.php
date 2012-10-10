@@ -74,6 +74,9 @@ class TestsHelper
 		return $key;
 	}
 
+	/**
+	 * Function will generate a new unique test session id for the given test_id and user_id
+	 */
 	function generate_unique_test_id( $test_id, $user_id = null )
 	{
 		if ( !$user_id ) {
@@ -91,8 +94,12 @@ class TestsHelper
 			return false;
 		}
 
+		$counter = 0;
 		while ( !$unique_id ) {
-			$_unique = md5( $date . $test_id . $user_id );
+			if ( $counter ) {
+				$_unique = md5( $date . $test_id . $user_id );
+			}
+
 			$query->clear()
 				->select( 'ta.`id`' )
 				->from( '#__test_active AS ta' )
@@ -101,8 +108,8 @@ class TestsHelper
 			if ( !$db->setQuery( $query )->loadResult() ) {
 				$query->clear()
 					->insert( '#__test_active' )
-					->columns( '`test_id`, `user_id`, `unique_id`, `date`' )
-					->values( "{$test_id}, {$user_id}, " .$db->q( $_unique ). ", '{$date}'" )
+					->columns( '`test_id`, `user_id`, `unique_id`, `is_active`, `date`' )
+					->values( "{$test_id}, {$user_id}, " .$db->q( $_unique ). ", 1, '{$date}'" )
 					;
 				$db->setQuery( $query )->query();
 
@@ -112,9 +119,51 @@ class TestsHelper
 
 				$unique_id = $_unique;
 			}
+
+			$counter++;
 		}
 
 		return $unique_id;
+	}
+
+	/**
+	 * Gets the test_id and the unique identifier for this testing session from the URL
+	 */
+	function get_test_session_id_from_url()
+	{
+		static $return;
+
+		if ( $return ) {
+			return $return;
+		}
+
+		$path = str_replace( JURI::root( true ), '', $_SERVER['REQUEST_URI'] );
+		$return = (object) array(
+			'test_id' => '',
+			'unique_id' => '',
+			);
+
+		// Match
+		preg_match( '/^\/([0-9]+)\/([0-9a-zA-Z]{6})\/?/', $path, $matches );
+
+		if ( isset( $matches[1] ) && $matches[1] ) {
+			$return->test_id = (int) $matches[1];
+		}
+
+		if ( $return->test_id && isset( $matches[2] ) && $matches[2] ) {
+			$db = JFactory::getDBO();
+
+			$query = $db->getQuery( true )
+				->select( 'ta.`unique_id`' )
+				->from( '#__test_active AS ta' )
+				->where( 'ta.`is_active` = 1' )
+				->where( 'ta.`test_id` = ' . (int) $return->test_id )
+				->where( 'ta.`unique_id` LIKE \'' .$db->escape( $matches[2] ). '%\'' )
+				;
+			$return->unique_id = $db->setQuery( $query, 0, 1 )->loadResult();
+		}
+
+		return $return;
 	}
 
 	function stripslashes_deep( $value )

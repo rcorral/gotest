@@ -257,4 +257,22 @@ class plgSystemTests extends plgSystemTestsFormEvents
 		parent::__construct( $subject, $config );
 		$this->loadLanguage();
 	}
+
+	public function onAfterInitialise()
+	{
+		$app = JFactory::getApplication();
+
+		if ( $app->isAdmin() ) {
+			return;
+		}
+
+		$path = str_replace( JURI::root( true ), '', $_SERVER['REQUEST_URI'] );
+
+		// Nothing is return by this, then that means we have a short url for a test
+		if ( '' == preg_replace( '/^\/[0-9]+\/[0-9a-zA-Z]{6}\/?/', '', $path ) ) {
+			$_REQUEST['option'] = 'com_tests';
+			$_REQUEST['view'] = 'test';
+			$_REQUEST['tmpl'] = 'component';
+		}
+	}
 }
