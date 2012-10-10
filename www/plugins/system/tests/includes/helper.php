@@ -74,6 +74,49 @@ class TestsHelper
 		return $key;
 	}
 
+	function generate_unique_test_id( $test_id, $user_id = null )
+	{
+		if ( !$user_id ) {
+			$user_id = JFactory::getUser()->get('id');
+		}
+
+		$db = JFactory::getDBO();
+		$query = $db->getQuery( true );
+		$test_id = (int) $test_id;
+		$user_id = (int) $user_id;
+		$date = date( 'Y-m-d H:i:s' );
+		$unique_id = '';
+
+		if ( !$test_id ) {
+			return false;
+		}
+
+		while ( !$unique_id ) {
+			$_unique = md5( $date . $test_id . $user_id );
+			$query->clear()
+				->select( 'ta.`id`' )
+				->from( '#__test_active AS ta' )
+				->where( 'ta.`unique_id` = ' . $db->q( $_unique ) )
+				;
+			if ( !$db->setQuery( $query )->loadResult() ) {
+				$query->clear()
+					->insert( '#__test_active' )
+					->columns( '`test_id`, `user_id`, `unique_id`, `date`' )
+					->values( "{$test_id}, {$user_id}, " .$db->q( $_unique ). ", '{$date}'" )
+					;
+				$db->setQuery( $query )->query();
+
+				if ( $db->getErrorNum() ) {
+					return false;
+				}
+
+				$unique_id = $_unique;
+			}
+		}
+
+		return $unique_id;
+	}
+
 	function stripslashes_deep( $value )
 	{
 		if ( is_array( $value ) ) {

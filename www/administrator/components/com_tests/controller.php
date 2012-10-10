@@ -30,6 +30,23 @@ class TestsController extends JController
 			// TestsCHelper::addSubmenu($view);
 		}
 
+		if ( 'test' == $view ) {
+			$unique_id = JRequest::getVar( 'unique_id' );
+			if ( !$unique_id ) {
+				// Lets generate id for this test
+				$unique_id = TestsHelper::generate_unique_test_id( JRequest::getInt( 'test_id' ) );
+
+				if ( !$unique_id ) {
+					JError::raiseError( 500, 'Error creating unique ID for test.' );
+				}
+
+				$url = JURI::getInstance();
+				$url->setVar( 'unique_id', $unique_id );
+
+				$this->setRedirect( $url->toString( array( 'query', 'fragment' ) ) );
+			}
+		}
+
 		return parent::display();
 	}
 }

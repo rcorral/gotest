@@ -4,6 +4,9 @@ XClick = (function() {
 	function XClick() {
 		this.debug = in_development;
 		this.user = { channels: {} };
+		this.unique_id = _gup( 'unique_id' );
+		this.test_id = jQuery('#test-id').val();
+		this.test_started = false;
 		setup();
 	}
 
@@ -47,7 +50,46 @@ XClick = (function() {
 		return socket;
 	};
 
+	XClick.prototype.init = function() {
+		if ( !this.unique_id ) {
+			jQuery('#non_existent_modal').modal('show');
+			return;
+		};
+	}
+
+	XClick.prototype.start_test = function() {
+		jQuery('#pre-test-info').slideUp('slow', function(){
+			// Get the timer going
+			xclick.start_seconds_left = 6;
+			var timer = jQuery.timer(function(){
+				xclick.start_seconds_left--;
+
+				jQuery('#start-timer span.digit').html( xclick.start_seconds_left );
+
+				if ( 0 == xclick.start_seconds_left ) {
+					timer.stop();
+					delete timer;
+					delete xclick.start_seconds_left;
+					jQuery('#start-timer').slideUp();
+
+					// Get first question
+					xclick.test_started = true;
+					xclick.next_question( xclick.test_id );
+				};
+			});
+			timer.set({ time : 1000, autostart : true });
+
+			jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
+		});
+
+		return false;
+	};
+
 	XClick.prototype.submit = function( type ) {
+		if ( !this.unique_id || !this.test_started ) {
+			return;
+		};
+
 		// Stop timer if it exists
 		if ( this.timer ) {
 			this.timer.stop();
@@ -65,7 +107,7 @@ XClick = (function() {
 			question_order = Number( _question_order ) - 1;
 		}
 
-		xclick.next_question( jQuery('#test-id').val(), question_order );
+		xclick.next_question( xclick.test_id, question_order );
 
 		return false;
 	};
@@ -146,7 +188,7 @@ XClick = (function() {
 jQuery(document).ready(function(){
 	if ( io ) {
 		xclick = new XClick;
-		xclick.next_question( jQuery('#test-id').val() );
+		xclick.init();
 	} else {
 		// SOME_ERROR
 	}
@@ -159,7 +201,7 @@ jQuery(document).ready(function(){
 		}
 		data.seconds_left = xclick.seconds_left;
 		data.key = api_key;
-		data.test_id = jQuery('#test-id').val();
+		data.test_id = xclick.test_id;
 
 		// Emit before the toggle in hopes that there is less of a time difference
 		// between client and presenter
