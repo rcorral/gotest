@@ -13,9 +13,7 @@ XClick = (function() {
 	function setup() {
 		socket = io.connect( io_server );
 		socket.on('next_question', function(data){
-			if ( xclick.debug ) {
-				console.log('Next question:', data);
-			}
+			xclick._debug( 'Next question:', data );
 
 			if ( !data || !data.question ) {
 				return;
@@ -51,15 +49,17 @@ XClick = (function() {
 	};
 
 	XClick.prototype.init = function() {
-		if ( !this.unique_id ) {
+		if ( !this.unique_id || !this.test_id ) {
 			jQuery('#non_existent_modal').modal('show');
 			return;
-		};
+		}
+
+		this.emit( 'test_begin' );
 	}
 
 	XClick.prototype.start_test = function() {
 		jQuery('#pre-test-info').slideUp('slow', function(){
-			// Get the timer going
+			// Display a 5 second countdown before starting test
 			xclick.start_seconds_left = 6;
 			var timer = jQuery.timer(function(){
 				xclick.start_seconds_left--;
@@ -74,7 +74,7 @@ XClick = (function() {
 
 					// Get first question
 					xclick.test_started = true;
-					xclick.next_question( xclick.test_id );
+					xclick.next_question();
 				};
 			});
 			timer.set({ time : 1000, autostart : true });
@@ -108,40 +108,49 @@ XClick = (function() {
 			question_order = Number( _question_order ) - 1;
 		}
 
-		xclick.next_question( xclick.test_id, question_order );
+		xclick.next_question( question_order );
 
 		return false;
 	};
 
-	XClick.prototype.next_question = function( test_id, question_order ) {
+	XClick.prototype.next_question = function( question_order ) {
 		msg = {};
-
-		if ( test_id ) {
-			msg.test_id = test_id;
-		};
 
 		if ( question_order ) {
 			msg.question_id = question_order;
 		};
 
-		if ( !core._object_empty( msg ) ) {
-			msg.key = api_key;
-			this.emit('next_question', msg);
-		}
+		this.emit( 'next_question', msg );
 	};
 
 	XClick.prototype.complete = function() {
 		jQuery('#finish_modal').modal('show');
 	};
 
-	XClick.prototype.emit = function(event, data) {
-		if ( this.debug ) {
-			console.log('Emit:', data);
+	XClick.prototype.emit = function( event, data ) {
+		if ( !event ) {
+			this._debug( 'Trying to emit but no event.' );
+			return '';
 		}
 
-		socket.emit(event, data, function( type, data ){
+		if ( 'undefined' == typeof data ) {
+			data = {};
+		}
+
+		// Add test_id
+		data.test_id = this.test_id;
+
+		// Add unique_id
+		data.uid = this.unique_id;
+
+		// Add api key
+		data.key = api_key;
+
+		this._debug( 'Emit:', data );
+
+		socket.emit( event, data, function( type, data ) {
 			// This callback is mostly for errors only
-			console.log('Callback:', type, data);
+			this._debug( 'Callback:', type, data );
 		});
 	};
 
@@ -183,6 +192,12 @@ XClick = (function() {
 		jQuery('#counter span.units').html( display_time.units );
 	};
 
+	XClick.prototype._debug = function() {
+		if ( this.debug ) {
+			console.log.apply( undefined, arguments );
+		};
+	};
+
 	return XClick;
 })();
 
@@ -203,9 +218,8 @@ jQuery(document).ready(function(){
 		} else {
 			data = { action: 'play' };
 		}
+
 		data.seconds_left = xclick.seconds_left;
-		data.key = api_key;
-		data.test_id = xclick.test_id;
 
 		// Emit before the toggle in hopes that there is less of a time difference
 		// between client and presenter

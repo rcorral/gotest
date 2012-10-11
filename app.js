@@ -5,7 +5,21 @@ var http = require('http')
 
 app.listen(8000);
 
-function handler (req, res) {
+io.configure(function(){
+	io.enable('browser client etag');
+	io.enable('browser client gzip');
+	io.set('log level', 2);
+
+	io.set('transports', [
+		'websocket'
+		, 'flashsocket'
+		, 'htmlfile'
+		, 'xhr-polling'
+		, 'jsonp-polling'
+  	]);
+});
+
+function handler ( req, res) {
 	fs.readFile(__dirname + '/client/index.html',
 	function (error, data) {
 		if (error) {
