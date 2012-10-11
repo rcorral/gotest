@@ -187,11 +187,14 @@ XClick = (function() {
 })();
 
 jQuery(document).ready(function(){
-	if ( io ) {
+	if ( 'undefined' != typeof io && io ) {
 		xclick = new XClick;
 		xclick.init();
 	} else {
-		// SOME_ERROR
+		// Display connection error problem
+		jQuery('#pre-test-info h1').html( 'Connection error' );
+		jQuery('#pre-test-info p')
+			.html( 'This is the worst error. Something is very very wrong.' ).slideDown();
 	}
 
 	jQuery('#counter').on('click', function(){
