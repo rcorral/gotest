@@ -146,11 +146,12 @@ XClick = (function() {
 		// Add api key
 		data.key = api_key;
 
-		this._debug( 'Emit:', data );
+		this._debug( 'Debug - Emit event:', event );
+		this._debug( 'Data: ', data );
 
 		socket.emit( event, data, function( type, data ) {
 			// This callback is mostly for errors only
-			this._debug( 'Callback:', type, data );
+			xclick._debug( 'Callback:', type, data );
 		});
 	};
 

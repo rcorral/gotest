@@ -2,13 +2,20 @@ var http = require('http')
 	, app = http.createServer(handler)
 	, io = require('socket.io').listen(app)
 	, fs = require('fs')
+	, in_development = true
+	;
 
 app.listen(8000);
 
 io.configure(function(){
 	io.enable('browser client etag');
 	io.enable('browser client gzip');
-	io.set('log level', 2);
+
+	if ( in_development ) {
+		io.set('log level', 3);
+	} else {
+		io.set('log level', 2);
+	}
 
 	io.set('transports', [
 		'websocket'
@@ -32,124 +39,160 @@ function handler ( req, res) {
 	});
 }
 
+function _debug() {
+	if ( in_development ) {
+		console.log.apply( undefined, arguments );
+	}
+}
+
 // for ( _client in channels.get_channel(data.channel) ) {
-// 	console.log(_client);
+// 	_debug(_client);
 // }
 
 click = require('./app-files/click');
-activetests = click.activetests.setup();
-lang = click.language.setup();
-client = click.client.setup();
-var current_question = [];
+var tests = click.tests.setup();
+// client = click.client.setup();
+// channels = click.channels.setup();
+var lang = click.language.setup();
 
 io.sockets.on('connection', function( socket ) {
-	socket.on('next_question', function( data, fn ) {
-		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
-
-		if ( !( data instanceof Object ) || !data.key ) {
+	socket.on('test_begin', function( data ) {
+		if ( !tests.validate_request_data( data, true ) ) {
+			_debug( 'not_presenter' );
 			socket.disconnect();
 			return;
 		}
+
+		tests.initialize_test( data.test_id, data.uid );
+
+		_debug( 'Test initialized', tests.at );
+	});
+
+	socket.on('next_question', function( data, fn ) {
+		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
+
+		if ( !tests.validate_request_data( data, true ) ) {
+			_debug( 'not_presenter' );
+			socket.disconnect();
+			return;
+		}
+
+		if ( !tests.test_exists( data.test_id, data.uid ) ) {
+			fn( 'error', { msg: lang._( 'test_not_init' ) } );
+			return;
+		};
 
 		if ( !fn ) {
 			fn = function(){}
 		}
 
-		if ( null != data.test_id ) {
-			data.test_id = Number( data.test_id );
+		var site = http.createClient(80, 'localhost');
+		var path = '/clicker/index.php?option=com_api&app=tests&resource=question&test_id='
+			+ data.test_id + '&key=' + data.key;
 
-			if ( !data.test_id ) {
-				fn('error', { msg: lang._( 'no_test_id' ) });
-				return;
-			}
-
-			var site = http.createClient(80, 'localhost');
-			var path = '/clicker/index.php?option=com_api&app=tests&resource=question&test_id='
-				+ data.test_id;
-
-			if ( data.question_id ) {
-				path += '&question_id=' + data.question_id;
-			}
-
-			if ( data.key ) {
-				path += '&key=' + data.key;
-			}
-
-			var request = site.request('GET',
-				path,
-				{'host' : 'localhost'});
-			request.end();
-			request.on('response', function(response){
-				response.setEncoding('utf8');
-
-				if ( 200 != response.statusCode ) {
-					fn('error', { msg: lang._( 'no_php_connection' ) });
-					return;
-				};
-
-				var body = '';
-				response.on('data', function(chunk) {
-					body += chunk;
-				});
-
-				response.on('end', function() {
-					current_question[data.test_id] = { date: new Date(), question: body };
-					io.sockets.emit('next_question',
-						{ type: 'question', question: body, offset: 0 });
-				});
-			});
+		if ( data.question_id ) {
+			path += '&question_id=' + data.question_id;
 		}
+
+		_debug( 'Requesting: ', path );
+		var request = site.request( 'GET', path, {'host' : 'localhost'} );
+		request.end();
+		request.on('response', function(response){
+			response.setEncoding('utf8');
+
+			if ( 200 != response.statusCode ) {
+				fn( 'error', { msg: lang._( 'no_php_connection' ) } );
+				return;
+			};
+
+			var body = '';
+			response.on('data', function(chunk) {
+				body += chunk;
+			});
+
+			response.on('end', function() {
+				test = tests.set_question( data.test_id, data.uid, body );
+				io.sockets.emit('next_question',
+					{ type: 'question', question: test.cq, offset: 0 });
+			});
+		});
 	});
 
-	socket.on('current_question', function( data, fn ) {
-		var body = '',
-			offset = 0,
-			timer_action = '',
-			by = '';
+	socket.on('current_question', function( data ) {
+		var _return = {};
 
-		if ( current_question[data.test_id] ) {
-			body = current_question[data.test_id].question;
-			timer_action = current_question[data.test_id].timer_action;
-
-			// If we have toggled the time then calculate the offset from the seconds left
-			if ( current_question[data.test_id].seconds_left ) {
-				_question = JSON.parse( current_question[data.test_id].question );
-				offset = Number( _question.seconds )
-					- Number( current_question[data.test_id].seconds_left );
-
-				// For debugging
-				by = 'seconds_left';
-			} else {
-				offset = Math.floor( new Date() / 1000
-					- current_question[data.test_id].date / 1000 );
-
-				// For debugging
-				by = 'current_date';
-			}
-		};
-
-		socket.emit('current_question', { type: 'question', question: body,
-			timer_action: timer_action, offset: offset, by: by });
-	});
-
-	socket.on('timer_toggle', function( data ) {
-		if ( !( data instanceof Object ) || !data.key ) {
+		if ( !tests.validate_request_data( data ) ) {
+			_debug( 'invalid_request' );
 			socket.disconnect();
 			return;
 		}
 
-		if ( 'pause' == data.action ) {
-			current_question[data.test_id].seconds_left = data.seconds_left;
-		} else if ( 'play' == data.action ) {
-			delete current_question[data.test_id].seconds_left;
-			_question = JSON.parse( current_question[data.test_id].question );
-			offset = Number( _question.seconds ) - Number( data.seconds_left );
-			date = new Date();
-			date.setSeconds( date.getSeconds() - offset );
-			current_question[data.test_id].date = date;
+		var test = tests.get_test( data.test_id, data.uid );
+
+		// Check if test is even existent
+		if ( !test ) {
+			_return.type = 'test';
+			_return.exists = false;
+			_debug( 'current_question', 'test_non_existent' );
+		};
+
+		// Check to see if test has been initialized
+		if ( !test.initialized ) {
+			_return.type = 'test';
+			_return.exists = true;
+			_return.initialized = false;
+			_debug( 'current_question', 'test_not_init' );
+		} else {
+			var body = test.cq;
+			var timer_action = test.timer_action;
+
+			// If we have toggled the time then calculate the offset from the seconds left
+			if ( test.seconds_left ) {
+				var question = JSON.parse( test.cq );
+				var offset = Number( question.seconds ) - Number( test.seconds_left );
+				_debug( 'Offset by: seconds_left' );
+			} else {
+				var offset = Math.floor( new Date() / 1000 - test.q_date / 1000 );
+				_debug( 'Offset by: current_date' );
+			}
+
+			_return = {
+				type: 'question',
+				question: test.cq,
+				timer_action: test.timer_action,
+				offset: offset
+				};
+			_debug( 'current_question', _return );
+		};
+
+		socket.emit('current_question', _return);
+	});
+
+	socket.on('timer_toggle', function( data ) {
+		if ( !tests.validate_request_data( data, true ) ) {
+			_debug( 'invalid_request' );
+			socket.disconnect();
+			return;
 		}
 
-		current_question[data.test_id].timer_action = data.action;
+		var test = tests.get_test( data.test_id, data.uid );
+
+		if ( 'pause' == data.action ) {
+			tests.set_test_var( data.test_id, data.uid, 'seconds_left', data.seconds_left );
+		} else if ( 'play' == data.action ) {
+			tests.remove_test_var( data.test_id, data.uid, 'seconds_left' );
+			question = JSON.parse( test.cq );
+			offset = Number( question.seconds ) - Number( data.seconds_left );
+			date = new Date();
+			date.setSeconds( date.getSeconds() - offset );
+			// Reset the start date of the question
+			// we are basically faking it for possible later use
+			tests.set_test_var( data.test_id, data.uid, 'q_date', date );
+		}
+
+		tests.set_test_var( data.test_id, data.uid, 'timer_action', data.action );
+
+		_debug( 'timer_toggle', data.action, data.seconds_left );
 
 		socket.broadcast.emit('timer_toggle',
 			{ action: data.action, seconds_left: data.seconds_left });
