@@ -55,7 +55,7 @@ $unique_url = JURI::root()
 					<h1>Let's get started!</h1>
 					<p></p>
 					<p>Give this link to students:</p>
-					<p><a href="<?php echo $unique_url; ?>"><?php echo $unique_url; ?></a></p>
+					<p><a href="<?php echo $unique_url; ?>" onclick="return false;"><?php echo $unique_url; ?></a></p>
 					<p>
 						<button type="button" class="btn btn-primary btn-large" onclick="xclick.start_test();">Start testing</button>
 					</p>

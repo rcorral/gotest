@@ -4,8 +4,8 @@ XClick = (function() {
 	function XClick() {
 		this.debug = in_development;
 		this.user = { channels: {} };
-		this.unique_id = _gup( 'unique_id' );
 		this.test_id = jQuery('#test-id').val();
+		this.unique_id = _gup( 'unique_id' );
 		this.test_started = false;
 		setup();
 	}
@@ -80,6 +80,7 @@ XClick = (function() {
 			timer.set({ time : 1000, autostart : true });
 
 			jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
+			jQuery('.post-test-hide').slideUp('slow');
 		});
 
 		return false;

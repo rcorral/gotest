@@ -4,6 +4,9 @@ XClick = (function() {
 	function XClick() {
 		this.debug = in_development;
 		this.user = { channels: {} };
+		this.test_id = jQuery('#test-id').val();
+		this.unique_id = jQuery('#unique-id').val();
+		this.test_started = false;
 		setup();
 	}
 
@@ -29,6 +32,23 @@ XClick = (function() {
 
 			if ( !question.id ) {
 				return;
+			};
+
+			// If this is the first time we are loading a test question
+			// then lets clean up the pre test stuff
+			if ( false == xclick.test_started ) {
+				xclick.test_started = true;
+
+				if ( xclick.start_timer ) {
+					xclick.start_timer.stop();
+				};
+				delete xclick.start_timer;
+				delete xclick.start_seconds_left;
+
+				jQuery('#pre-test-info').slideUp('slow', function(){
+					jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
+					jQuery('.post-test-hide').slideUp('slow');
+				});
 			};
 
 			template = templates.parse( question.question_type, question );
@@ -71,6 +91,37 @@ XClick = (function() {
 
 		return socket;
 	};
+
+	XClick.prototype.init = function() {
+		// Get the timer going
+		xclick.start_seconds_left = 7;
+		xclick.start_timer = jQuery.timer(function(){
+			xclick.start_seconds_left--;
+
+			if ( 4 == xclick.start_seconds_left ) {
+				jQuery('#pre-test-info p.pre-test-hide').slideDown( 'slow' );
+			};
+			jQuery('#pre-test-info h1').html( jQuery('#pre-test-info h1').html() + '.' );
+
+			if ( 0 == xclick.start_seconds_left ) {
+				xclick.start_timer.stop();
+				delete xclick.start_timer;
+				delete xclick.start_seconds_left;
+				jQuery('#pre-test-info h1').slideUp('fast', function(){
+					jQuery('#pre-test-info p.pre-test-hide').slideUp();
+					jQuery(this).html( 'Test not ready.' )
+						.slideDown( 'slow', function(){
+							jQuery('#pre-test-info p.pre-test-hide').html( '(puzzledlook)' )
+								.slideDown();
+						}
+					);
+				});
+			};
+		});
+		xclick.start_timer.set({ time : 1000, autostart : true });
+
+		this.current_question( this.test_id );
+	}
 
 	XClick.prototype.submit = function() {
 		// Store question for later submission
@@ -160,7 +211,7 @@ XClick = (function() {
 jQuery(document).ready(function(){
 	if ( io ) {
 		xclick = new XClick;
-		xclick.current_question( jQuery('#test-id').val() );
+		xclick.init();
 	} else {
 		// SOME_ERROR
 	}

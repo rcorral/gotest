@@ -5,6 +5,7 @@ defined('_JEXEC') or die;
 #counter { margin: 0; font-size: 44px; }
 .video-container { height: 0; overflow: hidden; padding-bottom: 56.25%; padding-top: 30px; position: relative; margin-bottom: 12px; }
 .video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.pre-test-hide { display: none; }
 </style>
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -12,7 +13,7 @@ defined('_JEXEC') or die;
 		<form id="student-form" onSubmit="return false;">
 			<div class="row-fluid">
 			<div class="page-header span12">
-				<div class="row-fluid">
+				<div class="row-fluid pre-test-hide">
 				<div class="span10 clearfix">
 					<h1><?php echo $this->test->title; ?>
 					<?php if ( $this->test->sub_title ) { ?>
@@ -28,10 +29,23 @@ defined('_JEXEC') or die;
 				</div>
 			</div>
 			</div>
+			<div class="row-fluid post-test-hide" id="pre-test-info">
+				<div class="span12">
+				<div class="container">
+				<div class="hero-unit">
+					<h1>Loading</h1>
+					<p></p>
+					<p class="pre-test-hide">Trying to make sense of why it's not loading.</p>
+				</div>
+				</div>
+				</div>
+			</div>
 			<div class="row-fluid" id="form-data"></div>
 			<div class="row-fluid">
 			<div class="span12">
 				<div class="control-group">
+				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
+				<input type="hidden" name="unique_id" value="<?php echo $this->test_session->unique_id; ?>" id="unique-id" />
 				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
 				<button type="button" name="submit" onclick="xclick.submit(this);" id="btn-submit" class="btn btn-primary" style="display:none;">Submit</button>
 				</div>
