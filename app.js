@@ -63,13 +63,16 @@ io.sockets.on('connection', function( socket ) {
 			return;
 		}
 
-		psid = client.get_id( socket );
+		var room = data.test_id + '-' + data.uid;
+		var psid = client.get_id( socket );
 
 		// Get the socket_id of the presenter socket id
-		test = tests.initialize_test( data.test_id, data.uid, psid );
+		var test = tests.initialize_test( data.test_id, data.uid, psid );
 
 		_debug( 'test_begin:test_initialized', tests.at );
-		socket.broadcast.emit('test_status', { type: 'test', initialized: test.initialized });
+		socket.join(room);
+		socket.broadcast.to(room)
+			.emit('test_status', { type: 'test', initialized: test.initialized });
 	});
 
 	socket.on('next_question', function( data, fn ) {
@@ -85,6 +88,9 @@ io.sockets.on('connection', function( socket ) {
 			fn( 'error', { msg: lang._( 'test_not_init' ) } );
 			return;
 		};
+
+		// Generate room name from request
+		var room = data.test_id + '-' + data.uid;
 
 		if ( !fn ) {
 			fn = function(){}
@@ -117,8 +123,8 @@ io.sockets.on('connection', function( socket ) {
 			response.on('end', function() {
 				test = tests.set_question( data.test_id, data.uid, body );
 				_debug( 'next_question:test', test );
-				io.sockets.emit('next_question',
-					{ type: 'question', question: test.cq, offset: 0 });
+				io.sockets.in(room)
+					.emit('next_question', { type: 'question', question: test.cq, offset: 0 });
 			});
 		});
 	});
@@ -132,7 +138,11 @@ io.sockets.on('connection', function( socket ) {
 			return;
 		}
 
+		var room = data.test_id + '-' + data.uid;
 		var test = tests.get_test( data.test_id, data.uid );
+
+		// Join room
+		socket.join(room);
 
 		_debug( 'current_question:test', test );
 
@@ -180,6 +190,7 @@ io.sockets.on('connection', function( socket ) {
 			return;
 		}
 
+		var room = data.test_id + '-' + data.uid;
 		var test = tests.get_test( data.test_id, data.uid );
 
 		if ( 'pause' == data.action ) {
@@ -199,8 +210,8 @@ io.sockets.on('connection', function( socket ) {
 
 		_debug( 'timer_toggle:response', data.action, data.seconds_left );
 
-		socket.broadcast.emit('timer_toggle',
-			{ action: data.action, seconds_left: data.seconds_left });
+		socket.broadcast.to(room)
+			.emit('timer_toggle', { action: data.action, seconds_left: data.seconds_left });
 	});
 
 	socket.on('disconnect', function () {
