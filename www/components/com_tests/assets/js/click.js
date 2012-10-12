@@ -1,23 +1,31 @@
 var socket, xclick;
 
 XClick = (function() {
+	// Constructor
 	function XClick() {
 		this.debug = in_development;
 		this.user = { channels: {} };
 		this.test_id = jQuery('#test-id').val();
 		this.unique_id = jQuery('#unique-id').val();
+		this.test_initialized = false;
 		this.test_started = false;
 		setup();
 	}
 
+	/**
+	 * Setup socket.io and it's event listeners
+	 **/
 	function setup() {
 		socket = io.connect( io_server );
 
+		socket.on('test_status', function( data ) {
+			xclick._debug('in:test_status', data);
+			xclick.update_test_status( data );
+		});
+
 		// Get current question function and listeners
-		update_question = function update_question( data ) {
-			if ( xclick.debug ) {
-				console.log('Current question:', data);
-			}
+		update_question = function update_question( data, type ) {
+			xclick._debug('in:' + type, data);
 
 			if ( xclick.timer ) {
 				xclick.timer.stop();
@@ -25,6 +33,9 @@ XClick = (function() {
 			jQuery('#counter').removeClass('text-error').removeClass('text-success');
 
 			if ( !data || !data.question ) {
+				if ( 'test' == data.type ) {
+					xclick.update_test_status( data );
+				};
 				return;
 			}
 
@@ -38,12 +49,7 @@ XClick = (function() {
 			// then lets clean up the pre test stuff
 			if ( false == xclick.test_started ) {
 				xclick.test_started = true;
-
-				if ( xclick.start_timer ) {
-					xclick.start_timer.stop();
-				};
-				delete xclick.start_timer;
-				delete xclick.start_seconds_left;
+				xclick.remove_start_timer();
 
 				jQuery('#pre-test-info').slideUp('slow', function(){
 					jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
@@ -60,11 +66,17 @@ XClick = (function() {
 				jQuery('#btn-submit').slideDown();
 			};
 		}
-		socket.on('current_question', update_question);
-		socket.on('next_question', update_question);
+		socket.on('current_question', function(data){
+			update_question( data, 'current_question' );
+		});
+		socket.on('next_question', function(data){
+			update_question( data, 'next_question' );
+		});
 
 		// Toggle timer
 		socket.on('timer_toggle', function( data ) {
+			xclick._debug('in:timer_toggle', data);
+
 			if ( !xclick.timer ) {
 				return;
 			}
@@ -92,21 +104,24 @@ XClick = (function() {
 		return socket;
 	};
 
+	/**
+	 * Initializes xclick, displays status type message to user as to what stage the test is on
+	 **/
 	XClick.prototype.init = function() {
 		// Get the timer going
 		xclick.start_seconds_left = 7;
 		xclick.start_timer = jQuery.timer(function(){
 			xclick.start_seconds_left--;
 
+			// Show a little more info when there is 4 seconds left
 			if ( 4 == xclick.start_seconds_left ) {
 				jQuery('#pre-test-info p.pre-test-hide').slideDown( 'slow' );
 			};
 			jQuery('#pre-test-info h1').html( jQuery('#pre-test-info h1').html() + '.' );
 
+			// If we reach the end of our timer, display an I don't know what i'm doing message
 			if ( 0 == xclick.start_seconds_left ) {
-				xclick.start_timer.stop();
-				delete xclick.start_timer;
-				delete xclick.start_seconds_left;
+				xclick.remove_start_timer();
 				jQuery('#pre-test-info h1').slideUp('fast', function(){
 					jQuery('#pre-test-info p.pre-test-hide').slideUp();
 					jQuery(this).html( 'Test not ready.' )
@@ -120,8 +135,32 @@ XClick = (function() {
 		});
 		xclick.start_timer.set({ time : 1000, autostart : true });
 
-		this.current_question( this.test_id );
+		this.emit('current_question');
 	}
+
+	XClick.prototype.update_test_status = function( data ) {
+		if ( this.test_started || this.test_initialized ) {
+			return;
+		}
+
+		if ( !data.initialized ) {
+			// Who knows what to do here...moar than likely the test doesn't fucking exist
+			return;
+		}
+
+		this.test_initialized = true;
+		xclick.remove_start_timer();
+		var h1 = 'Waiting on presenter';
+		var p = 'They\'re only are humans, give them a chance.';
+
+		jQuery('#pre-test-info h1').slideUp('fast', function(){
+			jQuery('#pre-test-info p.pre-test-hide').slideUp();
+			jQuery(this).html( h1 ).slideDown( 'slow' );
+			setTimeout(function(){
+				jQuery('#pre-test-info p.pre-test-hide').html( p ).slideDown('slow');
+				}, 3000);
+		});
+	};
 
 	XClick.prototype.submit = function() {
 		// Store question for later submission
@@ -129,29 +168,36 @@ XClick = (function() {
 		return false;
 	};
 
-	XClick.prototype.current_question = function( test_id ) {
-		msg = {};
-
-		if ( test_id ) {
-			msg.test_id = test_id;
-		};
-
-		if ( !core._object_empty( msg ) ) {
-			this.emit('current_question', msg);
-		}
-	};
-
 	XClick.prototype.emit = function( event, data ) {
-		if ( this.debug ) {
-			console.log('Emit:', data);
+		if ( !event ) {
+			this._debug( 'out:error:Trying to emit but no event.' );
+			return '';
 		}
+
+		if ( 'undefined' == typeof data ) {
+			data = {};
+		}
+
+		// Add test_id
+		data.test_id = this.test_id;
+
+		// Add unique_id
+		data.uid = this.unique_id;
+
+		// Add api key
+		data.key = api_key;
+
+		this._debug( 'out:emit ' + event, data );
 
 		socket.emit(event, data, function( type, data ){
 			// This callback is mostly for errors only
-			console.log('Callback:', type, data);
+			xclick._debug('in:fun:callback:', type, data);
 		});
 	};
 
+	/**
+	 * Method to create timer object if there are enough seconds left
+	 **/
 	XClick.prototype.set_timer = function( seconds, action ) {
 		this.question_seconds = Number( seconds );
 		this.seconds_left = this.question_seconds;
@@ -193,6 +239,9 @@ XClick = (function() {
 		this.timer.set({ time : 1000, autostart : autostart });
 	};
 
+	/**
+	 * Method that show/hides timer depending on the time to be displayed
+	 **/
 	XClick.prototype.display_time = function( display_time ) {
 		// Here is where we take care of stopping the timer if we are out of time
 		// We also hide submit button here
@@ -203,6 +252,22 @@ XClick = (function() {
 			jQuery('#counter span.digit').html( display_time.time );
 			jQuery('#counter span.units').html( display_time.units );
 		}
+	};
+
+	// Removes start timer
+	XClick.prototype.remove_start_timer = function() {
+		if ( this.start_timer ) {
+			this.start_timer.stop();
+		};
+		delete this.start_timer;
+		delete this.start_seconds_left;
+
+	};
+
+	XClick.prototype._debug = function() {
+		if ( this.debug ) {
+			console.log( Array.prototype.slice.call(arguments) );
+		};
 	};
 
 	return XClick;

@@ -4,7 +4,7 @@ Tests = (function() {
 		this.at = [];
 	}
 
-	Tests.prototype.validate_request_data = function( data, presenter ) {
+	Tests.prototype.validate_request_data = function( data, key, presenter ) {
 		if ( !( data instanceof Object ) ) {
 			return false;
 		};
@@ -17,8 +17,14 @@ Tests = (function() {
 			return false;
 		};
 
-		if ( 'undefined' != typeof presenter && presenter ) {
+		if ( 'undefined' != typeof key && key ) {
 			if ( !data.key ) {
+				return false;
+			};
+		};
+
+		if ( 'undefined' != typeof presenter && presenter ) {
+			if ( !data.isp ) {
 				return false;
 			};
 		};
@@ -36,7 +42,7 @@ Tests = (function() {
 		return 't' + test_id;
 	};
 
-	Tests.prototype.initialize_test = function( test_id, uid ) {
+	Tests.prototype.initialize_test = function( test_id, uid, psid ) {
 		var m_test_id = this.get_test_id_arraykey( test_id );
 
 		if ( 'undefined' == typeof this.at[m_test_id] ) {
@@ -48,9 +54,12 @@ Tests = (function() {
 			initialized: true,
 			started: false,
 			start_date: new Date,
+			presenter: psid,
 			timer_action: '',
 			cq: ''
 			};
+
+		return this.at[m_test_id][uid];
 	};
 
 	Tests.prototype.test_exists = function( test_id, uid ) {

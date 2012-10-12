@@ -36,6 +36,9 @@ class TestsViewTest extends JView
 		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'timer', 'core',
 			'socket.io', 'click', 'templates' ) );
 
+		Tests::addScriptDeclaration( "var api_key = '"
+			. TestsHelper::get_api_key( null, true ). "';" );
+
 		parent::display( $tpl );
 	}
 }

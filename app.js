@@ -51,28 +51,32 @@ function _debug() {
 
 click = require('./app-files/click');
 var tests = click.tests.setup();
-// client = click.client.setup();
+client = click.client.setup();
 // channels = click.channels.setup();
 var lang = click.language.setup();
 
 io.sockets.on('connection', function( socket ) {
 	socket.on('test_begin', function( data ) {
-		if ( !tests.validate_request_data( data, true ) ) {
-			_debug( 'not_presenter' );
+		if ( !tests.validate_request_data( data, true, true ) ) {
+			_debug( 'test_begin:not_presenter' );
 			socket.disconnect();
 			return;
 		}
 
-		tests.initialize_test( data.test_id, data.uid );
+		psid = client.get_id( socket );
 
-		_debug( 'Test initialized', tests.at );
+		// Get the socket_id of the presenter socket id
+		test = tests.initialize_test( data.test_id, data.uid, psid );
+
+		_debug( 'test_begin:test_initialized', tests.at );
+		socket.broadcast.emit('test_status', { type: 'test', initialized: test.initialized });
 	});
 
 	socket.on('next_question', function( data, fn ) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
 
-		if ( !tests.validate_request_data( data, true ) ) {
-			_debug( 'not_presenter' );
+		if ( !tests.validate_request_data( data, true, true ) ) {
+			_debug( 'next_question:not_presenter' );
 			socket.disconnect();
 			return;
 		}
@@ -94,7 +98,7 @@ io.sockets.on('connection', function( socket ) {
 			path += '&question_id=' + data.question_id;
 		}
 
-		_debug( 'Requesting: ', path );
+		_debug( 'next_question:requesting', path );
 		var request = site.request( 'GET', path, {'host' : 'localhost'} );
 		request.end();
 		request.on('response', function(response){
@@ -112,6 +116,7 @@ io.sockets.on('connection', function( socket ) {
 
 			response.on('end', function() {
 				test = tests.set_question( data.test_id, data.uid, body );
+				_debug( 'next_question:test', test );
 				io.sockets.emit('next_question',
 					{ type: 'question', question: test.cq, offset: 0 });
 			});
@@ -122,26 +127,26 @@ io.sockets.on('connection', function( socket ) {
 		var _return = {};
 
 		if ( !tests.validate_request_data( data ) ) {
-			_debug( 'invalid_request' );
+			_debug( 'current_question:invalid_request' );
 			socket.disconnect();
 			return;
 		}
 
 		var test = tests.get_test( data.test_id, data.uid );
 
+		_debug( 'current_question:test', test );
+
 		// Check if test is even existent
 		if ( !test ) {
 			_return.type = 'test';
-			_return.exists = false;
-			_debug( 'current_question', 'test_non_existent' );
-		};
-
-		// Check to see if test has been initialized
-		if ( !test.initialized ) {
-			_return.type = 'test';
-			_return.exists = true;
 			_return.initialized = false;
-			_debug( 'current_question', 'test_not_init' );
+			_debug( 'current_question:test_non_existent' );
+		} else if ( test.initialized && !test.started ) {
+			// Check for test initialized but not started
+			_return.type = 'test';
+			_return.initialized = true;
+			_return.started = false;
+			_debug( 'current_question:test_init_not_started' );
 		} else {
 			var body = test.cq;
 			var timer_action = test.timer_action;
@@ -150,10 +155,10 @@ io.sockets.on('connection', function( socket ) {
 			if ( test.seconds_left ) {
 				var question = JSON.parse( test.cq );
 				var offset = Number( question.seconds ) - Number( test.seconds_left );
-				_debug( 'Offset by: seconds_left' );
+				_debug( 'current_question:offset_by: seconds_left' );
 			} else {
 				var offset = Math.floor( new Date() / 1000 - test.q_date / 1000 );
-				_debug( 'Offset by: current_date' );
+				_debug( 'current_question:offset_by: current_date' );
 			}
 
 			_return = {
@@ -162,15 +167,15 @@ io.sockets.on('connection', function( socket ) {
 				timer_action: test.timer_action,
 				offset: offset
 				};
-			_debug( 'current_question', _return );
+			_debug( 'current_question:return', _return );
 		};
 
 		socket.emit('current_question', _return);
 	});
 
 	socket.on('timer_toggle', function( data ) {
-		if ( !tests.validate_request_data( data, true ) ) {
-			_debug( 'invalid_request' );
+		if ( !tests.validate_request_data( data, true, true ) ) {
+			_debug( 'timer_toggle:invalid_request' );
 			socket.disconnect();
 			return;
 		}
@@ -192,13 +197,13 @@ io.sockets.on('connection', function( socket ) {
 
 		tests.set_test_var( data.test_id, data.uid, 'timer_action', data.action );
 
-		_debug( 'timer_toggle', data.action, data.seconds_left );
+		_debug( 'timer_toggle:response', data.action, data.seconds_left );
 
 		socket.broadcast.emit('timer_toggle',
 			{ action: data.action, seconds_left: data.seconds_left });
 	});
 
 	socket.on('disconnect', function () {
-		io.sockets.emit('user disconnected');
+		// io.sockets.emit('user disconnected');
 	});
 });

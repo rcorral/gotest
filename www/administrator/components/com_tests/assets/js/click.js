@@ -1,6 +1,7 @@
 var socket, xclick;
 
 XClick = (function() {
+	// Constructor
 	function XClick() {
 		this.debug = in_development;
 		this.user = { channels: {} };
@@ -10,10 +11,13 @@ XClick = (function() {
 		setup();
 	}
 
+	/**
+	 * Setup socket.io and it's event listeners
+	 **/
 	function setup() {
 		socket = io.connect( io_server );
 		socket.on('next_question', function(data){
-			xclick._debug( 'Next question:', data );
+			xclick._debug( 'in:next_question', data );
 
 			if ( !data || !data.question ) {
 				return;
@@ -129,7 +133,7 @@ XClick = (function() {
 
 	XClick.prototype.emit = function( event, data ) {
 		if ( !event ) {
-			this._debug( 'Trying to emit but no event.' );
+			this._debug( 'out:error Trying to emit but no event.' );
 			return '';
 		}
 
@@ -146,12 +150,14 @@ XClick = (function() {
 		// Add api key
 		data.key = api_key;
 
-		this._debug( 'Debug - Emit event:', event );
-		this._debug( 'Data: ', data );
+		// For now this is how we tell if you are a presenter
+		data.isp = true;
+
+		this._debug( 'out:emit ' + event, data );
 
 		socket.emit( event, data, function( type, data ) {
 			// This callback is mostly for errors only
-			xclick._debug( 'Callback:', type, data );
+			xclick._debug('in:fun:callback:', type, data);
 		});
 	};
 
@@ -195,7 +201,7 @@ XClick = (function() {
 
 	XClick.prototype._debug = function() {
 		if ( this.debug ) {
-			console.log.apply( undefined, arguments );
+			console.log( Array.prototype.slice.call(arguments) );
 		};
 	};
 
