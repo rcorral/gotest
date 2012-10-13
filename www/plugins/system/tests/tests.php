@@ -266,6 +266,31 @@ class plgSystemTests extends plgSystemTestsFormEvents
 			return;
 		}
 
+		// If com_users lets keep the request going
+		if ( 'com_users' == JRequest::getVar( 'option' ) ) {
+			return;
+		}
+
+		// Lets see if we need to authenticate
+		$user = JFactory::getUser();
+		if ( !$user->get('id') ) {
+			// Check to see if we should be triggering any authentication plugins
+			if ( JRequest::getVar( 'auth' ) ) {
+				JPluginHelper::importPlugin( 'authentication' );
+				$app->triggerEvent( 'clickerBeginAuthentication' );
+			} elseif ( JRequest::getVar( 'authenticate' ) ) {
+				// Authenticate
+				JPluginHelper::importPlugin( 'authentication' );
+				$app->triggerEvent( 'clickerAuthenticate' );
+			} else {
+				$_REQUEST['option'] = 'com_tests';
+				$_REQUEST['view'] = 'login';
+				$_REQUEST['tmpl'] = 'component';
+			}
+
+			return;
+		}
+
 		$path = str_replace( JURI::root( true ), '', $_SERVER['REQUEST_URI'] );
 
 		// Nothing is return by this, then that means we have a short url for a test

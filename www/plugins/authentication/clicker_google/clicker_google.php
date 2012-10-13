@@ -1,0 +1,243 @@
+<?php
+/**
+ * @copyright	Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+// No direct access
+defined('_JEXEC') or die;
+
+/**
+ * Clicker:Google Authentication plugin
+ */
+class plgAuthenticationClicker_Google extends JPlugin
+{
+	/**
+	 * OpenID Endpoint
+	 */
+	protected $_openid_endpoint = 'https://www.google.com/accounts/o8/id';
+
+	public function __construct($subject, $config)
+	{
+		parent::__construct($subject, $config);
+		$this->loadLanguage();
+	}
+
+	protected function init()
+	{
+		$path_extra = JPATH_ADMINISTRATOR . '/components/com_tests/libraries/php-openid/';
+		$path = ini_get( 'include_path' );
+		ini_set( 'include_path', $path_extra . PATH_SEPARATOR . $path );
+
+		/**
+		 * Require the OpenID consumer code.
+		 */
+		require_once "Auth/OpenID/Consumer.php";
+
+		/**
+		 * Require the "file store" module, which we'll need to store
+		 * OpenID information.
+		 */
+		require_once "Auth/OpenID/FileStore.php";
+
+		/**
+		 * Require the AX extension API.
+		 */
+		require_once "Auth/OpenID/AX.php";
+
+		/**
+		 * Require the PAPE extension module.
+		 */
+		require_once "Auth/OpenID/PAPE.php";
+
+		// Generate trusted root url, which is just the root of our site
+		$this->trusted_root = JURI::root();
+
+		// Get Return to URL
+		$this->return_to = JURI::getInstance();
+		$this->return_to->setQuery( array( 'authenticate' => 1 ) );
+		$this->return_to = $this->return_to->toString();
+	}
+
+	/**
+	 * Method starts the authentication with google
+	 */
+	function clickerBeginAuthentication()
+	{
+		$this->init();
+
+		$app = JFactory::getApplication();
+		$consumer = getConsumer();
+
+		// Begin the OpenID authentication process.
+		$auth_request = $consumer->begin( $this->_openid_endpoint );
+
+		// No auth request means we can't begin OpenID.
+		if ( !$auth_request ) {
+			die( JText::_( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_ERR_AUTH_SERVER' ) );
+		}
+
+		// Create attributes fetch request
+		$ax = new Auth_OpenID_AX_FetchRequest;
+
+		// Add attributes to fetch request
+		// See https://developers.google.com/accounts/docs/OpenID#Parameters for parameters
+		// Usage: make( $type_uri, $count = 1, $required = false, $alias = null )
+		$ax->add( Auth_OpenID_AX_AttrInfo::make( 'http://axschema.org/contact/email', 1, 1,
+				'email' ) );
+		$ax->add( Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/first', 1, 1,
+				'firstname' ) );
+		$ax->add( Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/last', 1, 1,
+				'lastname' ) );
+
+		// Add AX fetch request to authentication request
+		$auth_request->addExtension( $ax );
+
+		// $policy_uris = null;
+		// if ( isset( $_GET['policies'] ) ) {
+			// $policy_uris = $_GET['policies'];
+		// }
+
+		// $pape_request = new Auth_OpenID_PAPE_Request( $policy_uris );
+		// if ( $pape_request ) {
+			// $auth_request->addExtension( $pape_request );
+		// }
+
+		// Redirect the user to the OpenID server for authentication.
+		// Store the token for this authentication so we can verify the
+		// response.
+
+		// For OpenID 1, send a redirect.  For OpenID 2, use a Javascript
+		// form to send a POST request to the server.
+		if ( $auth_request->shouldSendRedirect() ) {
+			$redirect_url = $auth_request->redirectURL( $this->trusted_root, $this->return_to );
+
+			// If the redirect URL can't be built, display an error message.
+			if ( Auth_OpenID::isFailure( $redirect_url ) ) {
+				die( JText::sprintf( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_ERR_REDIRECT_SERVER',
+					$redirect_url->message ) );
+			} else {
+				// Send redirect.
+				$app->redirect( $redirect_url );
+			}
+		} else {
+			// Generate form markup and render it.
+			$form_id = 'openid_message';
+			$form_html = $auth_request->htmlMarkup( $this->trusted_root, $this->return_to, false,
+				array( 'id' => $form_id ) );
+
+			// Display an error if the form markup couldn't be generated or render the HTML.
+			if ( Auth_OpenID::isFailure( $form_html ) ) {
+				die( JText::sprintf( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_ERR_REDIRECT_SERVER',
+					$redirect_url->message ) );
+			} else {
+				echo $form_html;
+				$app->close();
+			}
+		}
+	}
+
+	/**
+	 * Processed response from google OpenID authentication request
+	 */
+	function clickerAuthenticate()
+	{
+		$this->init();
+
+		$app = JFactory::getApplication();
+		$user = JFactory::getUser();
+		$consumer = getConsumer();
+
+		// Complete the authentication process using the server's response.
+		$response = $consumer->complete( $this->return_to );
+
+		// Check the response status.
+		if ( $response->status == Auth_OpenID_CANCEL ) {
+			// This means the authentication was cancelled.
+			$user->set( 'auth_msg',
+				JText::_( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_AUTH_ERR_CANCELLED' ) );
+		} else if ( $response->status == Auth_OpenID_FAILURE ) {
+			// Authentication failed; display the error message.
+			// This means the authentication was cancelled.
+			$user->set( 'auth_msg', JText::_( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_AUTH_ERR_FAIL',
+				$response->message ) );
+		} else if ( $response->status == Auth_OpenID_SUCCESS ) {
+			// This means the authentication succeeded; extract the
+			// identity URL and Simple Registration data (if it was returned).
+			$openid = $response->getDisplayIdentifier();
+
+			$ax = new Auth_OpenID_AX_FetchResponse();
+			$obj = $ax->fromSuccessResponse( $response );
+
+			myPrint($response);
+			myPrint($obj);die();
+
+			// $pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
+
+			// Log user into website
+			// Save user if it doesn't already exist
+		}
+
+		// If we didn't redirect above, then something failblogged
+		$_REQUEST['option'] = 'com_tests';
+		$_REQUEST['view'] = 'login';
+		$_REQUEST['layout'] = 'default_failed';
+		$_REQUEST['tmpl'] = 'component';
+
+		return;
+	}
+}
+
+
+
+
+
+
+
+function &getStore() {
+    /**
+     * This is where the example will store its OpenID information.
+     * You should change this path if you want the example store to be
+     * created elsewhere.  After you're done playing with the example
+     * script, you'll have to remove this directory manually.
+     */
+    $store_path = null;
+    if (function_exists('sys_get_temp_dir')) {
+        $store_path = sys_get_temp_dir();
+    }
+    else {
+        if (strpos(PHP_OS, 'WIN') === 0) {
+            $store_path = $_ENV['TMP'];
+            if (!isset($store_path)) {
+                $dir = 'C:\Windows\Temp';
+            }
+        }
+        else {
+            $store_path = @$_ENV['TMPDIR'];
+            if (!isset($store_path)) {
+                $store_path = '/tmp';
+            }
+        }
+    }
+    $store_path .= DIRECTORY_SEPARATOR . '_php_consumer_test';
+
+    if (!file_exists($store_path) &&
+        !mkdir($store_path)) {
+        print "Could not create the FileStore directory '$store_path'. ".
+            " Please check the effective permissions.";
+        exit(0);
+    }
+	$r = new Auth_OpenID_FileStore($store_path);
+
+    return $r;
+}
+
+function &getConsumer() {
+    /**
+     * Create a consumer object using the store object created
+     * earlier.
+     */
+    $store = getStore();
+	$r = new Auth_OpenID_Consumer($store);
+    return $r;
+}

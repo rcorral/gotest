@@ -51,6 +51,10 @@ class TestsHelper
 			$user_id = $user->get('id');
 		}
 
+		if ( !$user_id ) {
+			return '';
+		}
+
 		$db->setQuery( "SELECT `hash`
 			FROM #__api_keys
 				WHERE `user_id` = " . (int) $user_id );
