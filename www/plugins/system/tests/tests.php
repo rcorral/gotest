@@ -261,13 +261,14 @@ class plgSystemTests extends plgSystemTestsFormEvents
 	public function onAfterInitialise()
 	{
 		$app = JFactory::getApplication();
+		$option = JRequest::getVar( 'option' );
 
 		if ( $app->isAdmin() ) {
 			return;
 		}
 
-		// If com_users lets keep the request going
-		if ( 'com_users' == JRequest::getVar( 'option' ) ) {
+		// Let the request through if com_api or com_users
+		if ( in_array( $option, array( 'com_api', 'com_users' ) ) ) {
 			return;
 		}
 
