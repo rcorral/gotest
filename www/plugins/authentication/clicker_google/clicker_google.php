@@ -23,6 +23,63 @@ class plgAuthenticationClicker_Google extends JPlugin
 		$this->loadLanguage();
 	}
 
+	/**
+	 * This method should handle authentication requests created by this plugin
+	 *
+	 * @access	public
+	 * @param	array	Array holding the user credentials
+	 * @param	array	Array of extra options
+	 * @param	object	Authentication response object
+	 * @return	boolean
+	 * @since 1.5
+	 */
+	function onUserAuthenticate( $credentials, $options, &$response )
+	{
+		$response->type = 'Clicker:Google';
+
+		if ( JFactory::getApplication()->isAdmin() ) {
+			return;
+		}
+
+		if ( 'com_users' == JRequest::getVar( 'option' ) ) {
+			$response->status = JAuthentication::STATUS_FAILURE;
+			$response->error_message =
+				JText::_( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_AUTH_ERR_BAD_ENTRY' );
+			return false;
+		}
+
+		if ( empty( $credentials['password'] ) ) {
+			$response->status = JAuthentication::STATUS_FAILURE;
+			$response->error_message = JText::_( 'JGLOBAL_AUTH_EMPTY_PASS_NOT_ALLOWED' );
+			return false;
+		}
+
+		$db = JFactory::getDBO();
+
+		// Let's attempt to get the user
+		$query = $db->getQuery( true )
+			->select( 'u.`id`' )
+			->from( '#__users AS u' )
+			->leftjoin( '#__user_profiles AS up ON u.`id` = up.`user_id`' )
+			->where( 'u.`email` = ' . $db->q( $credentials['username'] ) )
+			->where( 'up.`profile_key` = \'openid.id\'' )
+			->where( 'up.`profile_value` = ' . $db->q( $credentials['password'] ) )
+			;
+		$user_id = $db->setQuery( $query )->loadResult();
+
+		if ( $user_id ) {
+			$user = JUser::getInstance( $user_id );
+			$response->fullname = $user->name;
+			$response->email = $user->email;
+			$response->language = $user->getParam('language');
+			$response->status = JAuthentication::STATUS_SUCCESS;
+			$response->error_message = '';
+		} else {
+			$response->status = JAuthentication::STATUS_FAILURE;
+			$response->error_message = JText::_('JGLOBAL_AUTH_NO_USER');
+		}
+	}
+
 	protected function init()
 	{
 		$path_extra = JPATH_ADMINISTRATOR . '/components/com_tests/libraries/php-openid/';
@@ -151,6 +208,13 @@ class plgAuthenticationClicker_Google extends JPlugin
 		// Complete the authentication process using the server's response.
 		$response = $consumer->complete( $this->return_to );
 
+		// Assume it will fail? lulz, very negative.
+		// It is easier in case we fail when creating the user
+		$_REQUEST['option'] = 'com_tests';
+		$_REQUEST['view'] = 'login';
+		$_REQUEST['layout'] = 'default_failed';
+		$_REQUEST['tmpl'] = 'component';
+
 		// Check the response status.
 		if ( $response->status == Auth_OpenID_CANCEL ) {
 			// This means the authentication was cancelled.
@@ -169,30 +233,129 @@ class plgAuthenticationClicker_Google extends JPlugin
 			$ax = new Auth_OpenID_AX_FetchResponse();
 			$obj = $ax->fromSuccessResponse( $response );
 
-			myPrint($response);
-			myPrint($obj);die();
-
 			// $pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
+
+			// Get openid unique identifier
+			$openid_identifier_url = JURI::getInstance( $openid );
+			$openid_identifier = $openid_identifier_url->getVar( 'id' );
 
 			// Log user into website
 			// Save user if it doesn't already exist
-		}
+			$user_data = $this->save_or_update_user( $obj, $openid_identifier );
 
-		// If we didn't redirect above, then something failblogged
-		$_REQUEST['option'] = 'com_tests';
-		$_REQUEST['view'] = 'login';
-		$_REQUEST['layout'] = 'default_failed';
-		$_REQUEST['tmpl'] = 'component';
+			if ( !$user_data ) {
+				$user->set( 'auth_msg', $this->getError() );
+				return;
+			}
+
+			$success = $app->login(
+				array( 'username' => $user_data['email'], 'password' => $openid_identifier ),
+				array( 'silent' => 1 ) );
+
+			if ( $success ) {
+				$redirect = JURI::getInstance();
+				$redirect->setQuery( array() );
+				$app->redirect( $redirect );
+			} else {
+				$user->set( 'auth_msg',
+					JText::_( 'PLG_AUTHENTICATION_CLICKER_GOOGLE_AUTH_ERR_LOGGING_IN' ) );
+			}
+		}
 
 		return;
 	}
+
+	/**
+	 * Save user to DB
+	 */
+	protected function save_or_update_user( $user_data, $openid_identifier )
+	{
+		$db = JFactory::getDBO();
+
+		foreach ( $user_data->data as $key => $value ) {
+			switch ( $key ) {
+				case 'http://axschema.org/namePerson/first':
+					$firstname = $value[0];
+					break;
+
+				case 'http://axschema.org/namePerson/last':
+					$lastname = $value[0];
+					break;
+
+				case 'http://axschema.org/contact/email':
+					$email = $value[0];
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		$user_params = JComponentHelper::getParams('com_users');
+
+		$data = array(
+			'name' => trim( $firstname ) . ' ' . trim( $lastname ),
+			'username' => $email,
+			'email' => $email,
+			'password' => JUserHelper::genRandomPassword(20),
+			'groups' => array( $user_params->get( 'new_usertype', 2 ) )
+			);
+
+		// Let's see if user already exists
+		$query = $db->getQuery( true )
+			->select( 'up.`user_id`' )
+			->from( '#__user_profiles AS up' )
+			->where( 'up.`profile_key` = \'openid.id\'' )
+			->where( 'up.`profile_value` = ' . $db->q( $openid_identifier ) )
+			;
+		$user_id = $db->setQuery( $query )->loadResult();
+
+		if ( $user_id ) {
+			$data['id'] = $user_id;
+		}
+
+		// Get user object
+		$user = new JUser;
+
+		// Bind the data.
+		if ( !$user->bind( $data ) ) {
+			$this->setError( $user->getError() );
+			return false;
+		}
+
+		// Store the data.
+		if ( !$user->save() ) {
+			$this->setError( $user->getError() );
+			return false;
+		}
+
+		if ( !$user_id ) {
+			// Add openid_identifier if user is new
+			$query = $db->getQuery( true )
+				->insert( '#__user_profiles' )
+				->columns( '`user_id`, `profile_key`, `profile_value`' )
+				->values( (int) $user->get('id') . ', \'openid.id\', ' . $db->q( $openid_identifier ) )
+				;
+			$db->setQuery( $query )->query();
+		}
+
+		return array( 'id' => $user->get('id'), 'email' => $email );
+	}
+
+	function clickerUserDelete( $user, $success, $msg )
+	{
+		$db = JFactory::getDBO();
+		$user_id = JArrayHelper::getValue( $user, 'id', 0, 'int' );
+
+		// Delete profile settings
+		$db->setQuery( "DELETE FROM #__user_profiles
+			WHERE user_id = {$user_id}
+			AND profile_key = 'openid.id'" );
+		if ( !$db->query() ) {
+			throw new Exception( $db->getErrorMsg() );
+		}
+	}
 }
-
-
-
-
-
-
 
 function &getStore() {
     /**

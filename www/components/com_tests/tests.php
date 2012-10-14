@@ -11,6 +11,12 @@ defined('_JEXEC') or die;
 // Include dependancies
 jimport('joomla.application.component.controller');
 
+if ( !JFactory::getUser()->get('id') ) {
+	JRequest::setVar( 'view', 'login' );
+	JRequest::setVar( 'tmpl', 'component' );
+	JRequest::setVar( 'tmpl2', 'compone33nt' );
+}
+
 // Execute the task.
 $controller	= JController::getInstance( 'Tests' );
 $controller->execute( JRequest::getCmd( 'task' ) );

@@ -298,6 +298,31 @@ class plgSystemTests extends plgSystemTestsFormEvents
 			$_REQUEST['option'] = 'com_tests';
 			$_REQUEST['view'] = 'test';
 			$_REQUEST['tmpl'] = 'component';
+			return;
 		}
+
+		$app->redirect( JURI::root() );
+	}
+
+	function onUserAfterDelete( $user, $success, $msg )
+	{
+		if ( !$success ) {
+			return false;
+		}
+
+		$app = JFactory::getApplication();
+		$user_id = JArrayHelper::getValue( $user, 'id', 0, 'int' );
+
+		if ( $user_id ) {
+			try {
+				JPluginHelper::importPlugin( 'authentication' );
+				$app->triggerEvent( 'clickerUserDelete', array( $user, $success, $msg ) );
+			} catch ( JException $e ) {
+				$this->_subject->setError( $e->getMessage() );
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
