@@ -8,6 +8,7 @@ XClick = (function() {
 		this.test_id = jQuery('#test-id').val();
 		this.unique_id = _gup( 'unique_id' );
 		this.test_started = false;
+		this.api_key = api_key;
 		setup();
 	}
 
@@ -102,7 +103,7 @@ XClick = (function() {
 
 		_question_order = jQuery('#question-order').val();
 		if ( 'next' == type && _question_order == xclick.current_question.max_order ) {
-			xclick.complete();
+			xclick.complete_prompt();
 			return;
 		}
 
@@ -127,8 +128,29 @@ XClick = (function() {
 		this.emit( 'next_question', msg );
 	};
 
-	XClick.prototype.complete = function() {
+	XClick.prototype.complete_prompt = function() {
 		jQuery('#finish_modal').modal('show');
+	};
+
+	XClick.prototype.complete = function() {
+		data = {};
+		data.test_id = this.test_id;
+		data.unique_id = this.unique_id;
+
+		data.option = 'com_api';
+		data.app = 'tests';
+		data.resource = 'complete';
+		data.key = this.api_key;
+
+		core._ajax(
+			data,
+			function( data ) {
+				xclick.emit( 'complete' );
+
+				jQuery('#test-active').hide();
+				jQuery('#finish_modal').modal('hide');
+				jQuery('#test-completed').slideDown();
+			}, { type: 'POST' });
 	};
 
 	XClick.prototype.emit = function( event, data ) {
@@ -148,7 +170,7 @@ XClick = (function() {
 		data.uid = this.unique_id;
 
 		// Add api key
-		data.key = api_key;
+		data.key = this.api_key;
 
 		// For now this is how we tell if you are a presenter
 		data.isp = true;
@@ -253,4 +275,8 @@ jQuery(document).ready(function(){
 			}
 		}
 	);
+
+	jQuery('#finish_modal button.btn-primary').on( 'click', function(){
+		xclick.complete();
+	});
 });

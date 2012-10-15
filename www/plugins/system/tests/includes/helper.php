@@ -170,6 +170,22 @@ class TestsHelper
 		return $return;
 	}
 
+	/**
+	 * See if test is still active
+	 */
+	function is_test_session_active( $test_id, $unique_id )
+	{
+		$db = JFactory::getDBO();
+
+		$query = $db->getQuery( true )
+			->select( '`is_active`' )
+			->from( '#__test_sessions AS ts' )
+			->where( '`test_id` = ' . (int) $test_id )
+			->where( '`unique_id` = ' . $db->q( $unique_id ) )
+			;
+		return $db->setQuery( $query )->loadResult();
+	}
+
 	function stripslashes_deep( $value )
 	{
 		if ( is_array( $value ) ) {

@@ -122,6 +122,16 @@ Tests = (function() {
 		return delete this.at[m_test_id][uid][key];
 	};
 
+	Tests.prototype.remove_test = function( test_id, uid ) {
+		if ( !this.test_exists( test_id, uid ) ) {
+			return true;
+		};
+
+		var m_test_id = this.get_test_id_arraykey( test_id );
+
+		return delete this.at[m_test_id][uid];
+	};
+
 	return Tests;
 })();
 

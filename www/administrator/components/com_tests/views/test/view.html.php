@@ -17,13 +17,17 @@ class TestsViewTest extends JView
 	{
 		$this->test = $this->get('Test');
 
-		if ( empty( $this->test ) ) {
-			JError::raiseError( 500, 'Test does\'t exist.' );
+		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive' ) );
+
+		if ( empty( $this->test )
+			|| !TestsHelper::is_test_session_active( $this->test->id,
+				JRequest::getVar( 'unique_id' ) )
+		) {
+			parent::display( 'noexists' );
 			return false;
 		}
 
-		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'timer', 'core',
-			'socket.io', 'click', 'templates' ) );
+		Tests::add_script( array( 'timer', 'core', 'socket.io', 'click', 'templates' ) );
 
 		Tests::addScriptDeclaration( "var api_key = '"
 			. TestsHelper::get_api_key( null, true ). "';" );

@@ -11,7 +11,7 @@ $unique_url = JURI::root()
 .pre-test-hide { display: none; }
 #start-timer { font-size: 180px; text-align: center; }
 </style>
-<div class="container-fluid">
+<div id="test-active" class="container-fluid">
 	<div class="row-fluid">
 	<div class="span12">
 		<form id="presenter-form" onSubmit="return false;">
@@ -70,6 +70,13 @@ $unique_url = JURI::root()
 			</div>
 		</form>
 	</div>
+	</div>
+</div>
+<div id="test-completed" class="container hide">
+	<div class="hero-unit">
+		<h1>Test completed</h1>
+		<p></p>
+		<p>All done!</p>
 	</div>
 </div>
 

@@ -214,6 +214,22 @@ io.sockets.on('connection', function( socket ) {
 			.emit('timer_toggle', { action: data.action, seconds_left: data.seconds_left });
 	});
 
+	socket.on('complete', function( data ) {
+		if ( !tests.validate_request_data( data, true, true ) ) {
+			_debug( 'complete:invalid_request' );
+			socket.disconnect();
+			return;
+		}
+
+		var room = data.test_id + '-' + data.uid;
+
+		tests.remove_test( data.test_id, data.uid );
+
+		_debug( 'complete:completing', room );
+
+		socket.broadcast.to(room).emit('complete', {});
+	});
+
 	socket.on('disconnect', function () {
 		// io.sockets.emit('user disconnected');
 	});

@@ -7,7 +7,7 @@ defined('_JEXEC') or die;
 .video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .pre-test-hide { display: none; }
 </style>
-<div class="container-fluid">
+<div id="test-active" class="container-fluid">
 	<div class="row-fluid">
 	<div class="span12">
 		<div class="row-fluid">
@@ -54,5 +54,10 @@ defined('_JEXEC') or die;
 			</div>
 		</form>
 	</div>
+	</div>
+</div>
+<div id="test-completed" class="container hide">
+	<div class="hero-unit">
+		<h2>Test is done!</h2>
 	</div>
 </div>

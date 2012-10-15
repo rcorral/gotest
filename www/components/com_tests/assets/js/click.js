@@ -110,6 +110,14 @@ XClick = (function() {
 			xclick.seconds_left = data.seconds_left;
 		});
 
+		// Complete
+		socket.on('complete', function( data ) {
+			xclick._debug('in:complete', data);
+
+			jQuery('#test-active').hide();
+			jQuery('#test-completed').slideDown();
+		});
+
 		return socket;
 	};
 
