@@ -9,6 +9,8 @@ XClick = (function() {
 		this.unique_id = jQuery('#unique-id').val();
 		this.test_initialized = false;
 		this.test_started = false;
+		this.question = {};
+		this.api_key = api_key;
 		setup();
 	}
 
@@ -45,6 +47,9 @@ XClick = (function() {
 				return;
 			};
 
+			// Store current question
+			xclick.question = question;
+
 			// If this is the first time we are loading a test question
 			// then lets clean up the pre test stuff
 			if ( false == xclick.test_started ) {
@@ -56,6 +61,10 @@ XClick = (function() {
 					jQuery('.post-test-hide').slideUp('slow');
 				});
 			};
+
+			// Clean up anything left over from the previous question
+			jQuery('#btn-submit').removeClass('btn-success')
+				.removeClass('btn-info').html('Submit');
 
 			template = templates.parse( question.question_type, question );
 			xclick.set_timer( Number( question.seconds )
@@ -163,7 +172,34 @@ XClick = (function() {
 	};
 
 	XClick.prototype.submit = function() {
-		// Store question for later submission
+		_data = jQuery('#student-form').serialize();
+		data = jQuery.deparam( _data );
+
+		// This means that the question hasn't been answered,
+		// because test_id and unique_id are the only two parameters
+		if ( 2 == Object.size( data ) ) {
+			return false;
+		}
+
+		data.question_id = this.question.id;
+
+		data.test_id = this.test_id;
+		data.unique_id = this.unique_id;
+
+		data.option = 'com_api';
+		data.app = 'tests';
+		data.resource = 'answer';
+		data.key = this.api_key;
+
+		jQuery('#btn-submit').removeClass('btn-success')
+			.addClass('btn-info').html('Submitting...');
+
+		core._ajax(
+			data,
+			function( data ) {
+				jQuery('#btn-submit').removeClass('btn-info')
+					.addClass('btn-success').html('Submitted');
+			}, { type: 'POST' });
 
 		return false;
 	};

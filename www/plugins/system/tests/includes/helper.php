@@ -105,13 +105,13 @@ class TestsHelper
 			}
 
 			$query->clear()
-				->select( 'ta.`id`' )
-				->from( '#__test_active AS ta' )
-				->where( 'ta.`unique_id` = ' . $db->q( $_unique ) )
+				->select( 'ts.`id`' )
+				->from( '#__test_sessions AS ts' )
+				->where( 'ts.`unique_id` = ' . $db->q( $_unique ) )
 				;
 			if ( !$db->setQuery( $query )->loadResult() ) {
 				$query->clear()
-					->insert( '#__test_active' )
+					->insert( '#__test_sessions' )
 					->columns( '`test_id`, `user_id`, `unique_id`, `is_active`, `date`' )
 					->values( "{$test_id}, {$user_id}, " .$db->q( $_unique ). ", 1, '{$date}'" )
 					;
@@ -158,11 +158,11 @@ class TestsHelper
 			$db = JFactory::getDBO();
 
 			$query = $db->getQuery( true )
-				->select( 'ta.`unique_id`' )
-				->from( '#__test_active AS ta' )
-				->where( 'ta.`is_active` = 1' )
-				->where( 'ta.`test_id` = ' . (int) $return->test_id )
-				->where( 'ta.`unique_id` LIKE \'' .$db->escape( $matches[2] ). '%\'' )
+				->select( 'ts.`unique_id`' )
+				->from( '#__test_sessions AS ts' )
+				->where( 'ts.`is_active` = 1' )
+				->where( 'ts.`test_id` = ' . (int) $return->test_id )
+				->where( 'ts.`unique_id` LIKE \'' .$db->escape( $matches[2] ). '%\'' )
 				;
 			$return->unique_id = $db->setQuery( $query, 0, 1 )->loadResult();
 		}

@@ -48,6 +48,9 @@ class Tests
 		'timer' => array(
 			'js' => 'TEMPLATEPATH/js/jquery.timer.js'
 			),
+		'deparam' => array(
+			'js' => 'TEMPLATEPATH/js/jquery.ba-bbq.min.js'
+			),
 		'core' => array(
 			'js' => "TEMPLATEPATH/js/core.js"
 			),

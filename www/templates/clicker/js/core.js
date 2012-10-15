@@ -290,6 +290,17 @@ function array_search( needle, haystack, argStrict ) {
 	return false;
 }
 
+Object.size = function(obj) {
+	var size = 0, key;
+	for ( key in obj ) {
+		if ( obj.hasOwnProperty( key ) ) {
+			size++;
+		}
+	}
+
+	return size;
+};
+
 // Colorbox fix for scrollbars
 if ( jQuery ) {
 	jQuery(document).ready(function(){

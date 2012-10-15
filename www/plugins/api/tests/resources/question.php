@@ -17,9 +17,15 @@ class TestsApiResourceQuestion extends ApiResource
 {
 	public function get()
 	{
+		APIHelper::setSessionUser();
 		JModel::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_tests/models' );
 
+		$user = JFactory::getUser();
 		$model = JModel::getInstance( 'Question', 'TestsModel' );
+
+		if ( !$user->authorise('core.admin') ) {
+			throw new JException( 'Not authorised.', 400 );
+		}
 
 		$question = $model->get_question();
 

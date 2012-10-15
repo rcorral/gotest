@@ -10,43 +10,44 @@ defined('_JEXEC') or die;
 <div class="container-fluid">
 	<div class="row-fluid">
 	<div class="span12">
+		<div class="row-fluid">
+		<div class="page-header span12">
+			<div class="row-fluid pre-test-hide">
+			<div class="span10 clearfix">
+				<h1><?php echo $this->test->title; ?>
+				<?php if ( $this->test->sub_title ) { ?>
+				<small><?php echo $this->test->sub_title; ?></small>
+				<?php } ?>
+				</h1>
+			</div>
+			<div class="span2">
+				<div class="well well-large muted pull-left" id="counter" style="display:none;">
+					<span class="digit"></span><span class="units"></span>
+				</div>
+			</div>
+			</div>
+		</div>
+		</div>
+		<div class="row-fluid post-test-hide" id="pre-test-info">
+			<div class="span12">
+			<div class="container">
+			<div class="hero-unit">
+				<h1>Loading</h1>
+				<p></p>
+				<p class="pre-test-hide">Trying to make sense of why it's not loading.</p>
+			</div>
+			</div>
+			</div>
+		</div>
 		<form id="student-form" onSubmit="return false;">
-			<div class="row-fluid">
-			<div class="page-header span12">
-				<div class="row-fluid pre-test-hide">
-				<div class="span10 clearfix">
-					<h1><?php echo $this->test->title; ?>
-					<?php if ( $this->test->sub_title ) { ?>
-					<small><?php echo $this->test->sub_title; ?></small>
-					<?php } ?>
-					</h1>
-				</div>
-				<div class="span2">
-					<div class="well well-large muted pull-left" id="counter" style="display:none;">
-						<span class="digit"></span><span class="units"></span>
-					</div>
-				</div>
-				</div>
-			</div>
-			</div>
-			<div class="row-fluid post-test-hide" id="pre-test-info">
-				<div class="span12">
-				<div class="container">
-				<div class="hero-unit">
-					<h1>Loading</h1>
-					<p></p>
-					<p class="pre-test-hide">Trying to make sense of why it's not loading.</p>
-				</div>
-				</div>
-				</div>
-			</div>
 			<div class="row-fluid" id="form-data"></div>
 			<div class="row-fluid">
+			<!-- To get past the first child -->
+			<div></div>
 			<div class="span12">
 				<div class="control-group">
 				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
 				<input type="hidden" name="unique_id" value="<?php echo $this->test_session->unique_id; ?>" id="unique-id" />
-				<input type="hidden" name="test_id" value="<?php echo $this->test->id; ?>" id="test-id" />
 				<button type="button" name="submit" onclick="xclick.submit(this);" id="btn-submit" class="btn btn-primary" style="display:none;">Submit</button>
 				</div>
 			</div>

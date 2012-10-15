@@ -18,7 +18,7 @@ Templates = (function() {
 			html += '<div class="span12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="radio">';
-			html += '<input type="radio" name="option" value="' +option.id+ '" id="option_'
+			html += '<input type="radio" name="answer" value="' +option.id+ '" id="option_'
 				+ option.id + '" /> ';
 			html += option.title+ '</label>';
 			html += '</div>';
@@ -42,7 +42,7 @@ Templates = (function() {
 			html += '<div class="span12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="checkbox">';
-			html += '<input type="checkbox" name="option" value="' +option.id+ '" id="option_'
+			html += '<input type="checkbox" name="answer[]" value="' +option.id+ '" id="option_'
 				+ option.id + '" /> ';
 			html += option.title+ '</label>';
 			html += '</div>';
@@ -62,7 +62,7 @@ Templates = (function() {
 
 		html += '<div class="span12">';
 		html += '<div class="control-group">';
-		html += '<input type="text" name="option" value="" placeholder="Answer..." class="input-xlarge" />';
+		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge" />';
 		html += '</div>';
 		html += '</div>';
 
@@ -79,7 +79,7 @@ Templates = (function() {
 
 		html += '<div class="span12">';
 		html += '<div class="control-group">';
-		html += '<input type="text" name="option" value="" placeholder="Answer..." class="input-xlarge" />';
+		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge" />';
 		html += '</div>';
 		html += '</div>';
 
@@ -96,7 +96,7 @@ Templates = (function() {
 
 		html += '<div class="span12">';
 		html += '<div class="control-group">';
-		html += '<textarea name="option" rows="10"></textarea>';
+		html += '<textarea name="answer" rows="10"></textarea>';
 		html += '</div>';
 		html += '</div>';
 
