@@ -101,6 +101,8 @@ class TestsHelper
 		$counter = 0;
 		while ( !$unique_id ) {
 			if ( $counter ) {
+				$_unique = md5( $date . $test_id . $user_id . $counter );
+			} else {
 				$_unique = md5( $date . $test_id . $user_id );
 			}
 
