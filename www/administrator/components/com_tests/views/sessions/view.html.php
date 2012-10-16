@@ -9,7 +9,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
-class TestsViewTests extends JView
+class TestsViewSessions extends JView
 {
 	protected $items;
 	protected $pagination;
@@ -23,7 +23,7 @@ class TestsViewTests extends JView
 		$this->items      = $this->get( 'Items' );
 		$this->pagination = $this->get( 'Pagination' );
 		$this->state      = $this->get( 'State' );
-
+myPrint($this->items);die();
 		// Check for errors.
 		if ( count( $errors = $this->get( 'Errors' ) ) ) {
 			JError::raiseError( 500, implode( "\n", $errors ) );
@@ -41,13 +41,8 @@ class TestsViewTests extends JView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title('Manage Tests');
+		JToolBarHelper::title('Tests Sessions');
 
-		JToolBarHelper::addNew('test_edit.add');
-		JToolBarHelper::editList('test_edit.edit');
-		JToolBarHelper::divider();
-		JToolBarHelper::deleteList('', 'tests.delete');
-		JToolBarHelper::divider();
-		JToolBarHelper::preferences('com_tests');
+		JToolBarHelper::deleteList('', 'sessions.delete');
 	}
 }
