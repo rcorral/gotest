@@ -18,7 +18,7 @@ $listDirn = $this->escape( $this->state->get( 'list.direction' ) );
 $loggeduser = JFactory::getUser();
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tests&view=tests');?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_tests&view=sessions');?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
@@ -43,16 +43,20 @@ $loggeduser = JFactory::getUser();
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th>
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
-				</th>
-				<th>
-					<?php echo JHtml::_('grid.sort', 'Sub title', 'a.sub_title', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 't.title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'Active', 'ts.active', $listDirn, $listOrder); ?>
 				</th>
+				<th width="15%">
+					<?php echo JHtml::_('grid.sort', 'JDATE', 'ts.date', $listDirn, $listOrder); ?>
+				</th>
+				<th width="8%">
+					Tests taken
+				</th>
+				<th width="8%"></th>
 				<th width="1%" class="nowrap">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'ts.id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		</thead>
@@ -68,31 +72,30 @@ $loggeduser = JFactory::getUser();
 			$item->max_ordering = 0; //??
 			$ordering	= ($listOrder == 'a.ordering');
 			$canEdit	= $user->authorise( 'core.edit', 'com_tests.test_edit.' . $item->id );
-			$canCheckin	= $user->authorise( 'core.manage', 'com_checkin' ) || $item->checked_out == $user->get('id') || $item->checked_out == 0;
-			$canEditOwn	= $user->authorise( 'core.edit.own', 'com_tests.test_edit.' . $item->id ) && $item->created_by == $user->get('id');
-			$canChange	= $user->authorise( 'core.edit.state', 'com_tests.test_edit.' . $item->id ) && $canCheckin;
+			$canCheckin	= $user->authorise( 'core.manage', 'com_checkin' );
+			$canEditOwn	= $user->authorise( 'core.edit.own', 'com_tests.test_edit.' . $item->id );
+			$canChange	= $user->authorise( 'core.edit.state', 'com_tests.test_edit.' . $item->id );
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
 				<td class="center">
 					<?php echo JHtml::_( 'grid.id', $i, $item->id ); ?>
 				</td>
 				<td>
-					<?php if ( $item->checked_out ) : ?>
-						<?php echo JHtml::_( 'jgrid.checkedout', $i, null, $item->checked_out_time, 'tests.', $canCheckin ); ?>
-					<?php endif; ?>
-					<?php if ( $canEdit || $canEditOwn ) : ?>
-						<a href="<?php echo JRoute::_('index.php?option=com_tests&task=test_edit.edit&id=' . $item->id);?>">
-							<?php echo $this->escape( $item->title ); ?></a>
-					<?php else : ?>
-						<?php echo $this->escape( $item->title ); ?>
-					<?php endif; ?>
-					<a href="<?php echo JRoute::_('index.php?option=com_tests&view=test&test_id=' . $item->id . '&tmpl=component');?>" target="_blank">[administer]</a>
-				</td>
-				<td>
-					<?php echo $this->escape( $item->sub_title ); ?>
+					<?php echo $this->escape( $item->title ); ?>
+					<p class="smallsub">
+						<?php echo $this->escape( $item->sub_title );?></p>
 				</td>
 				<td class="center">
-					<?php echo JHtml::_('jgrid.published', $item->published, $i, 'tests.', $canChange, 'cb' ); ?>
+					<?php echo JHtml::_('jgrid.published', $item->is_active, $i, 'sessions.', $canChange, 'cb' ); ?>
+				</td>
+				<td class="center">
+					<?php echo date( 'm/d/Y g:ia', strtotime( $item->date ) ); ?>
+				</td>
+				<td class="center">
+					<?php echo $item->count; ?>
+				</td>
+				<td class="center">
+					<a href="index.php?option=com_tests&amp;view=session_results&amp;id=<?php echo $item->id; ?>" target="_blank">Download</a>
 				</td>
 				<td class="center">
 					<?php echo (int) $item->id; ?>
