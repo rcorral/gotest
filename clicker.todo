@@ -1,12 +1,13 @@
 Things to do:
 - Presenter
-	- Login
-	- Upload questions
+	x Login
+	x Upload questions
 	- Download questions
-	- Create questions
-	- Present questions
+	x Create questions
+	x Present questions
 	- View data
+	- Categories
 - Audience
-	- Login some identifier (id or name)
-	- Answer questions
-	- Limited by timer
+	x Login some identifier (id or name)
+	x Answer questions
+	x Limited by timer
