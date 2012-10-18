@@ -7,7 +7,8 @@ abstract class TestsCHelper
 	public static function get_views()
 	{
 		return array(
-			array( 'view' => 'tests', 'name' => 'Tests' )
+			array( 'view' => 'tests', 'name' => 'Tests' ),
+			array( 'view' => 'sessions', 'name' => 'Sessions' )
 			);
 	}
 

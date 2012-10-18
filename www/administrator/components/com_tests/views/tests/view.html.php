@@ -48,6 +48,6 @@ class TestsViewTests extends JView
 		JToolBarHelper::divider();
 		JToolBarHelper::deleteList('', 'tests.delete');
 		JToolBarHelper::divider();
-		JToolBarHelper::preferences('com_menus');
+		JToolBarHelper::preferences('com_tests');
 	}
 }
