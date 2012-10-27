@@ -97,7 +97,7 @@ io.sockets.on('connection', function( socket ) {
 		}
 
 		var site = http.createClient(80, 'localhost');
-		var path = '/clicker/index.php?option=com_api&app=tests&resource=question&test_id='
+		var path = '/index.php?option=com_api&app=tests&resource=question&test_id='
 			+ data.test_id + '&key=' + data.key;
 
 		if ( data.question_id ) {
