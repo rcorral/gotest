@@ -58,12 +58,14 @@ class Tests
 			'js' => 'SITEcomponents/com_tests/assets/js/templates.js'
 			),
 		'socket.io' => array(
-			'js' => 'http://SITE_HOST:8000/socket.io/socket.io.js'
+			'js' => 'http://SITE_HOST:IO_PORT/socket.io/socket.io.js'
 			),
 		'click' => array(
 			'js' => 'BASEcomponents/com_tests/assets/js/click.js'
 			)
 		);
+
+	public static $io_port = 8080;
 
 	function add_script( $scripts = array() )
 	{
@@ -93,8 +95,9 @@ class Tests
 					if ( 'js' == $type ) {
 						foreach ( (array) $files as $file ) {
 							$file = str_replace(
-								array( 'TEMPLATEPATH', 'BASE', 'SITE_HOST', 'SITE' ),
-								array( $template_path, $base_path, $site_host, $site_path ),
+								array( 'TEMPLATEPATH', 'BASE', 'SITE_HOST', 'SITE', 'IO_PORT' ),
+								array( $template_path, $base_path, $site_host, $site_path,
+									self::$io_port ),
 								$file );
 							$doc->addScript( $file );
 						}
@@ -133,7 +136,7 @@ class Tests
 		$host = JURI::getInstance()->toString( array( 'host' ) );
 		$js = 'var live_site = \'' .JURI::root(). '\';';
 		$js .= 'var site_host = \'' .$host. '\';';
-		$js .= 'var io_server = \'http://' .$host. ':8000/\';';
+		$js .= 'var io_server = \'http://' .$host. ':' .self::$io_port. '/\';';
 		$js .= 'var in_development = ' . ( TESTS_DEVELOPMENT ? 1 : 0 ) . ';';
 
 		if ( JFactory::getApplication()->isAdmin() ) {

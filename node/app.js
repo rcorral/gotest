@@ -1,11 +1,7 @@
 var http = require('http')
-	, app = http.createServer(handler)
-	, io = require('socket.io').listen(app)
-	, fs = require('fs')
+	, io = require('socket.io').listen(8080)
 	, in_development = true
 	;
-
-app.listen(8000);
 
 io.configure(function(){
 	io.enable('browser client etag');
@@ -25,19 +21,6 @@ io.configure(function(){
 		, 'jsonp-polling'
   	]);
 });
-
-function handler ( req, res) {
-	fs.readFile(__dirname + '/client/index.html',
-	function (error, data) {
-		if (error) {
-			res.writeHead(500);
-			return res.end('Error loading index.html');
-		}
-
-		res.writeHead(200);
-		res.end(data);
-	});
-}
 
 function _debug() {
 	if ( in_development ) {
