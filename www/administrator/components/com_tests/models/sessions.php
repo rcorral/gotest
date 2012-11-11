@@ -91,7 +91,7 @@ class TestsModelSessions extends JModelList
 				a.`title`, a.`sub_title`,
 				COUNT( a.`user_id` ) AS `count`' )
 			->from( '(' . $query . ') AS a' )
-			->group( 'a.`user_id`' )
+			->group( 'a.`id`' )
 			;
 
 		return $_query;

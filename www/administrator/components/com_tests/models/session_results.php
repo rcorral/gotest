@@ -20,7 +20,7 @@ class TestsModelSession_Results extends JModel
 		$user = JFactory::getUser();
 
 		$query = $this->_db->getQuery(true)
-			->select( 't.*' )
+			->select( 't.*, ts.`date` AS `administration_date`' )
 			->from( '#__test_tests AS t' )
 			->leftjoin( '#__test_sessions AS ts ON ts.`test_id` = t.`id`' )
 			->where( 'ts.`id` = ' . (int) $session_id )
@@ -78,7 +78,7 @@ class TestsModelSession_Results extends JModel
 		$user = JFactory::getUser();
 
 		$query = $this->_db->getQuery(true)
-			->select( 'u.`name`, u.`email`, ta.`question_id`,
+			->select( 'u.`id` AS `user_id`, u.`name`, u.`email`, ta.`question_id`,
 				IF( ta.`answer_id`, tqo.`title`, ta.`answer_text` ) as `answer`' )
 			->from( '#__test_sessions AS ts' )
 			->leftjoin( '#__test_tests AS t ON t.`id` = ts.`test_id`' )
@@ -87,7 +87,7 @@ class TestsModelSession_Results extends JModel
 			->leftjoin( '#__test_question_options AS tqo ON tqo.`id` = ta.`answer_id`' )
 			->leftjoin( '#__users AS u ON u.`id` = ta.`user_id`' )
 			->where( 'ts.`id` = ' . (int) $session_id )
-			->order( 'u.`name` ASC, tq.`order` ASC' )
+			->order( 'u.`name` ASC, u.`id`, tq.`order` ASC' )
 			;
 
 		if ( !$user->authorise('core.admin') ) {
