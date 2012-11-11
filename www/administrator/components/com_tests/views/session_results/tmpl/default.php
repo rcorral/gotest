@@ -8,8 +8,8 @@
 
 defined('_JEXEC') or die;
 
-// myPrint($this->test);
-// myPrint($this->questions);
-// myPrint($this->student_answers);
-// die();
+myPrint($this->test);
+myPrint($this->questions);
+myPrint($this->student_answers);
+die();
 
