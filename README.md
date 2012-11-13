@@ -7,11 +7,11 @@ First instal
 2. Install PHP
 3. Install Node.js and NPM
 4. Add mysql dump to db
-5. Create /client/libraries/config.php file based off config.example.php
 
 Required node.js modules
 -----------------------------
-- socket.io
+> cd node
+> npm install
 
 Starting node server
 --------------------------

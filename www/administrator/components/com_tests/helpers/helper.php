@@ -17,6 +17,11 @@ abstract class TestsCHelper
 	 */
 	public static function addSubmenu( $view ) 
 	{
+		JSubMenuHelper::addEntry(
+			JText::_('COM_TESTS_SUBMENU_VIEW_CATEGORIES' ),
+			'index.php?option=com_categories&view=categories&extension=com_tests',
+			$view == 'categories' );
+
 		switch ( $view ) {
 			case 'example':
 				break;

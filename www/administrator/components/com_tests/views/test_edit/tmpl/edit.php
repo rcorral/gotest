@@ -119,6 +119,9 @@ JHtml::_('behavior.formvalidation');
 
 				<li><?php echo $this->form->getLabel('published'); ?>
 				<?php echo $this->form->getInput('published'); ?></li>
+
+				<li><?php echo $this->form->getLabel('catid'); ?>
+				<?php echo $this->form->getInput('catid'); ?></li>
 			</ul>
 	</fieldset>
 	</div>
