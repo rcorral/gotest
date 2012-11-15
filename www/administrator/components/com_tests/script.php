@@ -132,3 +132,4 @@ class com_testsInstallerScript
 		return !in_array( false, $returns, true );
 	}
 }
+
