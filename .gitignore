@@ -2,3 +2,6 @@
 /node/node_modules/
 /www/plugins/system/tests/development.php
 /node/logs/
+/build/www/
+/build/export.tar.gz
+/build/export/
