@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see	LICENSE.txt</license>
 	<authorEmail>rx.corral@gmail.com</authorEmail>
 	<authorUrl>www.rafaelcorral.com</authorUrl>
-	<version>0.01</version>
+	<version>0.0.1</version>
 	<description>COM_TESTS_XML_DESCRIPTION</description>
 
 	<files folder="site">
@@ -16,30 +16,41 @@
 		<filename>tests.php</filename>
 		<folder>assets</folder>
 		<folder>controllers</folder>
-		<folder>helpers</folder>
 		<folder>models</folder>
 		<folder>views</folder>
 	</files>
+
 	<languages folder="site">
-		<language tag="en-GB">language/en-GB.com_tests.ini
-		</language>
+		<language tag="en-GB">language/en-GB/en-GB.com_tests.ini</language>
 	</languages>
 
 	<administration>
+		<menu img="class:tests">com_tests</menu>
+		<submenu>
+			<menu link="option=com_categories&amp;extension=com_tests"
+				view="categories" img="class:tests-cat" alt="Tests/Categories">com_tests_categories</menu>
+			<menu link="option=com_tests" img="class:tests"
+				alt="Tests">com_tests</menu>
+			<menu link="option=com_tests&amp;view=sessions" img="class:tests-sessions"
+				alt="Tests/Sessions">com_tests_sessions</menu>
+		</submenu>
+
 		<files folder="admin">
+			<filename>access.xml</filename>
 			<filename>controller.php</filename>
 			<filename>index.html</filename>
 			<filename>tests.php</filename>
 			<folder>assets</folder>
 			<folder>controllers</folder>
 			<folder>helpers</folder>
+			<folder>libraries</folder>
 			<folder>models</folder>
+			<folder>tables</folder>
 			<folder>views</folder>
 		</files>
 
 		<languages folder="admin">
-			<language tag="en-GB">language/en-GB.com_tests.ini
-			</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_tests.ini</language>
 		</languages>
 	</administration>
 </extension>
