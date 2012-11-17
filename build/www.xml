@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Tests" default="build_package" basedir=".">
+	<property name="branch" value="master" />
 	<property name="joomla.version" value="2.5" />
 	<property name="joomla.root" value="build/export/www" />
 	<property name="component.short" value="tests" />
@@ -19,17 +20,17 @@
 		<phingcall target="package_component" />
 	</target>
 
-	<target name="export_repo">
-		<exec command="git archive --format tar --output build/export.tar.gz build-component" />
-		<exec command="mkdir build/export" />
-		<exec command="tar -xzf build/export.tar.gz -C build/export" />
-	</target>
-
 	<target name="cleanup">
 		<echo message="Deleting existing package folder..." />
 		<exec command="rm -rf build/www/" />
 		<exec command="rm -rf build/export/" />
 		<exec command="rm -rf build/export.tar.gz" />
+	</target>
+
+	<target name="export_repo">
+		<exec command="git archive --format tar --output build/export.tar.gz ${branch}" />
+		<exec command="mkdir build/export" />
+		<exec command="tar -xzf build/export.tar.gz -C build/export" />
 	</target>
 
 	<target name="package_component">
