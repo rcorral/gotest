@@ -1,6 +1,9 @@
 var http = require('http')
 	, io = require('socket.io').listen(8080)
 	, in_development = true
+	, argv = require('optimist')
+		.usage('Usage: $0 [--joomla=path]')
+		.argv;
 	;
 
 io.configure(function(){
@@ -28,15 +31,12 @@ function _debug() {
 	}
 }
 
-// for ( _client in channels.get_channel(data.channel) ) {
-// 	_debug(_client);
-// }
-
-click = require('./app-files/click');
+var click = require('./app-files/click');
 var tests = click.tests.setup();
-client = click.client.setup();
+var client = click.client.setup();
 // channels = click.channels.setup();
 var lang = click.language.setup();
+var joomla_path = argv.joomla || '';
 
 io.sockets.on('connection', function( socket ) {
 	socket.on('test_begin', function( data ) {
@@ -80,7 +80,7 @@ io.sockets.on('connection', function( socket ) {
 		}
 
 		var site = http.createClient(80, 'localhost');
-		var path = '/index.php?option=com_api&app=tests&resource=question&test_id='
+		var path = joomla_path + '/index.php?option=com_api&app=tests&resource=question&test_id='
 			+ data.test_id + '&key=' + data.key;
 
 		if ( data.question_id ) {

@@ -10,7 +10,8 @@
 
   "dependencies": {
     "socket.io": "0.9.x",
-    "forever": "x"
+    "forever": "x",
+    "optimist": "x"
   }
 }
 
