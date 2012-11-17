@@ -314,7 +314,7 @@ class TestsModelTest_Edit extends JModelAdmin
 
 		$templates = array();
 		foreach ( $types as $type ) {
-			$templates[$type] = TestsHelper::get_question_type( $type );
+			$templates[$type] = THelper::get_question_type( $type );
 		}
 
 		return (object) $templates;

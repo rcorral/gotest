@@ -26,6 +26,7 @@ class TestsModelTests extends JModelList
 			$config['filter_fields'] = array(
 				'id', 'a.id',
 				'title', 'a.title',
+				'catid', 'a.catid',
 			);
 		}
 
@@ -44,7 +45,7 @@ class TestsModelTests extends JModelList
 	protected function populateState( $ordering = null, $direction = null )
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication( 'administrator' );
+		$app = JFactory::getApplication();
 
 		// Load the filter state.
 		$search = $this->getUserStateFromRequest( $this->context
@@ -54,6 +55,14 @@ class TestsModelTests extends JModelList
 		$published = $this->getUserStateFromRequest( $this->context
 			. '.filter.published', 'filter_published', 1 );
 		$this->setState( 'filter.published', $published );
+
+		$category_id = $this->getUserStateFromRequest( $this->context
+			. '.filter.category_id', 'filter_category_id' );
+		$this->setState( 'filter.category_id', $category_id );
+
+		$level = $this->getUserStateFromRequest( $this->context
+			. '.filter.level', 'filter_level', 0, 'int' );
+		$this->setState( 'filter.level', $level );
 
 		// List state information.
 		parent::populateState( 'a.title', 'asc' );
@@ -70,7 +79,9 @@ class TestsModelTests extends JModelList
 	{
 		$query = $this->_db->getQuery( true )
 			->select( 'a.*' )
+			->select( 'c.title AS category_title' )
 			->from( '#__test_tests AS a' )
+			->leftjoin( '#__categories AS c ON c.id = a.catid' )
 			->where( 'a.`published` = ' . (int) $this->getState( 'filter.published' ) )
 			;
 
@@ -83,6 +94,24 @@ class TestsModelTests extends JModelList
 				$search = $this->_db->Quote( '%'.$this->_db->escape($search, true).'%' );
 				$query->where('(a.`title` LIKE ' . $search . ' OR a.alias LIKE ' . $search . ')' );
 			}
+		}
+
+		// Filter category id
+		$baselevel = 1;
+		$catid = $this->getState( 'filter.category_id' );
+		if ( $catid && is_numeric( $catid ) ) {
+			$cat_tbl = JTable::getInstance( 'Category', 'JTable' );
+			$cat_tbl->load( $catid );
+			$rgt = $cat_tbl->rgt;
+			$lft = $cat_tbl->lft;
+			$baselevel = (int) $cat_tbl->level;
+			$query->where( 'c.lft >= '.(int) $lft );
+			$query->where( 'c.rgt <= '.(int) $rgt );
+		}
+
+		// Filter on the level.
+		if ( $level = $this->getState( 'filter.level' ) ) {
+			$query->where( 'c.level <= ' . ( (int) $level + (int) $baselevel - 1 ) );
 		}
 
 		// Add the list ordering clause.

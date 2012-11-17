@@ -25,13 +25,13 @@
 	</languages>
 
 	<administration>
-		<menu img="class:tests">com_tests</menu>
+		<menu img="class:article">com_tests</menu>
 		<submenu>
 			<menu link="option=com_categories&amp;extension=com_tests"
-				view="categories" img="class:tests-cat" alt="Tests/Categories">com_tests_categories</menu>
-			<menu link="option=com_tests" img="class:tests"
-				alt="Tests">com_tests</menu>
-			<menu link="option=com_tests&amp;view=sessions" img="class:tests-sessions"
+				view="categories" img="class:category" alt="Tests/Categories">com_tests_categories</menu>
+			<menu link="option=com_tests" img="class:article"
+				alt="Tests">com_tests_menu</menu>
+			<menu link="option=com_tests&amp;view=sessions" img="class:contact"
 				alt="Tests/Sessions">com_tests_sessions</menu>
 		</submenu>
 

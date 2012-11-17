@@ -2,7 +2,7 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-abstract class TestsCHelper
+class TestsHelper
 {
 	public static function get_views()
 	{
@@ -27,7 +27,7 @@ abstract class TestsCHelper
 				break;
 
 			default:
-				$views = TestsCHelper::get_views();
+				$views = TestsHelper::get_views();
 
 				foreach ( $views as $_view ) {
 					JSubMenuHelper::addEntry(

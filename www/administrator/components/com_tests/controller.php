@@ -27,14 +27,14 @@ class TestsController extends JController
 
 		if ( JFactory::getApplication()->isAdmin() ) {
 			// Set the submenu
-			TestsCHelper::addSubmenu( $view );
+			TestsHelper::addSubmenu( $view );
 		}
 
 		if ( 'test' == $view ) {
 			$unique_id = JRequest::getVar( 'unique_id' );
 			if ( !$unique_id ) {
 				// Lets generate id for this test
-				$unique_id = TestsHelper::generate_unique_test_id( JRequest::getInt( 'test_id' ) );
+				$unique_id = THelper::generate_unique_test_id( JRequest::getInt( 'test_id' ) );
 
 				if ( !$unique_id ) {
 					JError::raiseError( 500, 'Error creating unique ID for test.' );

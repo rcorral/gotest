@@ -16,7 +16,7 @@ class TestsViewTest extends JView
 	public function display( $tpl = null )
 	{
 		$model = $this->getModel();
-		$this->test_session = TestsHelper::get_test_session_id_from_url();
+		$this->test_session = THelper::get_test_session_id_from_url();
 
 		if ( !$this->test_session->test_id || !$this->test_session->unique_id ) {
 			Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive' ) );
@@ -37,7 +37,7 @@ class TestsViewTest extends JView
 			'deparam', 'socket.io', 'click', 'templates' ) );
 
 		Tests::addScriptDeclaration( "var api_key = '"
-			. TestsHelper::get_api_key( null, true ). "';" );
+			. THelper::get_api_key( null, true ). "';" );
 
 		parent::display( $tpl );
 	}

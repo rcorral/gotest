@@ -13,7 +13,7 @@ if ( !JFactory::getUser()->authorise( 'core.manage', 'com_users' ) ) {
 	return JError::raiseWarning( 404, JText::_( 'JERROR_ALERTNOAUTHOR' ) );
 }
 
-JLoader::register( 'TestsCHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/helper.php' );
+JLoader::register( 'TestsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tests.php' );
 
 // Include dependancies
 jimport('joomla.application.component.controller');

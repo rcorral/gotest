@@ -10,7 +10,7 @@ defined('JPATH_BASE') or die;
 /**
  * Use for misc functions
  */
-class TestsHelper
+class THelper
 {
 	/**
 	 * Gets a question template

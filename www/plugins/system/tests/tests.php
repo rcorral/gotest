@@ -252,7 +252,7 @@ JTable::addIncludePath( JPATH_ADMINISTRATOR . '/components/com_tests/tables/' );
 JForm::addFieldPath( JPATH_ADMINISTRATOR . '/components/com_tests/models/fields' );
 
 $includes_path = JPATH_PLUGINS .DS. 'system' .DS. 'tests' .DS. 'includes';
-JLoader::register( 'TestsHelper', $includes_path . '/helper.php' );
+JLoader::register( 'THelper', $includes_path . '/helper.php' );
 JLoader::register( 'plgSystemTestsFormEvents', $includes_path . '/form-events.php' );
 require $includes_path . '/functions.php';
 
