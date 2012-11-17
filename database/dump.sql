@@ -2,19 +2,13 @@
 -- version 3.4.9
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 21, 2012 at 08:12 PM
--- Server version: 5.6.3
--- PHP Version: 5.3.10
+-- Host: localhost
+-- Generation Time: Nov 17, 2012 at 09:57 AM
+-- Server version: 5.5.20
+-- PHP Version: 5.3.17
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `clicker`
@@ -23,146 +17,130 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `questions`
+-- Table structure for table `vjaq6_test_answers`
 --
 
-CREATE TABLE IF NOT EXISTS `questions` (
+DROP TABLE IF EXISTS `vjaq6_test_answers`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_answers` (
+  `user_id` int(11) unsigned NOT NULL COMMENT 'Relation to _users',
+  `session_id` int(11) unsigned NOT NULL COMMENT 'Relation to _test_sessions',
+  `question_id` int(11) unsigned NOT NULL COMMENT 'Relation to _test_questions',
+  `answer_id` int(11) NOT NULL COMMENT 'Relation to _test_question_options',
+  `answer_text` mediumtext NOT NULL COMMENT 'For text type answers (essay)',
+  KEY `session_id` (`session_id`),
+  KEY `question_id` (`question_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vjaq6_test_questions`
+--
+
+DROP TABLE IF EXISTS `vjaq6_test_questions`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_questions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `test_id` int(11) NOT NULL,
   `question_type` int(11) NOT NULL,
   `seconds` int(11) NOT NULL,
+  `min_answers` tinyint(3) NOT NULL,
   `media` varchar(255) NOT NULL,
+  `media_type` enum('','link','image','youtube') NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `question_type` (`question_type`,`order`),
   KEY `test_id` (`test_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- Dumping data for table `questions`
---
-
-INSERT INTO `questions` (`id`, `title`, `test_id`, `question_type`, `seconds`, `media`, `order`) VALUES
-(1, 'Do you like cats?', 1, 1, 30, 'BIGCAT.JPG', 1),
-(2, 'Answers a and b are correct', 1, 2, 45, '', 2),
-(3, 'What is this object?', 1, 3, 45, 'http://techgenie.com/wp-content/uploads/Motherboard1.jpg', 3),
-(4, 'How do you spell my last name', 1, 3, 45, '', 4),
-(5, 'Quoth the Raven _________', 1, 4, 45, '', 5),
-(6, 'Name 2 food groups', 1, 4, 45, '', 6),
-(7, 'Why was the 10 day war over so quickly?', 1, 5, 180, '', 7),
-(8, 'Which political party do you prefer?', 1, 1, 60, '', 8),
-(9, 'What is your favorite color?', 1, 3, 120, '', 9);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question_answers`
+-- Table structure for table `vjaq6_test_question_options`
 --
 
-CREATE TABLE IF NOT EXISTS `question_answers` (
-  `question_id` int(11) NOT NULL,
-  `answer` varchar(255) NOT NULL,
-  KEY `question_id` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `question_answers`
---
-
-INSERT INTO `question_answers` (`question_id`, `answer`) VALUES
-(1, 'c'),
-(2, 'a'),
-(2, 'b'),
-(3, 'Motherboard'),
-(4, 'Fedele'),
-(5, '1'),
-(6, '2'),
-(8, '0'),
-(9, '0');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `question_possible_answers`
---
-
-CREATE TABLE IF NOT EXISTS `question_possible_answers` (
+DROP TABLE IF EXISTS `vjaq6_test_question_options`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_question_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `question_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
+  `valid` tinyint(3) NOT NULL COMMENT 'If 1 then it means the answer is a correct one.',
   PRIMARY KEY (`id`),
-  KEY `question_id` (`question_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
-
---
--- Dumping data for table `question_possible_answers`
---
-
-INSERT INTO `question_possible_answers` (`id`, `question_id`, `title`) VALUES
-(1, 1, 'Yes'),
-(2, 1, 'No'),
-(3, 1, 'Yes, but I can''t eat a whole one by myself.'),
-(4, 2, 'asdf'),
-(5, 2, 'asdf'),
-(6, 2, 'oiuy'),
-(7, 2, 'kjhg'),
-(8, 5, 'nevermore'),
-(9, 5, 'wtf'),
-(10, 6, 'meats'),
-(11, 6, 'grains'),
-(12, 6, 'fruits'),
-(13, 6, 'vegetables'),
-(14, 6, 'dairy'),
-(15, 8, 'Democrat'),
-(16, 8, 'Republican'),
-(17, 8, 'Libritarian'),
-(18, 8, 'Green'),
-(19, 8, 'Pirate'),
-(20, 8, 'Communist'),
-(21, 8, 'Socialist'),
-(22, 8, 'Independent'),
-(23, 8, 'Other');
+  KEY `question_id` (`question_id`),
+  KEY `valid` (`valid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=459 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question_types`
+-- Table structure for table `vjaq6_test_question_types`
 --
 
-CREATE TABLE IF NOT EXISTS `question_types` (
+DROP TABLE IF EXISTS `vjaq6_test_question_types`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_question_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(16) NOT NULL,
   `title` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `html` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `question_types`
+-- Dumping data for table `vjaq6_test_question_types`
 --
 
-INSERT INTO `question_types` (`id`, `title`) VALUES
-(1, 'mcsa'),
-(2, 'mcma'),
-(3, 'fitb'),
-(4, 'fitbma'),
-(5, 'essay');
+INSERT INTO `vjaq6_test_question_types` (`id`, `type`, `title`, `html`) VALUES
+(1, 'mcsa', 'Multiple choice single answer', '<div class="question-wrapper">\r\n  <h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>\r\n <input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />\r\n  <label for="question-QID">Question: </label>\r\n  <input type="text" name="questions[QID][question]" value="" id="question-QID" />\r\n  <label for="seconds-QID">Seconds: </label>\r\n  <input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />\r\n  <div clas="clr"></div>\r\n  Answers:\r\n  <div clas="clr"></div>\r\n  <div class="answers">\r\n   <table a:count="COUNTER_START">\r\n     <thead>\r\n       <tr>\r\n          <th>Answer</th>\r\n         <th>Correct Answer</th>\r\n         <th colspan="2">&nbsp;</th>\r\n       </tr>\r\n     </thead>\r\n      <tbody>\r\n       <tr>\r\n          <td>\r\n            <input type="text" name="questions[QID][options][COUNTER_START]" value="" class="input-increment clear-input" />\r\n          </td>\r\n         <td>\r\n            <input type="radio" name="questions[QID][answers][]" value="1" class="val-auto-increment" />\r\n          </td>\r\n         <td>\r\n            <button class="add-new-answer">Add</button>\r\n         </td>\r\n         <td>\r\n            <button class="remove-answer">Remove</button>\r\n         </td>\r\n       </tr>\r\n     </tbody>\r\n    </table>\r\n  </div>\r\n</div>'),
+(2, 'mcma', 'Multiple choice multiple answer', '<div class="question-wrapper">\r\n  <h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>\r\n <input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />\r\n  <label for="question-QID">Question: </label>\r\n  <input type="text" name="questions[QID][question]" value="" id="question-QID" />\r\n  <label for="seconds-QID">Seconds: </label>\r\n  <input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />\r\n  <label for="min-answers-QID">Minimum Answers: </label>\r\n  <input type="text" name="questions[QID][min_answers]" value="" id="min-answers-QID" />\r\n  <div clas="clr"></div>\r\n  Answers:\r\n  <div clas="clr"></div>\r\n  <div class="answers">\r\n   <table a:count="COUNTER_START">\r\n     <thead>\r\n       <tr>\r\n          <th>Answer</th>\r\n         <th>Correct Answer</th>\r\n         <th colspan="2">&nbsp;</th>\r\n       </tr>\r\n     </thead>\r\n      <tbody>\r\n       <tr>\r\n          <td>\r\n            <input type="text" name="questions[QID][options][COUNTER_START]" value="" class="input-increment clear-input" />\r\n          </td>\r\n         <td>\r\n            <input type="checkbox" name="questions[QID][answers][]" value="1" class="val-auto-increment" />\r\n         </td>\r\n         <td>\r\n            <button class="add-new-answer">Add</button>\r\n         </td>\r\n         <td>\r\n            <button class="remove-answer">Remove</button>\r\n         </td>\r\n       </tr>\r\n     </tbody>\r\n    </table>\r\n  </div>\r\n</div>'),
+(3, 'fitb', 'Fill in the blank', '<div class="question-wrapper">\r\n  <h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>\r\n <input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />\r\n  <label for="question-QID">Question: </label>\r\n  <input type="text" name="questions[QID][question]" value="" id="question-QID" />\r\n  <label for="seconds-QID">Seconds: </label>\r\n  <input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />\r\n  <div clas="clr"></div>\r\n  Answers:\r\n  <div clas="clr"></div>\r\n  <div class="answers">\r\n   <table a:count="COUNTER_START">\r\n     <thead>\r\n       <tr>\r\n          <th>Answer</th>\r\n         <th>Correct Answer</th>\r\n         <th colspan="2">&nbsp;</th>\r\n       </tr>\r\n     </thead>\r\n      <tbody>\r\n       <tr>\r\n          <td>\r\n            <input type="text" name="questions[QID][options][COUNTER_START]" value="" class="input-increment clear-input" />\r\n          </td>\r\n         <td>\r\n            <input type="radio" name="questions[QID][answers][]" value="1" class="val-auto-increment" />\r\n          </td>\r\n         <td>\r\n            <button class="add-new-answer">Add</button>\r\n         </td>\r\n         <td>\r\n            <button class="remove-answer">Remove</button>\r\n         </td>\r\n       </tr>\r\n     </tbody>\r\n    </table>\r\n  </div>\r\n</div>'),
+(4, 'fitbma', 'Fill in the blank multiple answer', '<div class="question-wrapper">\r\n  <h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>\r\n <input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />\r\n  <label for="question-QID">Question: </label>\r\n  <input type="text" name="questions[QID][question]" value="" id="question-QID" />\r\n  <label for="seconds-QID">Seconds: </label>\r\n  <input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />\r\n  <label for="min-answers-QID">Minimum Answers: </label>\r\n  <input type="text" name="questions[QID][min_answers]" value="" id="min-answers-QID" />\r\n  <div clas="clr"></div>\r\n  Answers:\r\n  <div clas="clr"></div>\r\n  <div class="answers">\r\n   <table a:count="COUNTER_START">\r\n     <thead>\r\n       <tr>\r\n          <th>Answer</th>\r\n         <th>Correct Answer</th>\r\n         <th colspan="2">&nbsp;</th>\r\n       </tr>\r\n     </thead>\r\n      <tbody>\r\n       <tr>\r\n          <td>\r\n            <input type="text" name="questions[QID][options][COUNTER_START]" value="" class="input-increment clear-input" />\r\n          </td>\r\n         <td>\r\n            <input type="checkbox" name="questions[QID][answers][]" value="1" class="val-auto-increment" />\r\n         </td>\r\n         <td>\r\n            <button class="add-new-answer">Add</button>\r\n         </td>\r\n         <td>\r\n            <button class="remove-answer">Remove</button>\r\n         </td>\r\n       </tr>\r\n     </tbody>\r\n    </table>\r\n  </div>\r\n</div>'),
+(5, 'essay', 'Essay', '<div class="question-wrapper">\r\n <h3>QUESTION_TYPE<button class="remove-question">Remove</button></h3>\r\n <input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />\r\n  <label for="question-QID">Question: </label>\r\n  <input type="text" name="questions[QID][question]" value="" id="question-QID" />\r\n  <label for="seconds-QID">Seconds: </label>\r\n  <input type="text" name="questions[QID][seconds]" value="" id="seconds-QID" />\r\n  <div clas="clr"></div>\r\n</div>');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tests`
+-- Table structure for table `vjaq6_test_sessions`
 --
 
-CREATE TABLE IF NOT EXISTS `tests` (
+DROP TABLE IF EXISTS `vjaq6_test_sessions`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_sessions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `test_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `unique_id` varchar(32) NOT NULL,
+  `is_active` tinyint(3) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `test_id` (`test_id`),
+  KEY `unique_id` (`unique_id`),
+  KEY `is_active` (`is_active`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vjaq6_test_tests`
+--
+
+DROP TABLE IF EXISTS `vjaq6_test_tests`;
+CREATE TABLE IF NOT EXISTS `vjaq6_test_tests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
+  `alias` varchar(255) NOT NULL,
   `sub_title` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `tests`
---
-
-INSERT INTO `tests` (`id`, `title`, `sub_title`) VALUES
-(1, 'History', 'Sojourner Truth');
+  `catid` int(11) unsigned NOT NULL,
+  `published` tinyint(3) NOT NULL,
+  `created` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `modified` datetime NOT NULL,
+  `modified_by` int(11) NOT NULL,
+  `checked_out` int(11) NOT NULL,
+  `checked_out_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `alias` (`alias`),
+  KEY `created_by` (`created_by`),
+  KEY `catid` (`catid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
