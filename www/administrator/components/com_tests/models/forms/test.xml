@@ -13,8 +13,7 @@
 			description="JFIELD_ALIAS_DESC" class="inputbox" size="45" />
 
 		<field name="sub_title" type="text" label="Sub Title"
-			description="JFIELD_TITLE_DESC" class="inputbox" size="30"
-			required="true" />
+			description="JFIELD_TITLE_DESC" class="inputbox" size="30" />
 
 		<field name="published" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="inputbox"
@@ -30,9 +29,9 @@
 				JTRASHED</option>
 		</field>
 
-		<field name="catid" type="category" extension="com_tests" class="inputbox"
+		<field name="catid" type="category" extension="com_tests" class="inputbox required"
 			default="" label="Category" description="Select a category" required="true">
-			<option value="0">- Select -</option>
+			<option value="">- Select -</option>
 		</field>
 
 		<field name="created" type="calendar" label="COM_CONTENT_FIELD_CREATED_LABEL"

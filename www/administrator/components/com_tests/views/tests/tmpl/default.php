@@ -22,7 +22,7 @@ $loggeduser = JFactory::getUser();
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_CONTENT_FILTER_SEARCH_DESC'); ?>" />
+			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_TESTS_FILTER_SEARCH_DESC'); ?>" />
 
 			<button type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
@@ -31,6 +31,16 @@ $loggeduser = JFactory::getUser();
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
+			</select>
+
+			<select name="filter_category_id" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_CATEGORY');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('category.options', 'com_tests'), 'value', 'text', $this->state->get('filter.category_id'));?>
+			</select>
+
+			<select name="filter_level" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_MAX_LEVELS');?></option>
+				<?php echo JHtml::_('select.options', $this->f_levels, 'value', 'text', $this->state->get('filter.level'));?>
 			</select>
 		</div>
 	</fieldset>
@@ -50,6 +60,9 @@ $loggeduser = JFactory::getUser();
 				</th>
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
+				</th>
+				<th width="10%">
+					<?php echo JHtml::_('grid.sort', 'JCATEGORY', 'category_title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="1%" class="nowrap">
 					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
@@ -93,6 +106,9 @@ $loggeduser = JFactory::getUser();
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('jgrid.published', $item->published, $i, 'tests.', $canChange, 'cb' ); ?>
+				</td>
+				<td class="center">
+					<?php echo $this->escape($item->category_title); ?>
 				</td>
 				<td class="center">
 					<?php echo (int) $item->id; ?>
