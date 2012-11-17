@@ -27,7 +27,7 @@ class TestsController extends JController
 
 		if ( JFactory::getApplication()->isAdmin() ) {
 			// Set the submenu
-			TestsCHelper::addSubmenu( $view );
+			TestsHelper::addSubmenu( $view );
 		}
 
 		if ( 'test' == $view ) {
