@@ -34,7 +34,7 @@ class TestsController extends JController
 			$unique_id = JRequest::getVar( 'unique_id' );
 			if ( !$unique_id ) {
 				// Lets generate id for this test
-				$unique_id = TestsHelper::generate_unique_test_id( JRequest::getInt( 'test_id' ) );
+				$unique_id = THelper::generate_unique_test_id( JRequest::getInt( 'test_id' ) );
 
 				if ( !$unique_id ) {
 					JError::raiseError( 500, 'Error creating unique ID for test.' );

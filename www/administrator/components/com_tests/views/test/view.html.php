@@ -20,7 +20,7 @@ class TestsViewTest extends JView
 		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive' ) );
 
 		if ( empty( $this->test )
-			|| !TestsHelper::is_test_session_active( $this->test->id,
+			|| !THelper::is_test_session_active( $this->test->id,
 				JRequest::getVar( 'unique_id' ) )
 		) {
 			parent::display( 'noexists' );
@@ -30,7 +30,7 @@ class TestsViewTest extends JView
 		Tests::add_script( array( 'timer', 'core', 'socket.io', 'click', 'templates' ) );
 
 		Tests::addScriptDeclaration( "var api_key = '"
-			. TestsHelper::get_api_key( null, true ). "';" );
+			. THelper::get_api_key( null, true ). "';" );
 
 		parent::display( $tpl );
 	}

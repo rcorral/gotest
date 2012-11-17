@@ -30,7 +30,7 @@ class TestsApiResourceQuestionTemplate extends ApiResource
 		}
 
 		// Lets check that this type actually exists
-		$row = TestsHelper::get_question_type( $type );
+		$row = THelper::get_question_type( $type );
 
 		if ( !$row || empty( $row ) ) {
 			throw new JException( JText::_('PLG_API_TESTS_QUESTION_UNAVAILABLE') );

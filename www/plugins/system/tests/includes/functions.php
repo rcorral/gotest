@@ -33,7 +33,7 @@ function tests_parse_str( $string, &$array )
 {
 	parse_str( $string, $array );
 	if ( get_magic_quotes_gpc() ) {
-		$array = TestsHelper::stripslashes_deep( $array );
+		$array = THelper::stripslashes_deep( $array );
 	}
 }
 
