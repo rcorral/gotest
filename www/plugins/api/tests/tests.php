@@ -19,6 +19,8 @@ class plgAPITests extends ApiPlugin
 		parent::__construct();
 		$this->loadLanguage();
 
+		$this->setResourceAccess( array( 'answer' ), 'public', JRequest::getMethod() );
+
 		ApiResource::addIncludePath( JPATH_PLUGINS .DS. 'api' .DS. 'tests' .DS. 'resources' );
 	}
 }

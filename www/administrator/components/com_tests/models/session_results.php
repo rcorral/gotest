@@ -16,8 +16,14 @@ class TestsModelSession_Results extends JModel
 	 */
 	public function getTest()
 	{
+		static $test;
+
 		$session_id = JRequest::getInt( 'id' );
 		$user = JFactory::getUser();
+
+		if ( $test ) {
+			return $test;
+		}
 
 		$query = $this->_db->getQuery(true)
 			->select( 't.*, ts.`date` AS `administration_date`' )
@@ -76,19 +82,31 @@ class TestsModelSession_Results extends JModel
 	{
 		$session_id = JRequest::getInt( 'id' );
 		$user = JFactory::getUser();
+		$test = $this->getTest();
 
 		$query = $this->_db->getQuery(true)
-			->select( 'u.`id` AS `user_id`, u.`name`, u.`email`, ta.`question_id`,
+			->select( 'ta.`question_id`,
 				IF( ta.`answer_id`, tqo.`title`, ta.`answer_text` ) as `answer`' )
 			->from( '#__test_sessions AS ts' )
 			->leftjoin( '#__test_tests AS t ON t.`id` = ts.`test_id`' )
 			->leftjoin( '#__test_answers AS ta ON ta.`session_id` = ts.`id`' )
 			->leftjoin( '#__test_questions AS tq ON tq.`id` = ta.`question_id`' )
 			->leftjoin( '#__test_question_options AS tqo ON tqo.`id` = ta.`answer_id`' )
-			->leftjoin( '#__users AS u ON u.`id` = ta.`user_id`' )
 			->where( 'ts.`id` = ' . (int) $session_id )
-			->order( 'u.`name` ASC, u.`id`, tq.`order` ASC' )
 			;
+
+		if ( !$test->anon ) {
+			$query
+				->select( 'u.`id` AS `user_id`, u.`name`, u.`email`' )
+				->leftjoin( '#__users AS u ON u.`id` = ta.`user_id`' )
+				->order( 'u.`name` ASC, u.`id`, tq.`order` ASC' )
+				;
+		} else {
+			$query
+				->select( 'ta.`anon_user_id`' )
+				->order( 'ta.`anon_user_id` ASC, tq.`order` ASC' )
+				;
+		}
 
 		if ( !$user->authorise('core.admin') ) {
 			$query->where( 'ts.`user_id` = ' . (int) $user->get('id') );

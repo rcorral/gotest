@@ -147,6 +147,7 @@ class THelper
 		$return = (object) array(
 			'test_id' => '',
 			'unique_id' => '',
+			'is_active' => 0
 			);
 
 		// Match
@@ -160,13 +161,15 @@ class THelper
 			$db = JFactory::getDBO();
 
 			$query = $db->getQuery( true )
-				->select( 'ts.`unique_id`' )
+				->select( 'ts.`unique_id`, ts.`is_active`' )
 				->from( '#__test_sessions AS ts' )
 				->where( 'ts.`is_active` = 1' )
 				->where( 'ts.`test_id` = ' . (int) $return->test_id )
 				->where( 'ts.`unique_id` LIKE \'' .$db->escape( $matches[2] ). '%\'' )
 				;
-			$return->unique_id = $db->setQuery( $query, 0, 1 )->loadResult();
+			$result = $db->setQuery( $query, 0, 1 )->loadObject();
+			$return->unique_id = @$result->unique_id;
+			$return->is_active = @$result->is_active;
 		}
 
 		return $return;
@@ -186,6 +189,50 @@ class THelper
 			->where( '`unique_id` = ' . $db->q( $unique_id ) )
 			;
 		return $db->setQuery( $query )->loadResult();
+	}
+
+	/**
+	 * Function will generate a new unique id for an anonymous test session
+	 */
+	function generate_unique_anon_id( $test_id, $session_id )
+	{
+		if ( !$test_id || !$session_id ) {
+			return false;
+		}
+
+		$db = JFactory::getDBO();
+		$query = $db->getQuery( true );
+		$test_id = (int) $test_id;
+		$date = date( 'Y-m-d H:i:s' );
+		$unique_id = '';
+
+		$counter = 0;
+		while ( !$unique_id ) {
+			if ( $counter ) {
+				$_unique = md5( $date . $test_id . $session_id . $counter );
+			} else {
+				$_unique = md5( $date . $test_id . $session_id );
+			}
+
+			// Make smaller and prefix, one in a billion chances someone will have the same id
+			$_unique = substr( $_unique, 0, 6 ) . date( 's' );
+
+			$query->clear()
+				->select( 'ta.`anon_user_id`' )
+				->from( '#__test_answers AS ta' )
+				->leftjoin( '#__test_sessions AS ts ON ts.`id` = ta.`session_id`' )
+				->where( 'ts.`test_id` = ' . $db->q( $test_id ) )
+				->where( 'ts.`unique_id` = ' . $db->q( $session_id ) )
+				->where( 'ta.`anon_user_id` = ' . $db->q( $_unique ) )
+				;
+			if ( !$db->setQuery( $query )->loadResult() ) {
+				$unique_id = $_unique;
+			}
+
+			$counter++;
+		}
+
+		return $unique_id;
 	}
 
 	function stripslashes_deep( $value )

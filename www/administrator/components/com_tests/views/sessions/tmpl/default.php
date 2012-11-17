@@ -43,20 +43,20 @@ $loggeduser = JFactory::getUser();
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 				</th>
 				<th>
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 't.title', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'Active', 'ts.active', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'Active', 'a.is_active', $listDirn, $listOrder); ?>
 				</th>
 				<th width="15%">
-					<?php echo JHtml::_('grid.sort', 'JDATE', 'ts.date', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JDATE', 'a.date', $listDirn, $listOrder); ?>
 				</th>
 				<th width="8%">
 					Tests taken
 				</th>
 				<th width="8%"></th>
 				<th width="1%" class="nowrap">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'ts.id', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		</thead>

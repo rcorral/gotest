@@ -32,10 +32,14 @@ $worksheet =& $workbook->addWorksheet( 'User answers' );
 $worksheet->setLandscape();
 
 // Write the questions
-// Don't write questions in the first two lines
-$worksheet->write( 0, 0, '' );
-$worksheet->write( 0, 1, '' );
-$column = 2;
+$column = 0;
+// Don't write questions in the first two lines if test is anonymous
+if ( !$this->test->anon ) {
+	$worksheet->write( 0, 0, '' );
+	$worksheet->write( 0, 1, '' );
+	$column = 2;
+}
+
 $question_map = array();
 foreach ( $this->questions as $question ) {
 	// Map question
@@ -68,7 +72,8 @@ $row = 2;
 $current_student = 0;
 $columns = array();
 foreach ( $this->student_answers as $answer ) {
-	if ( $current_student != $answer->user_id ) {
+	$user_identifier = $this->test->anon ? $answer->anon_user_id : $answer->user_id;
+	if ( $current_student != $user_identifier ) {
 		// Write the previous user out before going to the next row
 		if ( !empty( $columns ) ) {
 			foreach ( $columns as $column => $value ) {
@@ -78,11 +83,13 @@ foreach ( $this->student_answers as $answer ) {
 
 		// Clean up and start new row
 		$row++;
-		$current_student = $answer->user_id;
+		$current_student = $user_identifier;
 
 		$columns = array();
-		$worksheet->write( $row, 0, $answer->name );
-		$worksheet->write( $row, 1, $answer->email );
+		if ( !$this->test->anon ) {
+			$worksheet->write( $row, 0, $answer->name );
+			$worksheet->write( $row, 1, $answer->email );
+		}
 	}
 
 	if ( isset( $columns[$question_map[$answer->question_id]] ) ) {

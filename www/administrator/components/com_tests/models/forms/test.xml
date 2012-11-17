@@ -34,6 +34,10 @@
 			<option value="">- Select -</option>
 		</field>
 
+		<field name="anon" type="checkbox" value="1" class="inputbox"
+			default="" label="Anonymous submission"
+			description="Allow anonymous submission of test. This option can be used if you don't want users signing up, you may still ask for their personal information such as name on one of the questions." />
+
 		<field name="created" type="calendar" label="COM_CONTENT_FIELD_CREATED_LABEL"
 			description="COM_CONTENT_FIELD_CREATED_DESC" class="inputbox" size="22"
 			format="%Y-%m-%d %H:%M:%S" filter="user_utc" />
