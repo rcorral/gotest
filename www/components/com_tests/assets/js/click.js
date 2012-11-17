@@ -11,6 +11,7 @@ XClick = (function() {
 		this.test_started = false;
 		this.question = {};
 		this.api_key = api_key;
+		this.anon_id = typeof anon_id == 'undefined' ? '' : anon_id;
 		setup();
 	}
 
@@ -197,7 +198,13 @@ XClick = (function() {
 		data.option = 'com_api';
 		data.app = 'tests';
 		data.resource = 'answer';
-		data.key = this.api_key;
+
+		// If test is anonymous, let's keep it that way
+		if ( this.anon_id ) {
+			data.anon_id = this.anon_id;
+		} else {
+			data.key = this.api_key;
+		}
 
 		jQuery('#btn-submit').removeClass('btn-success')
 			.addClass('btn-info').html('Submitting...');

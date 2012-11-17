@@ -15,16 +15,17 @@ class TestsViewTest extends JView
 	 */
 	public function display( $tpl = null )
 	{
-		$model = $this->getModel();
-		$this->test_session = THelper::get_test_session_id_from_url();
+		$this->test_session = $this->get('TestSession');
 
-		if ( !$this->test_session->test_id || !$this->test_session->unique_id ) {
+		// Check to see that this is even a valid session and that it is active
+		if ( !$this->test_session->test_id
+			|| !$this->test_session->unique_id
+			|| !$this->test_session->is_active
+		) {
 			Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive' ) );
 			parent::display( 'noexists' );
 			return;
 		}
-
-		$model->setState( 'test_session', $this->test_session );
 
 		$this->test = $this->get('Test');
 
@@ -38,6 +39,12 @@ class TestsViewTest extends JView
 
 		Tests::addScriptDeclaration( "var api_key = '"
 			. THelper::get_api_key( null, true ). "';" );
+
+		// Set the anon_id
+		if ( $this->test->anon ) {
+			$uri = JFactory::getURI();
+			Tests::addScriptDeclaration( "var anon_id = '" . $uri->getVar( '_' ). "';" );
+		}
 
 		parent::display( $tpl );
 	}

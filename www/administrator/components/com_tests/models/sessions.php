@@ -23,7 +23,9 @@ class TestsModelSessions extends JModelList
 	{
 		if ( empty( $config['filter_fields'] ) ) {
 			$config['filter_fields'] = array(
-				'active', 'ts.active',
+				'is_active', 'a.is_active',
+				'title', 'a.title',
+				'id', 'a.id',
 			);
 		}
 
@@ -49,7 +51,7 @@ class TestsModelSessions extends JModelList
 		$this->setState( 'filter.active', $active );
 
 		// List state information.
-		parent::populateState( 'ts.date', 'desc' );
+		parent::populateState( 'a.date', 'desc' );
 	}
 
 	/**
@@ -65,13 +67,13 @@ class TestsModelSessions extends JModelList
 
 		$query = $this->_db->getQuery( true )
 			->select( 'ts.`id`, ts.`date`, ts.`is_active`,
-				t.`title`, t.`sub_title`,
-				ta.`user_id`' )
+				t.`title`, t.`sub_title`, t.`anon`,
+				ta.`user_id`, ta.`anon_user_id`' )
 			->from( '#__test_sessions AS ts' )
 			->leftjoin( '#__test_tests AS t ON t.`id` = ts.`test_id`' )
 			->leftjoin( '#__test_answers AS ta ON ta.`session_id` = ts.`id`' )
 			->where( 'ts.`user_id` = ' . $user->get('id') )
-			->group( 'ta.`session_id`, ta.`user_id`' )
+			->group( 'ta.`session_id`, IF( t.`anon` = 1, ta.`anon_user_id`, ta.`user_id` )' )
 			;
 
 		// Filter by active
@@ -80,19 +82,20 @@ class TestsModelSessions extends JModelList
 			$query->where( 'ts.`active` = ' . (int) $active );
 		}
 
+		$_query = $this->_db->getQuery( true )
+			->select( 'a.`id`, a.`date`, a.`is_active`,
+				a.`title`, a.`sub_title`,
+				IF( a.`anon` = 1, COUNT( a.`anon_user_id` ), COUNT( a.`user_id` ) ) AS `count`
+				' )
+			->from( '(' . $query . ') AS a' )
+			->group( 'a.`id`' )
+			;
+
 		// Add the list ordering clause.
 		$order_col  = $this->state->get( 'list.ordering', 'ts.title' );
 		$order_dirn = $this->state->get( 'list.direction', 'asc' );
 
-		$query->order( $this->_db->escape( $order_col . ' ' . $order_dirn ) );
-
-		$_query = $this->_db->getQuery( true )
-			->select( 'a.`id`, a.`date`, a.`is_active`,
-				a.`title`, a.`sub_title`,
-				COUNT( a.`user_id` ) AS `count`' )
-			->from( '(' . $query . ') AS a' )
-			->group( 'a.`id`' )
-			;
+		$_query->order( $this->_db->escape( $order_col . ' ' . $order_dirn ) );
 
 		return $_query;
 	}

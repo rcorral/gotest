@@ -28,7 +28,9 @@ class TestsApiResourceAnswer extends ApiResource
 
 		// Let's make sure that the answer sent matches all the ids in our system
 		$query = $db->getQuery( true )
-			->select( 't.`id` AS `test_id`, ts.`id` AS `session_id`, tq.`id` AS `question_id`,
+			->select( 't.`id` AS `test_id`, t.`anon`,
+				ts.`id` AS `session_id`,
+				tq.`id` AS `question_id`,
 				tqt.`type` AS `qtype`' )
 			->from( '#__test_tests AS t' )
 			->leftjoin( '#__test_sessions AS ts ON ts.`test_id` = t.`id`' )
@@ -40,23 +42,33 @@ class TestsApiResourceAnswer extends ApiResource
 			->where( 'tq.`id` = ' . (int) $data['question_id'] )
 			->group( 'ts.`id`' )
 			;
-		$test_data = $db->setQuery( $query )->loadObjectList();
-		if ( empty( $test_data ) || count( $test_data ) > 1 ) {
+		$test_data = $db->setQuery( $query )->loadObject();
+		if ( empty( $test_data )
+			|| ( $test_data->anon && ( !$data['anon_id'] && strlen( $data['anon_id'] ) != 8 ) )
+		) {
 			throw new JException( 'Invalid request.', 400 );
 		}
-		$test_data = $test_data[0];
 
 		// Delete all previous answers to this question for this test session
 		$query->clear()
 			->delete( '#__test_answers' )
-			->where( '`user_id` = ' . (int) $user->get('id') )
 			->where( '`session_id` = ' . (int) $test_data->session_id )
 			->where( '`question_id` = ' . (int) $test_data->question_id )
 			;
+		if ( $test_data->anon ) {
+			$query->where( '`anon_user_id` = ' . $db->q( $data['anon_id'] ) );
+		} else {
+			$query->where( '`user_id` = ' . (int) $user->get('id') );
+		}
 		$db->setQuery( $query )->query();
 
 		// Add answer(s) to db
-		$row_defaults = (int) $user->get('id') . ', ' . (int) $test_data->session_id . ', '
+		if ( $test_data->anon ) {
+			$row_defaults = '0, ' . $db->q( $data['anon_id'] ) . ', ';
+		} else {
+			$row_defaults = (int) $user->get('id') . ', \'\', ';
+		}
+		$row_defaults .= (int) $test_data->session_id . ', '
 					. (int) $test_data->question_id . ', %s, %s';
 		$tuples = array();
 
@@ -79,11 +91,15 @@ class TestsApiResourceAnswer extends ApiResource
 
 		$query->clear()
 			->insert( '#__test_answers' )
-			->columns( '`user_id`, `session_id`, `question_id`, `answer_id`, `answer_text`' )
+			->columns( '`user_id`, `anon_user_id`, `session_id`, `question_id`, `answer_id`,
+				`answer_text`' )
 			->values( $tuples )
 			;
-
 		$db->setQuery( $query )->query();
+
+		if ( $db->getErrorNum() ) {
+			throw new JException( 'Error saving answer, contact admin.', 500 );
+		}
 
 		$response = $this->getSuccessResponse( 201, 'Answer submitted.' );
 

@@ -273,42 +273,16 @@ class plgSystemTests extends plgSystemTestsFormEvents
 			return;
 		}
 
-		// Let the request through if com_api or com_users
-		if ( in_array( $option, array( 'com_api', 'com_users' ) ) ) {
-			return;
-		}
-
-		// Lets see if we need to authenticate
-		$user = JFactory::getUser();
-		if ( !$user->get('id') ) {
-			// Check to see if we should be triggering any authentication plugins
-			if ( JRequest::getVar( 'auth' ) ) {
-				JPluginHelper::importPlugin( 'authentication' );
-				$app->triggerEvent( 'clickerBeginAuthentication' );
-			} elseif ( JRequest::getVar( 'authenticate' ) ) {
-				// Authenticate
-				JPluginHelper::importPlugin( 'authentication' );
-				$app->triggerEvent( 'clickerAuthenticate' );
-			} else {
-				$_REQUEST['option'] = 'com_tests';
-				$_REQUEST['view'] = 'login';
-				$_REQUEST['tmpl'] = 'component';
-			}
-
-			return;
-		}
-
 		$path = str_replace( JURI::root( true ), '', $_SERVER['REQUEST_URI'] );
 
 		// Nothing is return by this, then that means we have a short url for a test
-		if ( '' == preg_replace( '/^\/[0-9]+\/[0-9a-zA-Z]{6}\/?/', '', $path ) ) {
+		// Will match for /[0-9]/[0-9a-zA-Z]{6} or /[0-9]/[0-9a-zA-Z]{6}?.*
+		if ( '' == preg_replace( '/^\/[0-9]+\/[0-9a-zA-Z]{6}\/?\??.*/', '', $path ) ) {
 			$_REQUEST['option'] = 'com_tests';
 			$_REQUEST['view'] = 'test';
 			$_REQUEST['tmpl'] = 'component';
 			return;
 		}
-
-		$app->redirect( JURI::root() );
 	}
 
 	function onUserAfterDelete( $user, $success, $msg )
