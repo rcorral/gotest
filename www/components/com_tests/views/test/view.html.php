@@ -17,6 +17,7 @@ class TestsViewTest extends JView
 	{
 		$this->test_session = $this->get('TestSession');
 		$this->uri = JFactory::getURI();
+		$this->user = JFactory::getUser();
 
 		// Check to see that this is even a valid session and that it is active
 		if ( !$this->test_session->test_id
@@ -45,7 +46,9 @@ class TestsViewTest extends JView
 
 		$this->uri->delVar( '_' );
 		Tests::addScriptDeclaration( "var api_key = '"
-			. THelper::get_api_key( null, true ). "';\nvar test_uri = '{$this->uri}';" );
+			. THelper::get_api_key( null, true ). "';"
+			. "var test_uri = '{$this->uri}';"
+			. "var jtoken = '" .JUtility::getToken(). "';" );
 
 		parent::display( $tpl );
 	}
