@@ -43,6 +43,8 @@ class TestsViewSessions extends JView
 	{
 		JToolBarHelper::title('Tests Sessions');
 
-		JToolBarHelper::deleteList('', 'sessions.delete');
+		JToolBarHelper::publish( 'sessions.activate', 'COM_TESTS_ACTIVATE', true );
+		JToolBarHelper::unpublish( 'sessions.deactivate', 'COM_TESTS_DEACTIVATE', true );
+		JToolBarHelper::deleteList( '', 'sessions.delete' );
 	}
 }

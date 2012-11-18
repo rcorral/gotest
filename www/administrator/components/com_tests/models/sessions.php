@@ -66,8 +66,8 @@ class TestsModelSessions extends JModelList
 		$user = JFactory::getUser();
 
 		$query = $this->_db->getQuery( true )
-			->select( 'ts.`id`, ts.`date`, ts.`is_active`,
-				t.`title`, t.`sub_title`, t.`anon`,
+			->select( 'ts.`id`, ts.`date`, ts.`is_active`, ts.`unique_id`,
+				t.`id` AS `test_id`, t.`title`, t.`sub_title`, t.`anon`,
 				ta.`user_id`, ta.`anon_user_id`' )
 			->from( '#__test_sessions AS ts' )
 			->leftjoin( '#__test_tests AS t ON t.`id` = ts.`test_id`' )
@@ -83,8 +83,8 @@ class TestsModelSessions extends JModelList
 		}
 
 		$_query = $this->_db->getQuery( true )
-			->select( 'a.`id`, a.`date`, a.`is_active`,
-				a.`title`, a.`sub_title`,
+			->select( 'a.`id`, a.`date`, a.`is_active`, a.`unique_id`,
+				a.`test_id`, a.`title`, a.`sub_title`,
 				IF( a.`anon` = 1, COUNT( a.`anon_user_id` ), COUNT( a.`user_id` ) ) AS `count`
 				' )
 			->from( '(' . $query . ') AS a' )
