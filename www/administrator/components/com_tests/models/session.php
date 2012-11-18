@@ -7,10 +7,14 @@
 
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.modeladmin');
 
-class TestsModelSession extends JModelList
+class TestsModelSession extends JModelAdmin
 {
+	public $event_before_delete = 'onSessionBeforeDelete';
+
+	public function getForm( $data = array(), $loadData = true ) {}
+
 	/**
 	 * Returns a Table object, always creating it
 	 *
@@ -35,6 +39,25 @@ class TestsModelSession extends JModelList
 	 * @since	1.6
 	 */
 	protected function canEditState( $record )
+	{
+		$user = JFactory::getUser();
+
+		if ( $user->authorise( 'core.admin' ) || $user->get('id') == $record->user_id ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Method to test whether a record can be deleted
+	 *
+	 * @param	object	$record	A record object.
+	 *
+	 * @return	boolean	True if allowed to change the state of the record. Defaults to the permission set in the component.
+	 * @since	1.6
+	 */
+	protected function canDelete( $record )
 	{
 		$user = JFactory::getUser();
 

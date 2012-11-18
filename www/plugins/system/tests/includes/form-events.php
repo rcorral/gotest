@@ -31,4 +31,29 @@ class plgSystemTestsFormEvents extends JPlugin
 	function onContentChangeState( $context, $pks, $value )
 	{
 	}
+
+	/**
+	 * Delete all answers for a session
+	 */
+	function onSessionBeforeDelete( $context, $table )
+	{
+		if ( 'com_tests.session' != $context ) {
+			return;
+		}
+
+		$db = JFactory::getDBO();
+
+		$query = $db->getQuery( true )
+			->delete( '#__test_answers' )
+			->where( '`session_id` = ' . (int) $table->id )
+			;
+		$db->setQuery( $query )->query();
+
+		if ( $db->getErrorNum() ) {
+			$table->setError( $db->getErrorMsg() );
+			return false;
+		}
+
+		return true;
+	}
 }
