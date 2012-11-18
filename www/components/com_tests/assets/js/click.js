@@ -315,6 +315,17 @@ XClick = (function() {
 
 	};
 
+	XClick.prototype.logout = function( el ) {
+		core.logout();
+
+		// Redirect if test is not anon
+		if ( !this.anon_id ) {
+			setTimeout( function(){ window.location.href = test_uri; }, 1000 );
+		} else {
+			jQuery(el).parent().slideUp();
+		}
+	};
+
 	XClick.prototype._debug = function() {
 		if ( this.debug ) {
 			console.log( Array.prototype.slice.call(arguments) );
