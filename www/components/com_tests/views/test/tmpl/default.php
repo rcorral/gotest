@@ -59,5 +59,10 @@ defined('_JEXEC') or die;
 <div id="test-completed" class="container hide">
 	<div class="hero-unit">
 		<h2>Test is done!</h2>
+		<?php if ( @$this->test->self_admined ) : ?>
+		<p>
+			<button type="button" onclick="window.location='<?php echo $this->uri; ?>'" class="btn btn-primary">Start over</button>
+		</p>
+		<?php endif; ?>
 	</div>
 </div>
