@@ -82,11 +82,16 @@ $loggeduser = JFactory::getUser();
 				</td>
 				<td>
 					<?php echo $this->escape( $item->title ); ?>
-					<p class="smallsub">
-						<?php echo $this->escape( $item->sub_title );?></p>
+					<?php if ( $item->is_active ) : ?>
+					<a href="<?php echo JRoute::_( 'index.php?option=com_tests&view=test&test_id=' . $item->test_id . '&tmpl=component&unique_id=' . $item->unique_id );?>" target="_blank">[administer]</a>
+					<?php endif; ?>
 				</td>
 				<td class="center">
-					<?php echo JHtml::_('jgrid.published', $item->is_active, $i, 'sessions.', $canChange, 'cb' ); ?>
+					<?php
+					// Ugly hack ;)
+					echo str_replace( array( '.publish', '.unpublish' ),
+						array( '.activate', '.deactivate' ),
+						JHtml::_('jgrid.published', $item->is_active, $i, 'sessions.', $canChange, 'cb' ) ); ?>
 				</td>
 				<td class="center">
 					<?php echo date( 'm/d/Y g:ia', strtotime( $item->date ) ); ?>
