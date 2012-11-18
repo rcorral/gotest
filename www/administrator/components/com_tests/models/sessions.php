@@ -73,7 +73,7 @@ class TestsModelSessions extends JModelList
 			->leftjoin( '#__test_tests AS t ON t.`id` = ts.`test_id`' )
 			->leftjoin( '#__test_answers AS ta ON ta.`session_id` = ts.`id`' )
 			->where( 'ts.`user_id` = ' . $user->get('id') )
-			->group( 'ta.`session_id`, IF( t.`anon` = 1, ta.`anon_user_id`, ta.`user_id` )' )
+			->group( 'ts.`id`, IF( t.`anon` = 1, ta.`anon_user_id`, ta.`user_id` )' )
 			;
 
 		// Filter by active
