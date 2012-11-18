@@ -14,6 +14,19 @@ core_class.prototype.inline_popup = function( msg, auto_close, complete_callback
 	}
 };
 
+/**
+ * Creates an iframe to log user out
+ */
+core_class.prototype.logout = function() {
+	ifrm = document.createElement( 'IFRAME' );
+	ifrm.setAttribute( 'src', live_site + 'index.php?option=com_users&task=user.logout&'
+		+ jtoken + '=1' );
+	ifrm.style.width = '1px';
+	ifrm.style.height = '1px';
+	ifrm.style.display = 'none';
+	document.body.appendChild( ifrm );
+};
+
 core_class.prototype._ajax = function( data, success, opts ) {
 	options = {
 		url: this.site_url + '?option=com_api',

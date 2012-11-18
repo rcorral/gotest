@@ -16,6 +16,8 @@ class TestsViewTest extends JView
 	public function display( $tpl = null )
 	{
 		$this->test_session = $this->get('TestSession');
+		$this->uri = JFactory::getURI();
+		$this->user = JFactory::getUser();
 
 		// Check to see that this is even a valid session and that it is active
 		if ( !$this->test_session->test_id
@@ -37,14 +39,16 @@ class TestsViewTest extends JView
 		Tests::add_script( array( 'jquery', 'bootstrap', 'bootstrap-responsive', 'timer', 'core',
 			'deparam', 'socket.io', 'click', 'templates' ) );
 
-		Tests::addScriptDeclaration( "var api_key = '"
-			. THelper::get_api_key( null, true ). "';" );
-
 		// Set the anon_id
 		if ( $this->test->anon ) {
-			$uri = JFactory::getURI();
-			Tests::addScriptDeclaration( "var anon_id = '" . $uri->getVar( '_' ). "';" );
+			Tests::addScriptDeclaration( "var anon_id = '" . $this->uri->getVar( '_' ). "';" );
 		}
+
+		$this->uri->delVar( '_' );
+		Tests::addScriptDeclaration( "var api_key = '"
+			. THelper::get_api_key( null, true ). "';"
+			. "var test_uri = '{$this->uri}';"
+			. "var jtoken = '" .JUtility::getToken(). "';" );
 
 		parent::display( $tpl );
 	}
