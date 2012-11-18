@@ -191,7 +191,7 @@ XClick = (function() {
 		this.question_seconds = Number( seconds );
 		this.seconds_left = this.question_seconds;
 
-		if ( !seconds ) {
+		if ( !seconds || 0 == seconds ) {
 			jQuery('#counter').slideUp();
 			jQuery('#counter span').html('');
 			delete this.timer;
