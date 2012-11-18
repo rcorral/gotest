@@ -61,8 +61,11 @@ $loggeduser = JFactory::getUser();
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 				</th>
-				<th width="10%">
+				<th width="13%">
 					<?php echo JHtml::_('grid.sort', 'JCATEGORY', 'category_title', $listDirn, $listOrder); ?>
+				</th>
+				<th width="5%">
+					<span title="The amount of times test has been administered by everyone on the system.">Hits</span>
 				</th>
 				<th width="1%" class="nowrap">
 					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
@@ -109,6 +112,9 @@ $loggeduser = JFactory::getUser();
 				</td>
 				<td class="center">
 					<?php echo $this->escape($item->category_title); ?>
+				</td>
+				<td class="center">
+					<?php echo (int) $item->hits; ?>
 				</td>
 				<td class="center">
 					<?php echo (int) $item->id; ?>
