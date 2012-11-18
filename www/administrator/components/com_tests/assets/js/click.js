@@ -80,6 +80,7 @@ XClick = (function() {
 					// Get first question
 					xclick.test_started = true;
 					xclick.next_question();
+					jQuery('#complete-test-btn').removeClass('disabled');
 				};
 			});
 			timer.set({ time : 1000, autostart : true });
@@ -133,6 +134,9 @@ XClick = (function() {
 	};
 
 	XClick.prototype.complete = function() {
+		// Just in case
+		delete this.timer;
+
 		data = {};
 		data.test_id = this.test_id;
 		data.unique_id = this.unique_id;
@@ -242,6 +246,10 @@ jQuery(document).ready(function(){
 	}
 
 	jQuery('#counter').on('click', function(){
+		if ( !xclick.timer ) {
+			return;
+		}
+
 		if ( xclick.timer.isActive ) {
 			data = { action: 'pause' };
 		} else {
@@ -257,24 +265,37 @@ jQuery(document).ready(function(){
 		xclick.timer.toggle();
 	}).hover(
 		function(){
-			if ( xclick.timer.isActive ) {
+			if ( xclick.timer && xclick.timer.isActive ) {
 				jQuery(this).addClass('text-warning')
 					.removeClass('text-success');
-			} else {
+			} else if ( xclick.timer ) {
 				jQuery(this).addClass('text-success')
 					.removeClass('text-error');
 			}
 		}, function(){
-			if ( xclick.timer.isActive ) {
+			if ( xclick.timer && xclick.timer.isActive ) {
 				jQuery(this).removeClass('text-warning')
 					.removeClass('text-success');
-			} else {
+			} else if ( xclick.timer ) {
 				jQuery(this).addClass('text-error')
 					.removeClass('text-warning')
 					.removeClass('text-success');
 			}
 		}
 	);
+
+	jQuery('#finish_modal')
+		.on('show', function(){
+			if ( xclick.timer && xclick.timer.isActive ) {
+				jQuery('#counter').trigger('click');
+			}
+		})
+		.on('hide', function(){
+			if ( xclick.timer && !xclick.timer.isActive ) {
+				jQuery('#counter').trigger('click');
+			}
+		})
+		;
 
 	jQuery('#finish_modal button.btn-primary').on( 'click', function(){
 		xclick.complete();

@@ -18,18 +18,19 @@ $unique_url = JURI::root()
 			<div class="row-fluid">
 			<div class="page-header span12">
 				<div class="row-fluid pre-test-hide">
-				<div class="span7 clearfix">
+				<div class="span6 clearfix">
 					<h1><?php echo $this->test->title; ?>
 					<?php if ( $this->test->sub_title ) { ?>
 					<small><?php echo $this->test->sub_title; ?></small>
 					<?php } ?>
 					</h1>
 				</div>
-				<div class="span3 clearfix">
+				<div class="span4 clearfix">
 					<!-- Next/Prev buttons -->
-					<div class="control-group well pull-left" style="max-width: 126px; margin: 0 auto 10px;">
+					<div class="control-group well pull-left" style="max-width: 174px; margin: 0 auto 10px;">
 						<button type="button" name="previous" onclick="xclick.submit(this.name);" id="btn-previous" class="btn disabled" disabled="disabled"><i class="icon-arrow-left"></i></button>
 						<button type="button" name="next" onclick="xclick.submit(this.name);" id="btn-next" class="btn disabled">Next <i class="icon-arrow-right"></i></button>
+						<button type="button" id="complete-test-btn" onclick="xclick.complete_prompt();" class="btn btn-danger disabled"><i class="icon-remove"></i></button>
 					</div>
 				</div>
 				<div class="span2">
