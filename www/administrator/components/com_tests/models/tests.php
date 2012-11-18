@@ -80,9 +80,12 @@ class TestsModelTests extends JModelList
 		$query = $this->_db->getQuery( true )
 			->select( 'a.*' )
 			->select( 'c.title AS category_title' )
+			->select( 'COUNT( ts.`test_id` ) AS `hits`' )
 			->from( '#__test_tests AS a' )
 			->leftjoin( '#__categories AS c ON c.id = a.catid' )
+			->leftjoin( '#__test_sessions AS ts ON ts.`test_id` = a.`id`' )
 			->where( 'a.`published` = ' . (int) $this->getState( 'filter.published' ) )
+			->group( 'a.`id`' )
 			;
 
 		// Filter by search in title.
