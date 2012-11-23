@@ -285,6 +285,30 @@ class plgSystemTests extends plgSystemTestsFormEvents
 		}
 	}
 
+	public function onBeforeRender()
+	{
+		$app = JFactory::getApplication();
+
+		if ( $app->isSite() ) {
+			return true;
+		}
+
+		$toolbar = JToolBar::getInstance();
+		$bar = $toolbar->get('_bar');
+		foreach ( $bar as $key => $button ) {
+			if ( 'Help' == $button[0] ) {
+				unset( $bar[$key] );
+			}
+		}
+
+		$last = end( $bar );
+		if ( 'Separator' == $last[0] ) {
+			unset( $bar[key( $bar )] );
+		}
+
+		$toolbar->set( '_bar', $bar );
+	}
+
 	function onUserAfterDelete( $user, $success, $msg )
 	{
 		if ( !$success ) {
