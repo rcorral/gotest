@@ -26,7 +26,7 @@ class TestsApiResourceComplete extends ApiResource
 		$db = JFactory::getDBO();
 		$user = JFactory::getUser();
 
-		if ( !$user->authorise('core.admin') ) {
+		if ( !$user->authorise( 'core.manage', 'com_tests' ) ) {
 			throw new JException( 'Not authorised.', 400 );
 		}
 

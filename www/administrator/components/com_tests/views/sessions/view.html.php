@@ -41,10 +41,23 @@ class TestsViewSessions extends JView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title('Tests Sessions');
+		$actions = TestsHelper::getActions();
 
-		JToolBarHelper::publish( 'sessions.activate', 'COM_TESTS_ACTIVATE', true );
-		JToolBarHelper::unpublish( 'sessions.deactivate', 'COM_TESTS_DEACTIVATE', true );
-		JToolBarHelper::deleteList( '', 'sessions.delete' );
+		JToolBarHelper::title( JText::_( 'COM_TESTS_VIEW_SESSIONS' ) );
+
+		if ( $actions->get( 'core.edit.state' ) ) {
+			JToolBarHelper::publish( 'sessions.activate', 'COM_TESTS_ACTIVATE', true );
+			JToolBarHelper::unpublish( 'sessions.deactivate', 'COM_TESTS_DEACTIVATE', true );
+		}
+
+		if ( $actions->get( 'core.delete' ) ) {
+			JToolBarHelper::deleteList( '', 'sessions.delete' );
+			JToolBarHelper::divider();
+		}
+
+		if ( $actions->get( 'core.admin' ) ) {
+			JToolBarHelper::divider();
+			JToolBarHelper::preferences('com_tests');
+		}
 	}
 }

@@ -56,13 +56,36 @@ class TestsViewTests extends JView
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title('Manage Tests');
+		$actions = TestsHelper::getActions();
 
-		JToolBarHelper::addNew('test_edit.add');
-		JToolBarHelper::editList('test_edit.edit');
-		JToolBarHelper::divider();
-		JToolBarHelper::deleteList('', 'tests.delete');
-		JToolBarHelper::divider();
-		JToolBarHelper::preferences('com_tests');
+		JToolBarHelper::title( JText::_( 'COM_TESTS_VIEW_TESTS' ) );
+
+		if ( $actions->get( 'core.create' ) ) {
+			JToolBarHelper::addNew( 'test_edit.add' );
+		}
+
+		if ( $actions->get( 'core.edit' ) || $actions->get( 'core.edit.own' ) ) {
+			JToolBarHelper::editList( 'test_edit.edit' );
+		}
+
+		if ( $actions->get( 'core.edit.state' ) ) {
+			JToolBarHelper::divider();
+			JToolBarHelper::publish( 'test_edit.publish', 'JTOOLBAR_PUBLISH', true );
+			JToolBarHelper::unpublish( 'test_edit.unpublish', 'JTOOLBAR_UNPUBLISH', true );
+			JToolBarHelper::divider();
+			JToolBarHelper::archiveList( 'test_edit.archive' );
+		}
+
+		if ( $this->state->get( 'filter.published' ) == -2 && $actions->get( 'core.delete' ) ) {
+			JToolBarHelper::deleteList( '', 'tests.delete', 'JTOOLBAR_EMPTY_TRASH' );
+			JToolBarHelper::divider();
+		} elseif ( $actions->get( 'core.edit.state' ) ) {
+			JToolBarHelper::trash( 'tests.trash' );
+			JToolBarHelper::divider();
+		}
+
+		if ( $actions->get( 'core.admin' ) ) {
+			JToolBarHelper::preferences('com_tests');
+		}
 	}
 }

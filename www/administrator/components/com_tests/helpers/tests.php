@@ -4,6 +4,8 @@ defined('_JEXEC') or die;
 
 class TestsHelper
 {
+	static $actions;
+
 	public static function get_views()
 	{
 		return array(
@@ -44,18 +46,18 @@ class TestsHelper
 	 */
 	public static function getActions()
 	{
-		$user   = JFactory::getUser();
-		$result = new JObject;
-  		$assetName = 'com_tests';
+		if ( empty( self::$actions ) ) {
+			$user = JFactory::getUser();
+			self::$actions = new JObject;
 
-		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.delete'
-		);
- 
-		foreach ( $actions as $action ) {
-			$result->set( $action, $user->authorise( $action, $assetName ) );
+			$actions = JAccess::getActions( 'com_tests', 'component' );
+
+			foreach ( $actions as $action ) {
+				self::$actions->set( $action->name,
+					$user->authorise( $action->name, 'com_tests' ) );
+			}
 		}
- 
-		return $result;
+
+		return self::$actions;
 	}
 }
