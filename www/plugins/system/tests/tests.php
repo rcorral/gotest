@@ -293,11 +293,20 @@ class plgSystemTests extends plgSystemTestsFormEvents
 
 		$app = JFactory::getApplication();
 		$user_id = JArrayHelper::getValue( $user, 'id', 0, 'int' );
+		$db = JFactory::getDBO();
 
 		if ( $user_id ) {
 			try {
+				// Have the authentication plugins clean up after themselves
 				JPluginHelper::importPlugin( 'authentication' );
 				$app->triggerEvent( 'clickerUserDelete', array( $user, $success, $msg ) );
+
+				// Delete all user answers
+				$query = $db->getQuery( true )
+					->delete( '#__test_answers' )
+					->where( '`user_id` = ' . $user_id )
+					;
+				$db->setQuery( $query )->query();
 			} catch ( JException $e ) {
 				$this->_subject->setError( $e->getMessage() );
 				return false;
