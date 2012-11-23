@@ -3,7 +3,7 @@ var socket, xclick;
 XClick = (function() {
 	// Constructor
 	function XClick() {
-		this.debug = in_development;
+		this.debug = in_development && typeof console != 'undefined';
 		this.user = { channels: {} };
 		this.test_id = jQuery('#test-id').val();
 		this.unique_id = _gup( 'unique_id' );
