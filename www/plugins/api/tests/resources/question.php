@@ -23,7 +23,7 @@ class TestsApiResourceQuestion extends ApiResource
 		$user = JFactory::getUser();
 		$model = JModel::getInstance( 'Question', 'TestsModel' );
 
-		if ( !$user->authorise('core.admin') ) {
+		if ( !$user->authorise( 'core.manage', 'com_tests' ) ) {
 			throw new JException( 'Not authorised.', 400 );
 		}
 

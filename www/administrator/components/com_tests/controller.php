@@ -20,7 +20,9 @@ class TestsController extends JController
 {
 	public function display()
 	{
-		$view = JRequest::getCmd('view', 'tests');
+		$view = JRequest::getCmd( 'view', 'tests' );
+		$layout = JRequest::getCmd( 'layout', 'default' );
+		$id = JRequest::getInt( 'id' );
 
 		// set default view if not set
 		JRequest::setVar('view', $view);
@@ -45,6 +47,18 @@ class TestsController extends JController
 
 				$this->setRedirect( $url->toString( array( 'query', 'fragment' ) ) );
 			}
+		}
+
+		// Check for edit form.
+		if ( 'test_edit' == $view && $layout == 'edit'
+			&& !$this->checkEditId( 'com_tests.edit.test_edit', $id )
+		) {
+			// Somehow the person just went to the form - we don't allow that.
+			$this->setError( JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id ) );
+			$this->setMessage( $this->getError(), 'error' );
+			$this->setRedirect( JRoute::_( 'index.php?option=com_tests&view=tests', false ) );
+
+			return false;
 		}
 
 		return parent::display();

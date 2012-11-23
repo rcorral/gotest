@@ -39,6 +39,84 @@ class TestsModelTest_Edit extends JModelAdmin
 	}
 
 	/**
+	 * Method override to check-in a record or an array of record
+	 *
+	 * @param   mixed  $pks  The ID of the primary key or an array of IDs
+	 * @return  mixed  Boolean false if there is an error, otherwise the count of records checked in.
+	 */
+	public function checkin( $pks = array() )
+	{
+		// Initialise variables.
+		$pks = (array) $pks;
+		$table = $this->getTable();
+		$user = JFactory::getUser();
+		$count = 0;
+
+		if ( empty( $pks ) ) {
+			$pks = array( (int) $this->getState( $this->getName() . '.id' ) );
+		}
+
+		// Check in all items.
+		foreach ( $pks as $pk ) {
+			if ( $table->load( $pk ) ) {
+				if ( $table->checked_out > 0 ) {
+					if ( $table->created_by != $user->get('id')
+						&& $table->checked_out != $user->get('id')
+						&& !$user->authorise( 'core.manage', 'com_checkin' )
+					) {
+						$this->setError( JText::_( 'COM_TESTS_CANT_CHECKIN' ) );
+						return false;
+					}
+
+					// Attempt to check the row in.
+					if ( !$table->checkin( $pk ) ) {
+						$this->setError( $table->getError() );
+						return false;
+					}
+
+					$count++;
+				}
+			} else {
+				$this->setError( $table->getError() );
+
+				return false;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Method override to check-out a record.
+	 *
+	 * @param   integer  $pk  The ID of the primary key.
+	 * @return  boolean  True if successful, false if an error occurs.
+	 */
+	public function checkout( $pk = null )
+	{
+		// Initialise variables.
+		$pk = ( !empty( $pk ) ) ? $pk : (int) $this->getState($this->getName() . '.id' );
+		$table = $this->getTable();
+		$user = JFactory::getUser();
+
+		if ( $table->load( $pk ) ) {
+			// Don't checkout if not owner or if not admin
+			if ( $table->created_by != $user->get('id')
+				&& $table->checked_out != $user->get('id')
+				&& !$user->authorise( 'core.manage', 'com_checkin' )
+			) {
+				return true;
+			}
+		} else {
+			$this->setError( $table->getError() );
+
+			return false;
+		}
+
+		return parent::checkout( $pk );
+	}
+
+	/**
 	 * Method to get a test item.
 	 *
 	 * @param	integer	The id of the test item to get.

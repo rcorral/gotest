@@ -41,8 +41,9 @@ class TestsModelSession extends JModelAdmin
 	protected function canEditState( $record )
 	{
 		$user = JFactory::getUser();
+		$actions = TestsHelper::getActions();
 
-		if ( $user->authorise( 'core.admin' ) || $user->get('id') == $record->user_id ) {
+		if ( $actions->get( 'core.admin' ) || $user->get('id') == $record->user_id ) {
 			return true;
 		}
 
@@ -60,8 +61,9 @@ class TestsModelSession extends JModelAdmin
 	protected function canDelete( $record )
 	{
 		$user = JFactory::getUser();
+		$actions = TestsHelper::getActions();
 
-		if ( $user->authorise( 'core.admin' ) || $user->get('id') == $record->user_id ) {
+		if ( $actions->get( 'core.admin' ) || $user->get('id') == $record->user_id ) {
 			return true;
 		}
 
@@ -83,6 +85,7 @@ class TestsModelSession extends JModelAdmin
 		// Initialise variables.
 		$user = JFactory::getUser();
 		$table = $this->getTable();
+		$actions = TestsHelper::getActions();
 		$pks = (array) $pks;
 
 		// Access checks.
@@ -105,6 +108,11 @@ class TestsModelSession extends JModelAdmin
 			->set( 'is_active = ' . (int) $value )
 			->where( 'id IN (' .implode( ',', $pks ). ')' )
 			;
+
+		if ( !$actions->get( 'core.admin' ) ) {
+			$query->where( '`user_id` = ' . (int) $user->get( 'id' ) );
+		}
+
 		$this->_db->setQuery( $query )->query();
 
 		if ( $this->_db->getErrorNum() ) {

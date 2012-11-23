@@ -44,15 +44,23 @@ class TestsViewTest_Edit extends JView
 	 */
 	protected function addToolbar()
 	{
-		$isNew = ( $this->item->id == 0 );
+		$user = JFactory::getUser();
+		$actions = TestsHelper::getActions();
+		$is_new = ( $this->item->id == 0 );
+		$can_edit = $is_new || $this->item->created_by == $user->get( 'id' )
+			|| $actions->get( 'core.admin' );
 
 		JToolBarHelper::title('Manage Tests');
 
-		JToolBarHelper::apply('test_edit.apply');
-		JToolBarHelper::save('test_edit.save');
-		JToolBarHelper::save2new('test_edit.save2new');
+		if ( $can_edit ) {
+			JToolBarHelper::apply('test_edit.apply');
+			JToolBarHelper::save('test_edit.save');
+			JToolBarHelper::save2new('test_edit.save2new');
+		} else {
+			JError::raise( E_NOTICE, 200, JText::_( 'COM_TEST_TEST_VIEW_NO_EDIT' ) );
+		}
 
-		if ( $isNew ) {
+		if ( $is_new ) {
 			JToolBarHelper::cancel('test_edit.cancel');
 		} else {
 			JToolBarHelper::cancel('test_edit.cancel', 'JTOOLBAR_CLOSE');

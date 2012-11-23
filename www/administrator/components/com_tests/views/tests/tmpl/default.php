@@ -15,7 +15,6 @@ JHtml::_('behavior.modal');
 $user = JFactory::getUser();
 $listOrder = $this->escape( $this->state->get( 'list.ordering' ) );
 $listDirn = $this->escape( $this->state->get( 'list.direction' ) );
-$loggeduser = JFactory::getUser();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_tests&view=tests');?>" method="post" name="adminForm" id="adminForm">
@@ -81,11 +80,7 @@ $loggeduser = JFactory::getUser();
 		</tfoot>
 		<tbody>
 		<?php foreach ( $this->items as $i => $item ) :
-			$item->max_ordering = 0; //??
-			$ordering	= ($listOrder == 'a.ordering');
-			$canEdit	= $user->authorise( 'core.edit', 'com_tests.test_edit.' . $item->id );
-			$canCheckin	= $user->authorise( 'core.manage', 'com_checkin' ) || $item->checked_out == $user->get('id') || $item->checked_out == 0;
-			$canEditOwn	= $user->authorise( 'core.edit.own', 'com_tests.test_edit.' . $item->id ) && $item->created_by == $user->get('id');
+			$canCheckin	= $user->authorise( 'core.manage', 'com_checkin' ) || $user->get( 'id' ) == $item->created_by;
 			$canChange	= $user->authorise( 'core.edit.state', 'com_tests.test_edit.' . $item->id ) && $canCheckin;
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
@@ -96,12 +91,8 @@ $loggeduser = JFactory::getUser();
 					<?php if ( $item->checked_out ) : ?>
 						<?php echo JHtml::_( 'jgrid.checkedout', $i, null, $item->checked_out_time, 'tests.', $canCheckin ); ?>
 					<?php endif; ?>
-					<?php if ( $canEdit || $canEditOwn ) : ?>
-						<a href="<?php echo JRoute::_('index.php?option=com_tests&task=test_edit.edit&id=' . $item->id);?>">
-							<?php echo $this->escape( $item->title ); ?></a>
-					<?php else : ?>
-						<?php echo $this->escape( $item->title ); ?>
-					<?php endif; ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_tests&task=test_edit.edit&id=' . $item->id);?>">
+						<?php echo $this->escape( $item->title ); ?></a>
 					<a href="<?php echo JRoute::_('index.php?option=com_tests&view=test&test_id=' . $item->id . '&tmpl=component');?>" target="_blank">[administer]</a>
 				</td>
 				<td>

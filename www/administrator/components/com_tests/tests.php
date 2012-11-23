@@ -8,12 +8,14 @@
 
 defined('_JEXEC') or die;
 
+JLoader::register( 'TestsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tests.php' );
+
+$actions = TestsHelper::getActions();
+
 // Access check.
-if ( !JFactory::getUser()->authorise( 'core.manage', 'com_users' ) ) {
+if ( !$actions->get( 'core.manage' ) ) {
 	return JError::raiseWarning( 404, JText::_( 'JERROR_ALERTNOAUTHOR' ) );
 }
-
-JLoader::register( 'TestsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tests.php' );
 
 // Include dependancies
 jimport('joomla.application.component.controller');
