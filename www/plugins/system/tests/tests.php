@@ -267,9 +267,38 @@ class plgSystemTests extends plgSystemTestsFormEvents
 	public function onAfterInitialise()
 	{
 		$app = JFactory::getApplication();
+		$user = JFactory::getUser();
 		$option = JRequest::getVar( 'option' );
 
-		if ( $app->isAdmin() ) {
+		if ( $app->isAdmin() && !$user->authorise( 'core.admin' ) ) {
+			if ( $option && !in_array( $option, array( 'com_categories', 'com_tests', 'com_api',
+				'com_admin', 'com_login' ) )
+			) {
+				JError::raise( E_ERROR, 400,
+					JText::_( 'PLG_SYSTEM_TESTS_ACCESS_TO_RESOURCE_DENIED' ), null, true );
+			}
+
+			if ( 'com_categories' == $option ) {
+				$task = JRequest::getVar( 'task' );
+				$extension = JRequest::getVar( 'extension' );
+				$cids = (array) JRequest::getVar( 'cid', null, null, 'array' );
+				$id = (array) JRequest::getInt( 'id' );
+				$bad_views = array( 'trash', 'delete', 'unpublish', 'publish', 'archive', 'edit' );
+				foreach ( $bad_views as $name ) {
+					if ( strpos( $task, $name ) ) {
+						$tests = THelper::get_test_in_category( array_merge( $cids, $id ) );
+						if ( !empty( $tests ) ) {
+							JError::raise( E_WARNING, 400,
+								JText::sprintf( 'PLG_SYSTEM_TESTS_ACTION_DENIED_CATEGORIES',
+									$name ),
+								null, true );
+							$app->redirect( 'index.php?option=com_categories&extension='
+								. $extension );
+						}
+					}
+				}
+			}
+
 			return;
 		}
 
@@ -293,6 +322,7 @@ class plgSystemTests extends plgSystemTestsFormEvents
 			return true;
 		}
 
+		// Remove all help buttons from the toolbar, as there has been no help written.
 		$toolbar = JToolBar::getInstance();
 		$bar = $toolbar->get('_bar');
 		foreach ( $bar as $key => $button ) {
@@ -307,6 +337,22 @@ class plgSystemTests extends plgSystemTestsFormEvents
 		}
 
 		$toolbar->set( '_bar', $bar );
+	}
+
+	public function onAfterRender()
+	{
+		$app = JFactory::getApplication();
+		$user = JFactory::getUser();
+		$option = JRequest::getVar( 'option' );
+
+		if ( $app->isAdmin() && !$user->authorise( 'core.admin' )
+			&& 'com_categories' == $option
+		) {
+			$_buffer = JResponse::getBody();
+			$buffer = preg_replace( '/\<fieldset class="batch">.*\<\/fieldset>/mis', '',
+				$_buffer );
+			JResponse::setBody( $buffer );
+		}
 	}
 
 	function onUserAfterDelete( $user, $success, $msg )
