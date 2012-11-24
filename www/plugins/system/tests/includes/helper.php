@@ -235,6 +235,38 @@ class THelper
 		return $unique_id;
 	}
 
+	/**
+	 * Gets a list of tests that are part of a specific category ids
+	 */
+	function get_test_in_category( $cid )
+	{
+		// Make sure the item ids are integers
+		jimport('joomla.utilities.arrayhelper');
+		JArrayHelper::toInteger( $cid );
+
+		$db = JFactory::getDBO();
+		$ids = array();
+
+		foreach ( $cid as $id ) {
+			$table = JTable::getInstance( 'Category' );
+			$table->load( $id );
+			$tree = $table->getTree();
+
+			foreach ( $tree as $cat ) {
+				$ids[] = (int) $cat->id;
+			}
+		}
+
+		$query = $db->getQuery( true )
+			->select( '*' )
+			->from( '#__test_tests AS t' )
+			->where( 't.`catid` IN (' . implode( ',', array_unique( $ids ) ) . ')' )
+			;
+		$rows = $db->setQuery( $query )->loadObjectList();
+
+		return $rows;
+	}
+
 	function stripslashes_deep( $value )
 	{
 		if ( is_array( $value ) ) {
