@@ -1,5 +1,11 @@
 <?php
-// No direct access to this file
+/**
+ * @package		Tests
+ * @subpackage	com_tests
+ * @copyright	Copyright (C) 2012 Rafael Corral. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
 defined('_JEXEC') or die;
 
 class TestsHelper
@@ -59,5 +65,60 @@ class TestsHelper
 		}
 
 		return self::$actions;
+	}
+
+	/**
+	 * Checks db current database version
+	 *
+	 * This is a database check function
+	 * it will check the current database version and run any updates
+	 * Calles methods of class PagoUpgrader located: '/helpers/upgrade.php'
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 **/
+	static public function db_check()
+	{
+		// $current_version = TestsHelper::get_xml_tag_value( 'dbversion' );
+		//
+		// if ( !$current_version ) {
+		// 	return;
+		// }
+
+		jimport( 'joomla.database.table' );
+
+		// Supress all possible errors because there is a chance the db was never created
+		$row = @JTable::getInstance( 'Config', 'TestsTable' );
+		@$row->load( array( 'name' => 'dbversion' ) );
+		$db_version = @$row->params;
+
+		// If equal, nothing to do
+		// if ( $db_version == $current_version ) {
+		// 	return;
+		// }
+
+		if ( !$db_version ) {
+			TestsUpgrader::create_config();
+			$db_version = 1000;
+
+			$row = JTable::getInstance( 'Config', 'TestsTable' );
+			$row->load( array( 'name' => 'dbversion' ) );
+			$db_version = $row->params;
+		}
+
+		// if ( $db_version < 1000 ) {
+		// 	PagoUpgrader::upgrade_1000();
+		// }
+
+		$current_version = TestsUpgrader::find_upgrades( $db_version );
+
+		// Finally store new version to DB
+		// Only store if row already exists
+		if ( $row->id ) {
+			$row->params = $current_version;
+			$row->check();
+			$row->store();
+		}
 	}
 }
