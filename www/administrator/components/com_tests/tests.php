@@ -9,6 +9,7 @@
 defined('_JEXEC') or die;
 
 JLoader::register( 'TestsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/tests.php' );
+JLoader::register( 'TestsUpgrader', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/upgrade.php' );
 
 $actions = TestsHelper::getActions();
 
@@ -16,6 +17,9 @@ $actions = TestsHelper::getActions();
 if ( !$actions->get( 'core.manage' ) ) {
 	return JError::raiseWarning( 404, JText::_( 'JERROR_ALERTNOAUTHOR' ) );
 }
+
+// Update database
+TestsHelper::db_check();
 
 // Include dependancies
 jimport('joomla.application.component.controller');
