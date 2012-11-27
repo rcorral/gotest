@@ -7,7 +7,7 @@
 
 defined('JPATH_BASE') or die;
 
-include 'development.php';
+@include 'development.php';
 if ( !defined( 'TESTS_DEVELOPMENT' ) ) {
 	define( 'TESTS_DEVELOPMENT', false );
 }
