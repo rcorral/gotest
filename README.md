@@ -15,4 +15,4 @@ Required node.js modules
 
 Starting node server
 --------------------------
-node app.js
+node app.js [--joomla=/clicker]
