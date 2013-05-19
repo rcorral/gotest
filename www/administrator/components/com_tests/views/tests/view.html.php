@@ -70,10 +70,10 @@ class TestsViewTests extends JView
 
 		if ( $actions->get( 'core.edit.state' ) ) {
 			JToolBarHelper::divider();
-			JToolBarHelper::publish( 'test_edit.publish', 'JTOOLBAR_PUBLISH', true );
-			JToolBarHelper::unpublish( 'test_edit.unpublish', 'JTOOLBAR_UNPUBLISH', true );
+			JToolBarHelper::publish( 'tests.publish', 'JTOOLBAR_PUBLISH', true );
+			JToolBarHelper::unpublish( 'tests.unpublish', 'JTOOLBAR_UNPUBLISH', true );
 			JToolBarHelper::divider();
-			JToolBarHelper::archiveList( 'test_edit.archive' );
+			JToolBarHelper::archiveList( 'tests.archive' );
 		}
 
 		if ( $this->state->get( 'filter.published' ) == -2 && $actions->get( 'core.delete' ) ) {

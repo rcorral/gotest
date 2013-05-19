@@ -339,14 +339,18 @@ class TestsModelTest_Edit extends JModelAdmin
 		$item_ids = (array) $item_ids;
 		JArrayHelper::toInteger( $item_ids );
 
+		// Init sessions model
+		$sessions_model = JModel::getInstance( 'Session', 'TestsModel' );
+
 		// Get a group row instance.
 		$table = $this->getTable();
 
 		// Iterate the items to delete each one.
-		foreach ( $item_ids as $itemId ) {
-			// TODO: Delete the menu associations - Menu items and Modules
+		foreach ( $item_ids as $item_id ) {
+			// Delete test sessions and answers associated with them
+			$sessions_model->delete( $item_id );
 
-			if ( !$table->delete( $itemId ) ) {
+			if ( !$table->delete( $item_id ) ) {
 				$this->setError( $table->getError() );
 				return false;
 			}

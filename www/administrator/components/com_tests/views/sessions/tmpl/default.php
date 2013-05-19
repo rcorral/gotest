@@ -83,7 +83,7 @@ $loggeduser = JFactory::getUser();
 				<td>
 					<?php echo $this->escape( $item->title ); ?>
 					<?php if ( $item->is_active ) : ?>
-					<a href="<?php echo JRoute::_( 'index.php?option=com_tests&view=test&test_id=' . $item->test_id . '&tmpl=component&unique_id=' . $item->unique_id );?>" target="_blank">[administer]</a>
+					<!--<a href="<?php echo JRoute::_( 'index.php?option=com_tests&view=test&test_id=' . $item->test_id . '&tmpl=component&unique_id=' . $item->unique_id );?>" target="_blank">[administer]</a>-->
 					<?php endif; ?>
 				</td>
 				<td class="center">
