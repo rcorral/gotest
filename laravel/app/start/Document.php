@@ -57,9 +57,16 @@ class Document
 	 * This array is used in the combiner.php file to generate a single css and js file.
 	 * When adding new scripts, test the combiner.php file to ensure there will be no problems
 	 */
-	public static $_libs = array(
+	public $_libs = array(
 		'jquery' => array(
 			'js' => "SITEPATH/js/jquery-2.0.1.min.js"
+			),
+		'bootstrap' => array(
+			'js' => "SITEPATH/packages/bootstrap/js/bootstrap.min.js",
+			'css' => array(
+				"SITEPATH/packages/bootstrap/css/bootstrap.css",
+				"SITEPATH/packages/bootstrap/css/bootstrap-responsive.css"
+				)
 			),
 		'colorbox' => array(
 			'js' => "SITEPATH/js/jquery.colorbox.js",
@@ -95,13 +102,9 @@ class Document
 		'uniform' => array(
 			'js' => "SITEPATH/js/jquery.uniform.min.js"
 			),
-		'template' => array(
-			'js' => "SITEPATH/js/template.js",
-			'css' => array(
-				"SITEPATH/css/template.css",
-				"SITEPATH/css/normalize.css",
-				"SITEPATH/templates/system/css/system.css"
-				)
+		'main' => array(
+			'js' => "SITEPATH/js/main.js",
+			'css' => "SITEPATH/css/main.css"
 			)
 		);
 
@@ -208,7 +211,7 @@ class Document
 	 */
 	function add_jquery( $content )
 	{
-			self::$_jquery_declaration .= $content . (false === strpos(trim($content), ';') ? ';' : '');
+			$this->$_jquery_js .= $content . (false === strpos(trim($content), ';') ? ';' : '');
 	}
 
 	/**
@@ -224,17 +227,17 @@ class Document
 		if ( 'local' != App::environment() ) {
 			if ( !$called ) {
 				require dirname(__FILE__) . '/combined-files.php';
-				self::add_script_declaration(';jQuery.noConflict();');
+				$this->add_script_declaration(';jQuery.noConflict();');
 				$called = true;
 			}
 		} else {
 			foreach ( (array) $libs as $lib ) {
 				// We only want to add this once
-				if ( !isset( $_libs[$script] ) || true === $_libs[$script] ) {
+				if ( !isset( $this->_libs[$lib] ) || true === $this->_libs[$lib] ) {
 					continue;
 				}
 
-				foreach ( $_libs[$script] as $type => $files ) {
+				foreach ( $this->_libs[$lib] as $type => $files ) {
 					if ( 'js' == $type ) {
 						foreach ( (array) $files as $file ) {
 							$this->add_script(str_replace('SITEPATH', $site_path, $file));
@@ -246,11 +249,20 @@ class Document
 					}
 				}
 
-				if ( 'jquery' == $script ) {
-					self::add_script_declaration(';jQuery.noConflict();');
+				switch ($lib) {
+					case 'jquery':
+						$this->add_script_declaration(';jQuery.noConflict();');
+						break;
+
+					case 'bootstrap':
+						$this->add_meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'), 1);
+						break;
+
+					default:
+						break;
 				}
 
-				$_libs[$script] = true;
+				$this->_libs[$lib] = true;
 			}
 		}
 
@@ -274,30 +286,17 @@ class Document
 			$js .= "\nvar community_token = '14f3bb75e8b6bcdc84f341c8872f68fe57c4023e';";
 		} else {
 			// TODO: Fix this
-			$active = 0;
 			$user = (object) array('id'=>0);
 			$loggedin = ( $user->id ) ? 1 : 0;
+			$home = (int) Helper::is_home();
 
-			if ( $active ) {
-				$home = $active->home;
-			} else {
-				$home = 0;
-			}
 			$js .= "\nvar is_home={$home};";
 			$js .= "\nvar is_loggedin={$loggedin};";
 		}
 
-		self::add_script_declaration( $js );
+		$this->add_script_declaration( $js );
 
 		$done = true;
-	}
-
-	/**
-	 * Gets the curret output buffer
-	 */
-	public function get_buffer()
-	{
-		return $this->_buffer;
 	}
 
 	/**
@@ -331,11 +330,11 @@ class Document
 					$used_list[$meta['name']] = true;
 				}
 
-				$buffer .= $this->_tab . '<meta ';
+				$buffer .= $this->_tab . '<meta';
 				foreach ( $meta as $key => $value ) {
-					$buffer .= $key . '="' . htmlspecialchars($value) . '"';
+					$buffer .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
 				}
-				$buffer .= ' />' . $this->_line_end;
+				$buffer .= '>' . $this->_line_end;
 			}
 		}
 
@@ -351,7 +350,7 @@ class Document
 				}
 				$used_list[$src] = true;
 
-				$buffer .= $this->_tab . '<link src="' . $src . '" ';
+				$buffer .= $this->_tab . '<link href="' . $src . '" ';
 				foreach ( $attr as $key => $value ) {
 					$buffer .= $key . '="' . $value . '"';
 				}
@@ -375,7 +374,7 @@ class Document
 				foreach ( $attr as $key => $value ) {
 					$buffer .= $key . '="' . $value . '"';
 				}
-				$buffer .= ' ></script>' . $this->_line_end;
+				$buffer .= '></script>' . $this->_line_end;
 			}
 		}
 
@@ -394,12 +393,61 @@ class Document
 			if ( $prio > 5 ) {
 				break;
 			}
-			foreach ( $script as $content ) {
-				$buffer .= $this->_tab . '<script type="text/javascript">' . $this->_line_end;
-				// TODO: Add minifier
-				$buffer .= $content . $this->_line_end;
-				$buffer .= $this->_tab . '</style>' . $this->_line_end;
+			$buffer .= $this->_tab . '<script type="text/javascript">' . $this->_line_end;
+			// TODO: Add minifier
+			$buffer .= $content . $this->_line_end;
+			$buffer .= $this->_tab . '</script>' . $this->_line_end;
+		}
+
+		return $buffer;
+	}
+
+	/**
+	 * Generates the html that goes before the </body> tag
+	 *
+	 * @return string Contents to put before the </body> tag
+	 **/
+	public function get_footer()
+	{
+		// Fire off listener before anything else
+		Event::fire('footer.before_compile');
+
+		$buffer = '';
+		$is_dev = ('local' != App::environment());
+
+		// Sort by priority
+		ksort($this->_scripts);
+		ksort($this->_script);
+
+		// Scripts
+		$used_list = array();
+		foreach ( $this->_scripts as $prio => $scripts ) {
+			if ( $prio < 6 ) {
+				continue;
 			}
+			foreach ( $scripts as $src => $attr ) {
+				if ( isset($used_list[$src]) ) {
+					continue;
+				}
+				$used_list[$src] = true;
+
+				$buffer .= $this->_tab . '<script src="' . $src . '" ';
+				foreach ( $attr as $key => $value ) {
+					$buffer .= $key . '="' . $value . '"';
+				}
+				$buffer .= '></script>' . $this->_line_end;
+			}
+		}
+
+		// Script declarations
+		foreach ( $this->_script as $prio => $content ) {
+			if ( $prio < 6 ) {
+				continue;
+			}
+			$buffer .= $this->_tab . '<script type="text/javascript">' . $this->_line_end;
+			// TODO: Add minifier
+			$buffer .= $content . $this->_line_end;
+			$buffer .= $this->_tab . '</script>' . $this->_line_end;
 		}
 
 		return $buffer;

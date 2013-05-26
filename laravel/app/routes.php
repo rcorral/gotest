@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('/', 'HomeController@exec');
+Route::get('/', array('as' => 'home', 'uses' => 'HomeController@exec'));
 
