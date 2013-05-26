@@ -69,6 +69,9 @@ App::down(function()
 	return Response::make("Be right back!", 503);
 });
 
+require app_path().'/start/Helper.php';
+require app_path().'/start/Document.php';
+
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File

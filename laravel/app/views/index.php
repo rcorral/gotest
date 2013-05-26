@@ -1,8 +1,11 @@
+<?php
+$doc = Document::get_instance();
+?>
 <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<?php echo $that->get_head(); ?>
+	<?php echo $doc->get_head(); ?>
 </head>
 <body>
 	<div class="wrapper">

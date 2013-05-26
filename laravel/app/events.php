@@ -7,3 +7,4 @@
 |
 */
 
+Event::listen('head.before_compile', 'Document@on_before_compile');
