@@ -1,6 +1,6 @@
 <?php
 
-class SignupController extends \BaseController {
+class LoginController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,13 +9,13 @@ class SignupController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('signup');
+		$this->_buffer = View::make('login');
 
 		if ( Request::ajax() )
 			return Response::json(array('modal' => array(
-				'header' => 'Sign up',
+				'header' => 'Log in',
 				'body' => (string) $this->_buffer,
-				'footer' => '<a href="#" class="login-action">(or log in)</a>' . ' | ' . Form::submit('Sign up', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'signup-form')),
+				'footer' => '<a href="#" class="signup-action">(or sign up)</a>' . ' | ' . Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
 				'options' => array('width' => '250px')
 			)));
 
@@ -23,14 +23,12 @@ class SignupController extends \BaseController {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
+	 * This method handles logging in
 	 */
 	public function store($group_name = 'Teacher')
 	{
 		Helper::csrf_check();
-
+die();
 		try {
 			// Create the user
 			$user = Sentry::getUserProvider()->create(Input::only('email', 'password'));

@@ -5,7 +5,7 @@ class BaseController extends Controller
 	/**
 	 * Default front-end libraries to be added to every page
 	 */
-	protected $libs = array('jquery', 'bootstrap', 'core', 'main');
+	protected $libs = array('jquery', 'bootstrap', 'deparam', 'core', 'main');
 
 	/**
 	 * Gets the curret output buffer

@@ -15,6 +15,14 @@ core_class.prototype.inline_popup = function( msg, auto_close, complete_callback
 };
 
 core_class.prototype.modal = function(data) {
+	var modal_container = jQuery('#modal-container');
+
+	if ( data.options ) {
+		if ( data.options.width ) {
+			modal_container.css({width: data.options.width});
+		};
+	}
+
 	html = '';
 	if ( data.header )
 		html += '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>' + data.header + '</h3></div>';
@@ -25,11 +33,18 @@ core_class.prototype.modal = function(data) {
 	if ( data.footer )
 		html += '<div class="modal-footer">' + data.footer + '</div>';
 
-
-	jQuery('#modal-container').modal('hide').html(html).modal().css(
+	modal_container.html(html).modal().css(
 		(jQuery(document).width() <= 751 ? {margin:'30px auto'} : {'margin-left':function () { return -(jQuery(this).width() / 2);}})
 	);
-}
+};
+
+core_class.prototype.parse_request = function(req) {
+	if ( typeof req.modal !== 'undefined' ) {
+		this.modal(req.modal);
+	} else if ( typeof req.redirect !== 'undefined' ) {
+		window.location.replace(req.redirect);
+	}
+};
 
 /**
  * Creates an iframe to log user out

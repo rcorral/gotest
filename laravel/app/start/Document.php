@@ -194,7 +194,7 @@ class Document
 	 * @param  $attr (Optional) Array with attributes to be added to script tag
 	 * @param  $priority The priority of the script
 	 */
-	protected function add_script( $src, $attr = array(), $priority = 10 )
+	public function add_script( $src, $attr = array(), $priority = 10 )
 	{
 		if ( !isset( $this->_scripts[$priority] ) ) {
 			$this->_scripts[$priority] = array();
