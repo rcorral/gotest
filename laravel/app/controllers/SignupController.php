@@ -32,8 +32,8 @@ class SignupController extends \BaseController {
 		Helper::csrf_check();
 
 		try {
-			// Create the user
-			$user = Sentry::getUserProvider()->create(Input::only('email', 'password'));
+			// Register the user and activate them
+			$user = Sentry::register(Input::only('email', 'password'), true);
 
 			// Assign the group to the user
 			$user->addGroup(Helper::get_group($group_name));

@@ -9,8 +9,13 @@
 			<a class="brand" href="<?php echo URL::route('home'); ?>">My Exam</a>
 			<div class="nav-collapse">
 				<ul class="nav pull-right">
+					<?php if ( !Sentry::check() ): ?>
 					<li><a href="#login" class="login-action">Log in</a></li>
 					<li><a href="#signup" class="signup-action">Sign up</a></li>
+					<?php else: ?>
+					<li><a href="#account" class="account-action"></a></li>
+					<li><a href="#logout" class="logout-action">Log out</a></li>
+					<?php endif; ?>
 				</ul>
 			</div>
 		</div>

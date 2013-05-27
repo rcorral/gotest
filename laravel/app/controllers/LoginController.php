@@ -25,28 +25,16 @@ class LoginController extends \BaseController {
 	/**
 	 * This method handles logging in
 	 */
-	public function store($group_name = 'Teacher')
+	public function store()
 	{
 		Helper::csrf_check();
-die();
+
 		try {
-			// Create the user
-			$user = Sentry::getUserProvider()->create(Input::only('email', 'password'));
+			$user = Helper::authenticate(Input::only('email', 'password'), true);
 
-			// Assign the group to the user
-			$user->addGroup(Helper::get_group($group_name));
-
-			return Response::json(array('message' => 'success!'), 201);
-		} catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
-			$error = 'Login field is required.';
-		} catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
-			$error = 'Password field is required.';
-		} catch (Cartalyst\Sentry\Users\UserExistsException $e) {
-			$error = 'User with this login already exists.';
-		} catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
-			$error = 'Group was not found.';
+			return Response::json(array('redirect' => URL::route('home')), 201);
+		} catch (Exception $e) {
+			return Response::json(array('message' => $e->getMessage()), 400);
 		}
-
-		return Response::json(array('message' => $error), 400);
 	}
 }
