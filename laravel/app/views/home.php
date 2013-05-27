@@ -1,18 +1,8 @@
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
-<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, nobis, aperiam, aspernatur, magni accusantium consectetur itaque in odio vel ducimus quis earum veniam modi sunt consequuntur dolore non iste mollitia!</div>
-<div>Quo, qui sapiente quidem eum minus. Minus nemo mollitia laudantium voluptatum debitis dolore voluptates hic fugiat quas a. Dicta atque cupiditate sint sapiente cumque eaque nam tenetur iusto aliquam laborum.</div>
-<div>Nulla, corporis, illo, amet tempore exercitationem rem nesciunt vel aut perspiciatis quibusdam molestias voluptatem quo voluptate illum autem itaque minus temporibus explicabo dignissimos fugiat animi dolorum delectus. Rerum, odio, velit.</div>
+<section class="home">
+	<a id="home"></a>
+	<h1 class="home-title museo">Create Unlimited Tests. For Free.</h1>
+	<form class="intro">
+		<div class="button"><input type="text" name="name" placeholder="Enter A Test Name" /></div>
+		<input type="submit" value="Create Your Test" class="started" />
+	</form>
+</section>
