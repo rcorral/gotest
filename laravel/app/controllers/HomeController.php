@@ -1,13 +1,11 @@
 <?php
 
-class HomeController extends BaseController
+class HomeController extends \BaseController
 {
-	public function display()
+	public function index()
 	{
-		$doc = Document::get_instance();
+		$this->_buffer = View::make('home');
 
-		$doc->add_lib(array('jquery', 'bootstrap', 'core', 'main'));
-
-		return View::make('home');
+		return $this->exec();
 	}
 }

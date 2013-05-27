@@ -11,5 +11,6 @@
 |
 */
 
-Route::get('/', array('as' => 'home', 'uses' => 'HomeController@exec'));
+Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
+Route::resource('signup', 'SignupController', array('before' => 'csrf'));

@@ -1,4 +1,5 @@
 <?php
+return;
 if ( Helper::is_home() ) {
 	return;
 }

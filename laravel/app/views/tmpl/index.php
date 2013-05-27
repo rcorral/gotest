@@ -13,14 +13,11 @@ if ( $sidebarr ) $content_span -= 2;
 <head>
 <meta charset="UTF-8">
 <?php echo $doc->get_head(); ?>
-	<style type="text/css">
-		body { padding-top: 60px; padding-bottom: 40px; }
-	</style>
 </head>
 <body>
 <?php include $tmpl_path . '/nav.php'; ?>
 
-<div class="container-fluid">
+<div class="wrapper container-fluid">
 	<div class="row-fluid">
 		<?php echo $sidebarl; ?>
 
@@ -32,6 +29,9 @@ if ( $sidebarr ) $content_span -= 2;
 	</div>
 
 <?php include $tmpl_path . '/footer.php'; ?>
+</div>
+<div>
+	<div id="modal-container" class="modal hide fade" role="dialog" aria-hidden="true"></div>
 </div>
 
 <?php echo $doc->get_footer(); ?>

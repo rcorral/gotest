@@ -13,4 +13,9 @@ class Helper
 
 		return $home;
 	}
+
+	static function modal_html( $contents, $title = '', $footer = '' )
+	{
+		
+	}
 }
