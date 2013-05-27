@@ -15,3 +15,7 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 Route::resource('signup', 'SignupController');
 Route::resource('login', 'LoginController');
+
+Route::any('logout', array('as' => 'logout', function(){
+	return Helper::logout();
+}));

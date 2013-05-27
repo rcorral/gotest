@@ -36,7 +36,8 @@ class Helper
 			// User wasn't found, should only happen if the user was deleted
 			// when they were already logged in or had a "remember me" cookie set
 			// and they were deleted.
-			Helper::logout();
+			Helper::logout(false);
+			App::abort(401, 'You are not authorized.');
 		}
 	}
 
@@ -93,7 +94,7 @@ class Helper
 		Sentry::logout();
 
 		if ( $redirect ) {
-			URL::redirect('/');
+			return Redirect::route('home');
 		}
 	}
 }
