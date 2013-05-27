@@ -12,9 +12,11 @@
 					<?php if ( !Sentry::check() ): ?>
 					<li><a href="#login" class="login-action">Log in</a></li>
 					<li><a href="#signup" class="signup-action">Sign up</a></li>
-					<?php else: ?>
-					<li><a href="#account" class="account-action"></a></li>
-					<li><a href="#logout" class="logout-action">Log out</a></li>
+					<?php else:
+					$user = Helper::get_current_user();
+					?>
+					<li><a href="#account" class="account-action"><?php echo $user->first_name ? $user->first_name : $user->email; ?></a></li>
+					<li><a href="<?php echo URL::route('logout'); ?>" class="logout-action">Log out</a></li>
 					<?php endif; ?>
 				</ul>
 			</div>
