@@ -12,7 +12,6 @@ h1 {
 }
 section {
 	width: 100%;
-	min-height: 800px;
 }
 .button {
 	background-color: #f5f5f5;
@@ -114,4 +113,7 @@ nav li {
 	text-indent: 15px;
 	margin: 0;
 	padding: 0;
+}
+footer {
+	text-align: center;
 }
