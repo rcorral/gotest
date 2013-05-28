@@ -12,6 +12,7 @@
 */
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
+Route::get('/form', array('as' => 'form', 'uses' => 'FormController@index'));
 
 Route::resource('signup', 'SignupController');
 Route::resource('login', 'LoginController');

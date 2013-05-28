@@ -7,3 +7,4 @@
 /build/export/
 /build/com_tests*
 vendor
+laravel/app/config/local/database.php

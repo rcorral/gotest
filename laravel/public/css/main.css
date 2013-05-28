@@ -102,6 +102,7 @@ nav li {
 .intro input[type="text"] {
 	width: 500px;
 	height: 50px;
+	line-height: 50px;
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-topleft: 5px;
