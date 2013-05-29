@@ -27,18 +27,30 @@ class SignupController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store($group_name = 'Teacher')
+	public function store($group_name = 'Teacher', $silent_login = true)
 	{
 		Helper::csrf_check();
 
 		try {
+			$credentials = Input::only('email', 'password');
+
 			// Register the user and activate them
-			$user = Sentry::register(Input::only('email', 'password'), true);
+			$user = Sentry::register($credentials, true);
 
 			// Assign the group to the user
 			$user->addGroup(Helper::get_group($group_name));
 
-			return Response::json(array('message' => 'success!'), 201);
+			if ( $silent_login ) {
+				try {
+					$user = Helper::authenticate($credentials, true);
+
+					return Response::json(array('redirect' => URL::route('home')), 200);
+				} catch (Exception $e) {
+					return Response::json(array('message' => $e->getMessage()), 400);
+				}
+			} else {
+				return true;
+			}
 		} catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
 			$error = 'Login field is required.';
 		} catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {

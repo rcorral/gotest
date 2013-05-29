@@ -32,7 +32,7 @@ class LoginController extends \BaseController {
 		try {
 			$user = Helper::authenticate(Input::only('email', 'password'), true);
 
-			return Response::json(array('redirect' => URL::route('home')), 201);
+			return Response::json(array('redirect' => URL::route('home')), 200);
 		} catch (Exception $e) {
 			return Response::json(array('message' => $e->getMessage()), 400);
 		}

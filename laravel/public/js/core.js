@@ -36,6 +36,9 @@ core_class.prototype.modal = function(data) {
 	modal_container.html(html).modal().css(
 		(jQuery(document).width() <= 751 ? {margin:'30px auto'} : {'margin-left':function () { return -(jQuery(this).width() / 2);}})
 	);
+	setTimeout(function(){
+		modal_container.find('input[type="text"]:first')[0].focus();
+	}, 500);
 };
 
 core_class.prototype.parse_request = function(req) {

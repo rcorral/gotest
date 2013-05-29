@@ -30,6 +30,16 @@ jQuery(function(){
 			return false;
 		})
 	;
+
+	jQuery('#modal-container')
+		.on('keydown', function(e){
+			if ( 13 == e.keyCode ) {
+				// Find the form
+				jQuery(this).find('.btn-primary').click();
+			}
+		})
+	;
+
 	jQuery('.intro').animate({
 		left: 0,
 		opacity: 1
