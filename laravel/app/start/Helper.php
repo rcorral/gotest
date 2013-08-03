@@ -22,9 +22,66 @@ class Helper
 		}
 	}
 
-	static function modal_html( $contents, $title = '', $footer = '' )
+	static function prefix_table( $name )
 	{
-		
+		return self::get_db_prefix() . $name;
+	}
+
+	static function get_db_prefix()
+	{
+		static $prefix;
+
+		if ( !$prefix ) {
+			$prefix = Config::get('database.connections.mysql.prefix');
+		}
+
+		return $prefix;
+	}
+
+	static function modal_html( $contents, $title = '', $footer = '' ) {}
+
+	/**
+	 * TEST METHODS
+	 */
+
+	static function get_question_templates()
+	{
+		$types = DB::table('test_question_types')
+			->get()
+			;
+
+		$templates = array();
+		foreach ( $types as $type ) {
+			$templates[$type->type] = $type;
+		}
+
+		return $templates;
+	}
+
+	/**
+	 * Gets a question template
+	 */
+	static function get_question_type( $type )
+	{
+		if ( !$type )
+			return '';
+
+		$row = DB::table('test_question_types')
+			->select('id', 'title', 'html')
+			->where('type', $type)
+			->first()
+			;
+
+		return $row;
+	}
+
+	/**
+	 * USER METHODS
+	 */
+
+	static function is_logged_in()
+	{
+		return Sentry::check();
 	}
 
 	static function get_current_user()
@@ -96,5 +153,18 @@ class Helper
 		if ( $redirect ) {
 			return Redirect::route('home');
 		}
+	}
+
+	static function json_success_response( $data, $code = 200 )
+	{
+		$data['success'] = true;
+		return Response::json((object) $data, $code);
+	}
+
+	static function json_error_response( $data, $code = 400 )
+	{
+		$data['success'] = false;
+		$data['error'] = true;
+		return Response::json((object) $data, $code);
 	}
 }

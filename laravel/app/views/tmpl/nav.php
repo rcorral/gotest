@@ -16,6 +16,7 @@
 					$user = Helper::get_current_user();
 					?>
 					<li><a href="#account" class="account-action"><?php echo $user->first_name ? $user->first_name : $user->email; ?></a></li>
+					<li><a href="<?php echo URL::route('create'); ?>" class="create-action">Create a Test</a></li>
 					<li><a href="<?php echo URL::route('logout'); ?>" class="logout-action">Log out</a></li>
 					<?php endif; ?>
 				</ul>

@@ -33,6 +33,15 @@ class SignupController extends \BaseController {
 
 		try {
 			$credentials = Input::only('email', 'password');
+			$credentials['api_token'] = md5(uniqid(rand(), true));
+
+			// Create a unique api_token
+			while (
+				$_r = DB::table('users')->where('api_token', $credentials['api_token'])->first()
+				&& !empty($_r)
+			) {
+				$credentials['api_token'] = md5(uniqid(rand(), true));
+			}
 
 			// Register the user and activate them
 			$user = Sentry::register($credentials, true);

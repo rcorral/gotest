@@ -211,7 +211,7 @@ class Document
 	 */
 	function add_jquery( $content )
 	{
-			$this->$_jquery_js .= $content . (false === strpos(trim($content), ';') ? ';' : '');
+		$this->_jquery_js .= $content . (false === strpos(trim($content), ';') ? ';' : '');
 	}
 
 	/**
@@ -272,6 +272,23 @@ class Document
 		return $this;
 	}
 
+	function add_inline_view_file($view, $options = array())
+	{
+		$type = substr($view, (strrpos($view, '.') + 1));
+
+		if ( 'js' == $type ) {
+			ob_start();
+			require app_path() . '/views/js/' . $view;
+			$contents = ob_get_clean();
+
+			if ( isset($options['jquery']) && $options['jquery'] ) {
+				$this->add_jquery($contents);
+			} else {
+				$this->add_script($contents);
+			}
+		}
+	}
+
 	function js_variables()
 	{
 		static $done;
@@ -281,18 +298,16 @@ class Document
 
 		$js = 'var live_site = \'' . URL::to('/'). '/\';';
 
-		// TODO: Fix token so it's unique to user
-		if ( 0 ) {
-			$js .= "\nvar community_token = '14f3bb75e8b6bcdc84f341c8872f68fe57c4023e';";
-		} else {
-			// TODO: Fix this
-			$user = (object) array('id'=>0);
-			$loggedin = ( $user->id ) ? 1 : 0;
-			$home = (int) Helper::is_home();
-
-			$js .= "\nvar is_home={$home};";
-			$js .= "\nvar is_loggedin={$loggedin};";
+		$is_logged_in = false;
+		if ( Helper::is_logged_in() ) {
+			$is_logged_in = true;
+			$user = Helper::get_current_user();
+			$js .= "\nvar api_token = '{$user->api_token}';";
 		}
+
+		$home = (int) Helper::is_home();
+		$js .= "\nvar is_home={$home};";
+		$js .= "\nvar is_loggedin={$is_logged_in};";
 
 		$this->add_script_declaration( $js );
 
@@ -461,7 +476,7 @@ class Document
 		if ( $doc->_jquery_js ) {
 			$pre = 'jQuery(document).ready(function(){';
 			$post = '});';
-			$doc->add_script_declaration( $protected . $doc->_jquery_js . $post );
+			$doc->add_script_declaration( $pre . $doc->_jquery_js . $post );
 		}
 	}
 }

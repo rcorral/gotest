@@ -225,19 +225,19 @@ body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  line-height: 50px;
+  line-height: 20px;
   color: #333333;
   background-color: #ffffff;
 }
 
 a {
-  color: #FE5A27;
+  color: #0088cc;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #49AEC0;
+  color: #005580;
   text-decoration: underline;
 }
 
@@ -823,7 +823,7 @@ ol ul {
 }
 
 li {
-  line-height: 50px;
+  line-height: 20px;
 }
 
 ul.unstyled,
@@ -3360,14 +3360,18 @@ input[type="button"].btn-block {
 .btn-primary {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background: #5beaea; /* Old browsers */
-  background: -moz-linear-gradient(top, #5beaea 0%, #53cbf1 40%, #49aec0 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5beaea), color-stop(40%,#53cbf1), color-stop(100%,#49aec0)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #5beaea 0%,#53cbf1 40%,#49aec0 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #5beaea 0%,#53cbf1 40%,#49aec0 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #5beaea 0%,#53cbf1 40%,#49aec0 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #5beaea 0%,#53cbf1 40%,#49aec0 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5beaea', endColorstr='#49aec0',GradientType=0 ); /* IE6-9 */
+  background-color: #006dcc;
+  *background-color: #0044cc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
 .btn-primary:hover,
@@ -4366,17 +4370,21 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar-inner {
-  min-height: 50px;
+  min-height: 40px;
   padding-right: 20px;
   padding-left: 20px;
-  background: #dd577a; /* Old browsers */
-  background: -moz-linear-gradient(top, #dd577a 0%, #db6d89 44%, #db728c 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dd577a), color-stop(44%,#db6d89), color-stop(100%,#db728c)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #dd577a 0%,#db6d89 44%,#db728c 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dd577a', endColorstr='#db728c',GradientType=0 ); /* IE6-9 */
+  background-color: #fafafa;
+  background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+  background-repeat: repeat-x;
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
   *zoom: 1;
   -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
      -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
@@ -4406,11 +4414,12 @@ input[type="submit"].btn.btn-mini {
 .navbar .brand {
   display: block;
   float: left;
-  padding: 0 20px;
+  padding: 10px 20px 10px;
   margin-left: -20px;
   font-size: 20px;
   font-weight: 200;
-  color: #FAFAFA;
+  color: #777777;
+  text-shadow: 0 1px 0 #ffffff;
 }
 
 .navbar .brand:hover,
@@ -4567,6 +4576,13 @@ input[type="submit"].btn.btn-mini {
   top: 0;
 }
 
+.navbar-fixed-top .navbar-inner,
+.navbar-static-top .navbar-inner {
+  -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
 .navbar-fixed-bottom {
   bottom: 0;
 }
@@ -4596,9 +4612,10 @@ input[type="submit"].btn.btn-mini {
 
 .navbar .nav > li > a {
   float: none;
-  padding: 0 15px;
-  color: #FAFAFA;
+  padding: 10px 15px 10px;
+  color: #777777;
   text-decoration: none;
+  text-shadow: 0 1px 0 #ffffff;
 }
 
 .navbar .nav .dropdown-toggle .caret {
@@ -4607,7 +4624,7 @@ input[type="submit"].btn.btn-mini {
 
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
-  color: #FFF0CF;
+  color: #333333;
   text-decoration: none;
   background-color: transparent;
 }
@@ -5217,17 +5234,6 @@ input[type="submit"].btn.btn-mini {
 .modal-header {
   padding: 9px 15px;
   border-bottom: 1px solid #eee;
-  background: #fff0cf; /* Old browsers */
-  background: -moz-linear-gradient(top, #fff0cf 0%, #ccc3a7 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff0cf), color-stop(100%,#ccc3a7)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #fff0cf 0%,#ccc3a7 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #fff0cf 0%,#ccc3a7 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #fff0cf 0%,#ccc3a7 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #fff0cf 0%,#ccc3a7 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff0cf', endColorstr='#ccc3a7',GradientType=0 ); /* IE6-9 */
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
 }
 
 .modal-header .close {

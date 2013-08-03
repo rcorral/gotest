@@ -1,25 +1,26 @@
 var core_class = function() {
 	this.site_url = live_site;
+	this.modal_container = jQuery('#modal-container');
 }
 
 core_class.prototype.inline_popup = function( msg, auto_close, complete_callback ) {
-	jQuery.colorbox({
-		innerWidth: '500px',
-		html: '<div id="inline_content">' +msg+ '</div>',
-		onComplete: complete_callback
-	});
+	this.modal_container.on('shown', complete_callback);
+
+	this.modal(msg);
 
 	if ( Number( auto_close ) > 0 ) {
-		setTimeout( function(){ jQuery.colorbox.close(); }, auto_close );
+		setTimeout( function(){ this.modal_container.modal('hide'); }, auto_close );
 	}
 };
 
 core_class.prototype.modal = function(data) {
-	var modal_container = jQuery('#modal-container');
+	if ( typeof data === 'string' ) {
+		data = {body: data};
+	}
 
 	if ( data.options ) {
 		if ( data.options.width ) {
-			modal_container.css({width: data.options.width});
+			this.modal_container.css({width: data.options.width});
 		};
 	}
 
@@ -33,13 +34,19 @@ core_class.prototype.modal = function(data) {
 	if ( data.footer )
 		html += '<div class="modal-footer">' + data.footer + '</div>';
 
-	modal_container.html(html).modal().css(
+	this.modal_container.html(html).modal().css(
 		(jQuery(document).width() <= 751 ? {margin:'30px auto'} : {'margin-left':function () { return -(jQuery(this).width() / 2);}})
 	);
 	setTimeout(function(){
-		modal_container.find('input[type="text"]:first')[0].focus();
+		$el = core.modal_container.find('input[type="text"]:first');
+		if ( $el[0] )
+			$el[0].focus();
 	}, 500);
 };
+
+core_class.prototype.modal_close = function() {
+	this.modal_container.modal('hide');
+}
 
 core_class.prototype.parse_request = function(req) {
 	if ( typeof req.modal !== 'undefined' ) {
