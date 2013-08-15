@@ -3,8 +3,90 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9b884ba2fe2521f7dc19b7f512b07584",
+    "hash": "b44db4ca4b6c751bf7c467686ee36741",
     "packages": [
+        {
+            "name": "cartalyst/nested-sets",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:cartalyst/nested-sets.git",
+                "reference": "37f768356a8fa22aa07b8fb453387c81c6f81a2b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cartalyst/nested-sets/zipball/37f768356a8fa22aa07b8fb453387c81c6f81a2b",
+                "reference": "37f768356a8fa22aa07b8fb453387c81c6f81a2b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "illuminate/database": "4.0.*",
+                "mockery/mockery": "0.7.2"
+            },
+            "suggest": {
+                "illuminate/database": "We (by default) provide an Eloquent implementation (and illuminate/database worker). Required if you are not building your own implementations."
+            },
+            "type": "library",
+            "extra": {
+                "component": "package",
+                "frameworks": [
+                    "Laravel 3",
+                    "Laravel 4"
+                ],
+                "versions": {
+                    "1": "1.0/master",
+                    "2": "master"
+                },
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Cartalyst\\NestedSets": "src/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cartalyst LLC",
+                    "email": "help@cartalyst.com"
+                },
+                {
+                    "name": "Ben Corlett",
+                    "email": "ben.corlett@cartalyst.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Bruno Gaspar",
+                    "email": "bruno.gaspar@cartalyst.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dan Syme",
+                    "email": "dan.syme@cartalyst.com",
+                    "role": "Creator & Designer"
+                }
+            ],
+            "description": "PHP 5.3+ nested sets package utilizing the Modified Preorder Tree Traversal algorithm.",
+            "keywords": [
+                "categories",
+                "mptt",
+                "nested",
+                "nested-sets",
+                "tags"
+            ],
+            "support": {
+                "source": "https://github.com/cartalyst/nested-sets/tree/2.0",
+                "issues": "https://github.com/cartalyst/nested-sets/issues"
+            },
+            "time": "2013-06-06 07:14:39"
+        },
         {
             "name": "cartalyst/sentry",
             "version": "dev-master",

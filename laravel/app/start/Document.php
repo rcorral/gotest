@@ -298,7 +298,7 @@ class Document
 
 		$js = 'var live_site = \'' . URL::to('/'). '/\';';
 
-		$is_logged_in = false;
+		$is_logged_in = 0;
 		if ( Helper::is_logged_in() ) {
 			$is_logged_in = true;
 			$user = Helper::get_current_user();

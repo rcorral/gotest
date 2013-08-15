@@ -1,7 +1,16 @@
 {
+	"name": "rcorra/clicker",
+	"description": "Clicker",
+	"repositories": [
+	    {
+	        "type": "composer",
+	        "url": "http://packages.cartalyst.com"
+	    }
+	],
 	"require": {
 		"laravel/framework": "4.0.*",
-		"cartalyst/sentry": "2.0.*"
+		"cartalyst/sentry": "2.0.*",
+		"cartalyst/nested-sets": "2.0.*"
 	},
 	"autoload": {
 		"classmap": [
