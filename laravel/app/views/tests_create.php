@@ -15,7 +15,7 @@ echo Form::model((array)$test,array('route' => array('tests.update', $test->id),
 				<?php echo Form::published('published', $test->published); ?></li>
 
 				<li><?php echo Form::label('catid', 'Subject'); ?>
-				<?php echo Form::text('catid'); ?></li>
+				<?php echo Form::categories('catid', $test->catid); ?></li>
 
 				<li><?php echo Form::label('anon', 'Anonymous submission'); ?>
 				<?php echo Form::checkbox('anon'); ?></li>
@@ -85,3 +85,19 @@ echo Form::model((array)$test,array('route' => array('tests.update', $test->id),
 <?php
 echo Form::submit('Save');
 echo Form::close();
+?>
+<div id="create-subject-frm-wrapper" style="display:none;">
+<?php
+echo Form::open(array('class' => 'create-subject-frm'));
+echo Form::label('subject', 'Please enter a new subject name:');
+echo Form::text('subject');
+if ( $cats = Form::categories('nested_catid', 0, array('default' => array(0 => '')), true) )
+{
+	echo '<br />';
+	echo Form::checkbox('nest', '1', false, array('id' => 'nest'));
+	echo Form::label('nest', 'Nest label under:');
+	echo $cats;
+}
+echo Form::close();
+?>
+</div>

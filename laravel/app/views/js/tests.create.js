@@ -77,3 +77,22 @@ jQuery(document).on('submit', '.question-selection', function(){
 
 	return false;
 });
+
+jQuery('#catid option[value="-1"]').on('click', function(e) {
+	$this = jQuery(this);
+	$this.parent().val(0);
+
+	core.modal({
+		header: 'New Subject',
+		body: jQuery('#create-subject-frm-wrapper').html(),
+		footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled">Create</button>'
+	});
+});
+
+jQuery(document).on('keyup', '.create-subject-frm #subject', function(){
+	$btn = jQuery('#modal-container').find('button.btn-primary');
+	if ( this.value && $btn.hasClass('disabled') )
+		$btn.removeClass('disabled');
+	else if ( !this.value )
+		$btn.addClass('disabled');
+});
