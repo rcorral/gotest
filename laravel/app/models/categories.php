@@ -1,6 +1,6 @@
 <?php
 
-class Category extends Cartalyst\NestedSets\Nodes\EloquentNode {
+class Categories extends Cartalyst\NestedSets\Nodes\EloquentNode {
 
 	/**
 	 * The table associated with the model.

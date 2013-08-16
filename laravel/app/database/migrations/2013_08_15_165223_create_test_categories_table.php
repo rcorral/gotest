@@ -24,7 +24,7 @@ class CreateTestCategoriesTable extends Migration {
 		});
 
 		// Make a new root node
-		$root = new Category(array('name' => 'root', 'published' => 1));
+		$root = new Categories(array('name' => 'root', 'published' => 1));
 		$root->makeRoot();
 	}
 
