@@ -24,3 +24,6 @@ Route::resource('/login', 'LoginController');
 Route::any('/logout', array('as' => 'logout', function(){
 	return Helper::logout();
 }));
+
+// API
+Route::resource('/subjects','SubjectsController');

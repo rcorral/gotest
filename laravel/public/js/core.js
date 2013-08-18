@@ -49,11 +49,11 @@ core_class.prototype.modal_close = function() {
 }
 
 core_class.prototype.parse_request = function(req) {
-	if ( typeof req.modal !== 'undefined' ) {
-		this.modal(req.modal);
-	} else if ( typeof req.redirect !== 'undefined' ) {
-		window.location.replace(req.redirect);
-	}
+	if ( typeof req.modal !== 'undefined' ) this.modal(req.modal);
+
+	if ( typeof req.redirect !== 'undefined' ) window.location.replace(req.redirect);
+
+	if ( typeof req.exec !== 'undefined' ) this.eval(req);
 };
 
 /**
@@ -149,6 +149,20 @@ core_class.prototype._load_asset = function( filename, filetype, async ) {
 	if ( typeof sc != 'undefined' )
 		document.getElementsByTagName('head')[0].appendChild( sc );
 };
+
+core_class.prototype.eval = function( variables )
+{
+	var text = '';
+	for ( i in variables )
+		if ( i != 'exec' )
+			text += 'var ' + i + ' = "' + variables[i].replace(/"/g, '\\"') + '";';
+
+	var script = document.createElement('script');
+	script.type = "text/javascript";
+	document.getElementsByTagName('head')[0].appendChild(script);
+	// Closure that shit - fuck the polution
+	script.text = '(function(){' + text + variables.exec + '})();';
+}
 
 core_class.prototype._start_loader = function( msg, callback ) {
 	return;

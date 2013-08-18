@@ -78,14 +78,14 @@ jQuery(document).on('submit', '.question-selection', function(){
 	return false;
 });
 
-jQuery('#catid option[value="-1"]').on('click', function(e) {
+jQuery('form.create-form').on('click', '#catid option[value="-1"]', function(e) {
 	$this = jQuery(this);
 	$this.parent().val(0);
 
 	core.modal({
 		header: 'New Subject',
 		body: jQuery('#create-subject-frm-wrapper').html(),
-		footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled">Create</button>'
+		footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled form-ajax-submit" data-form-ajax-submit="create-subject-frm">Create</button>'
 	});
 });
 
@@ -95,4 +95,10 @@ jQuery(document).on('keyup', '.create-subject-frm #subject', function(){
 		$btn.removeClass('disabled');
 	else if ( !this.value )
 		$btn.addClass('disabled');
+}).on('click', '.create-subject-frm input.nest', function(){
+	var option = jQuery('form.create-subject-frm:visible select[name="nested_catid"] option:first');
+	if ( jQuery(this).is(':checked') )
+		option.html('Please select a parent...');
+	else
+		option.html('');
 });

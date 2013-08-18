@@ -16,17 +16,21 @@ jQuery(function(){
 				cache: true
 			});
 		})
-		.on('click', '.form-ajax-submit', function(){
-			var form = jQuery('form.' + jQuery(this).data('form-ajax-submit'))
+		.on('click', '.form-ajax-submit', function(event){
+			var form = jQuery('form.' + jQuery(this).data('form-ajax-submit') + ':visible')
 				, data = jQuery.deparam(form.serialize())
 				;
 
-			core._ajax(data, function(data){
+			core._ajax(data, function( data ){
 				core.parse_request(data);
 			}, {
 				url: form[0]['action'],
 				type: 'POST'
 			});
+
+			return false;
+		})
+		.on('submit', '.ajax-frm', function(event){
 			return false;
 		})
 	;

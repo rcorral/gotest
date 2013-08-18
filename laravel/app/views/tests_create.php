@@ -88,13 +88,13 @@ echo Form::close();
 ?>
 <div id="create-subject-frm-wrapper" style="display:none;">
 <?php
-echo Form::open(array('class' => 'create-subject-frm'));
+echo Form::open(array('url' => '/subjects', 'method' => 'post', 'class' => 'create-subject-frm ajax-frm'));
 echo Form::label('subject', 'Please enter a new subject name:');
 echo Form::text('subject');
-if ( $cats = Form::categories('nested_catid', 0, array('default' => array(0 => '')), true) )
+if ( $cats = Form::categories('nested_catid', 0, array('default_opt' => array(0 => ''), 'return_on_empty' => true)) )
 {
 	echo '<br />';
-	echo Form::checkbox('nest', '1', false, array('id' => 'nest'));
+	echo Form::checkbox('nest', '1', false, array('class' => 'nest'));
 	echo Form::label('nest', 'Nest label under:');
 	echo $cats;
 }
