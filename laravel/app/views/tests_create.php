@@ -1,15 +1,15 @@
 <?php
 // echo '<pre>'; print_r($test);die();
-echo Form::model((array)$test,array('route' => array('tests.update', $test->id), 'method' => 'post', 'class' => 'create-form')); ?>
+echo Form::model((array)$test,array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form')); ?>
 <div class="width-40">
 	<fieldset class="adminform">
 		<legend>Details</legend>
 			<ul class="adminformlist">
 				<li><?php echo Form::label('title', 'Title'); ?>
-				<?php echo Form::text('title'); ?></li>
+				<?php echo Form::text('title', $test->title); ?></li>
 
 				<li><?php echo Form::label('sub_title', 'Sub title'); ?>
-				<?php echo Form::text('sub_title'); ?></li>
+				<?php echo Form::text('sub_title', $test->sub_title); ?></li>
 
 				<li><?php echo Form::label('published', 'Published'); ?>
 				<?php echo Form::published('published', $test->published); ?></li>
@@ -83,6 +83,7 @@ echo Form::model((array)$test,array('route' => array('tests.update', $test->id),
 	<?php endif; ?>
 	</div>
 <?php
+echo Form::hidden('id', $test->id);
 echo Form::submit('Save');
 echo Form::close();
 ?>

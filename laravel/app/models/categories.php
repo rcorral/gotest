@@ -9,11 +9,6 @@ class Categories extends Cartalyst\NestedSets\Nodes\EloquentNode {
 	 */
 	protected $table = 'test_categories';
 
-	protected $attributes = array(
-		'name' => 'name',
-		'published' => 'published',
-	);
-
 	protected $fillable = array(
 		'name',
 		'published',

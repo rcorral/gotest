@@ -3,30 +3,28 @@
 class ModelBase extends Eloquent
 {
 	/**
-	 * undocumented class variable
-	 *
-	 * @var string
-	 **/
-	protected $objects = array();
-
-	/**
 	 * Load row from database
 	 **/
-	public function load( $id, $key = null )
+	public static function load_populate( $id, $key = null )
 	{
-		if ( isset( $this->objects[$id] ) )
-			return $this->objects[$id];
+		$instance = new static;
 
-		$this->objects[$id] = (object) array_merge($this->_populate(), $this->get_object_from_db($id, coalesce($key, $this->primary_key)));
+		if ( ($object = $instance->get_object_from_db($id, coalesce($key, $instance->primary_key))) === null )
+			$object = array();
+		elseif ( isset($object->{$instance->primary_key}) && $object->{$instance->primary_key} )
+		{
+			$instance->setAttribute($instance->primary_key, $object->{$instance->primary_key});
+			$instance->exists = true;
+		}
 
-		return $this->objects[$id];
+		return $instance->fill(array_merge($instance->_populate(), (array) $object));
 	}
 
 	protected function get_object_from_db( $id, $key )
 	{
 		$obj = DB::table($this->table)
 			->where($key, $id)
-			->get()
+			->first()
 			;
 		return $obj;
 	}
@@ -44,6 +42,19 @@ class ModelBase extends Eloquent
 		foreach ( $cols as $name => $col )
 			$cache[$name] = $col->Default ? $col->Default : ( false !== strpos($col->Type, 'int') ? 0 : $col->Default );
 
+		if ( empty($this->fillable) )
+		{
+			$fillable = $cache;
+			// No metadata
+			unset($fillable[$this->primary_key]);
+			if ( @is_null($fillable['created_at']) ) unset($fillable['created_at']);
+			if ( isset($fillable['created_by']) ) unset($fillable['created_by']);
+			if ( @is_null($fillable['updated_at']) ) unset($fillable['updated_at']);
+
+			$fillable = array_keys($fillable);
+			$this->fillable($fillable);
+		}
+
 		return $cache;
 	}
 
@@ -60,5 +71,21 @@ class ModelBase extends Eloquent
 			$result[$field->Field] = $field;
 
 		return $result;
+	}
+
+	/**
+	 * Proxy to call pre-save checks
+	 **/
+	public function save( array $options = array() )
+	{
+		if ( !$this->check() )
+			return false;
+
+		return parent::save($options);
+	}
+
+	public function check()
+	{
+		return true;
 	}
 }

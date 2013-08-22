@@ -14,36 +14,44 @@ class Test extends ModelBase
 	 */
 	protected $primary_key = 'id';
 
-	public function load( $id, $key = null )
+	/**
+	 * The attributes that aren't mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $guarded = array('id');
+
+	public static function load_populate( $id, $key = null, $questions = true )
 	{
-		$object = parent::load( $id, $key );
+		$instance = parent::load_populate( $id, $key );
 
-		$this->load_questions( $object );
+		if ( $questions )
+			$instance->load_questions();
 
-		return $object;
+		return $instance;
 	}
 
 	/**
 	 * Load questions for tests
 	 */
-	protected function load_questions( &$object )
+	protected function load_questions()
 	{
-		if ( !$object->id )
+		if ( !$this->id )
 		{
-			$object->questions = array();
-			return $object;
+			$this->questions = array();
+			return;
 		}
 
-		$object->questions = DB::table('test_questions')
+		$this->questions = DB::table('test_questions')
 			->select('test_questions.*')
 			->addSelect('test_question_types.type AS tqt_type')
 			->join('test_question_types', 'test_question_types.id', '=', 'test_questions.question_type', 'left')
-			->where('test_questions.test_id', (int) $object->id)
+			->where('test_questions.test_id', (int) $this->id)
 			->orderBy('test_questions.order')
 			->get()
 			;
 
-		foreach ( $object->questions as &$question )
+		foreach ( $this->questions as &$question )
 		{
 			$question->options = DB::table('test_question_options')
 				->where('question_id', $question->id)
@@ -61,4 +69,33 @@ class Test extends ModelBase
 	{
 		return (object) Helper::get_question_templates();
 	}
+
+	/**
+	 * Cehck
+	 */
+	function check()
+	{
+		// Check for valid title
+		if ( trim($this->title ) == '')
+			throw new Exception(JText::_('COM_TESTS_WARNING_PROVIDE_VALID_NAME'));
+
+		if ( empty($this->alias) )
+			$this->alias = $this->title . date('Y-m-d H:i:s');
+
+		$this->alias = Helper::string_url_safe($this->alias);
+
+		if ( !$this->exists )
+			$this->created_by = Helper::get_current_user()->id;
+
+		// Check for valid category
+		if ( !trim($this->catid) )
+			throw new Exception(JText::_('COM_TESTS_WARNING_CATEGORY'));
+
+		$test = Test::where('alias', $this->alias)->where('catid', $this->catid)->first();
+		if ( $test && ($test->id != $this->id || !$this->id) )
+			throw new Exception(JText::_('COM_TESTS_ERROR_UNIQUE_ALIAS'));
+
+		return true;
+	}
+
 }

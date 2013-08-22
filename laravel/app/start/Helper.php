@@ -167,4 +167,21 @@ class Helper
 		$data['error'] = true;
 		return Response::json((object) $data, $code);
 	}
+
+	static function string_url_safe( $string )
+	{
+		// Remove any '-' from the string since they will be used as concatenaters
+		$str = str_replace('-', ' ', $string);
+
+		// Trim white spaces at beginning and end of alias and make lowercase
+		$str = trim(strtolower($str));
+
+		// Remove any duplicate whitespace, and ensure all characters are alphanumeric
+		$str = preg_replace('/(\s|[^A-Za-z0-9\-])+/', '-', $str);
+
+		// Trim dashes at beginning and end of alias
+		$str = trim($str, '-');
+
+		return $str;
+	}
 }
