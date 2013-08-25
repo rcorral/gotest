@@ -1,5 +1,21 @@
 <?php
 
+define('URL_FORMAT', 
+	'/^(https?):\/\/'.                                         // protocol
+	'(([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+'.         // username
+	'(:([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+)?'.      // password
+	'@)?(?#'.                                                  // auth requires @
+	')((([a-z0-9]\.|[a-z0-9][a-z0-9-]*[a-z0-9]\.)*'.                      // domain segments AND
+	'[a-z][a-z0-9-]*[a-z0-9]'.                                 // top level domain  OR
+	'|((\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])\.){3}'.
+	'(\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])'.                 // IP address
+	')(:\d+)?'.                                                // port
+	')(((\/+([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)*'. // path
+	'(\?([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)'.      // query string
+	'?)?)?'.                                                   // path and query string optional
+	'(#([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)?'.      // fragment
+	'$/i');
+
 class Test extends ModelBase
 {
 	/**
@@ -98,4 +114,137 @@ class Test extends ModelBase
 		return true;
 	}
 
+	/**
+	 * Saves questions that are submitted when editing a test
+	 * It saves questions in order and updates or adds questions if new
+	 */
+	public function add_test_questions( $data, $test_id )
+	{
+		if ( empty( $data ) )
+			return true;
+
+		$question_ids = array();
+		foreach ( $data as $question_id => $question )
+		{
+			$question['question'] = trim( $question['question'] );
+			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] )
+				continue;
+
+			$table = DB::table('test_questions');
+			$_data = array(
+				'title' => $question['question'],
+				'test_id' => $test_id,
+				'question_type' => $question['type_id'],
+				'seconds' => $question['seconds'],
+				'min_answers' => @$question['min_answers'] ? $question['min_answers'] : 0,
+				'media' => $this->clean_media_url( @$question['media'], @$question['media_type'] ),
+				'media_type' => @$question['media_type'] ? $question['media_type'] : ''
+				);
+
+			// This means that this question already exists so lets add the id to the array
+			try
+			{
+				// Update
+				if ( substr( $question_id, 0, 1 ) != 'n' )
+				{
+					$table->where('id', (int) $question_id)
+						->update($_data)
+						;
+					$qid = (int) $question_id;
+				}
+				// Insert
+				else
+				{
+					$_data['order'] = (int) DB::table('test_questions')
+						->where( 'test_id', (int) $test_id )
+						->max('order') + 1
+						;
+					$qid = (int) $table->insertGetId($_data);
+				}
+			}
+			catch (Exception $e)
+			{
+				// Should we abort completely? or just continue?
+				$errors[] = "Question there was an error with question: {$question['question']}";
+				continue;
+			}
+
+			$question_ids[] = $qid;
+
+			// Lets add all the options
+			$tuples = array();
+
+			if ( isset( $question['options'] ) && !empty( $question['options'] ) )
+			{
+				// Delete all previous question options
+					DB::table('test_question_options')
+					->where('question_id', $qid)
+					->delete()
+					;
+
+				foreach ( $question['options'] as $option_id => $option )
+				{
+					$option = trim( $option );
+					if ( empty( $option ) )
+						continue;
+
+					try
+					{
+						DB::table('test_question_options')->insert(
+							array(
+								'question_id' => $qid,
+								'title' => $option,
+								'valid' => @in_array( $option_id, @$question['answers'] )
+							))
+							;
+					}
+					catch (Exception $e)
+					{
+						$errors[] = "Some answers weren't saved on question: {$question['question']}";
+						continue;
+					}
+				}
+			}
+		}
+
+		// Delete all questions that are not on request
+		DB::table('test_questions')
+			->where('test_id', (int) $test_id )
+			->whereNotIn('id', $question_ids)
+			->delete()
+			;
+
+		if ( !empty( $errors ) )
+			throw new Exception(implode("\n", $errors));
+
+		return true;
+	}
+
+	public function clean_media_url( $url, $type )
+	{
+		if ( !$url ) {
+			return '';
+		}
+
+		return preg_match(URL_FORMAT, $url) ? $url : '';
+	}
+
+	/**
+	 * Hooks
+	 */
+	public static function boot()
+	{
+		parent::boot();
+
+		Test::saved(function($test)
+		{
+			$questions = Input::get('questions');
+
+			$test->add_test_questions($questions, $test->id);
+		});
+
+		Test::deleted(function($test)
+		{
+		});
+	}
 }
