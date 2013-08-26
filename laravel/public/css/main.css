@@ -85,6 +85,10 @@ nav li {
 	line-height: 50px;
 	padding-left: 25px;
 }
+.wrapper {
+	position: relative;
+	top: 40px;
+}
 .home-title {
 	text-align: center;
 	margin: 200px 0 25px 0;

@@ -35,7 +35,7 @@ class Test extends ModelBase
 	 *
 	 * @var array
 	 */
-	protected $guarded = array('id');
+	protected $guarded = array('id', 'created_at', 'created_by', 'updated_at');
 
 	public static function load_populate( $id, $key = null, $questions = true )
 	{
@@ -58,7 +58,7 @@ class Test extends ModelBase
 			return;
 		}
 
-		$this->questions = DB::table('test_questions')
+		$questions = DB::table('test_questions')
 			->select('test_questions.*')
 			->addSelect('test_question_types.type AS tqt_type')
 			->join('test_question_types', 'test_question_types.id', '=', 'test_questions.question_type', 'left')
@@ -67,13 +67,14 @@ class Test extends ModelBase
 			->get()
 			;
 
-		foreach ( $this->questions as &$question )
+		foreach ( $questions as &$question )
 		{
 			$question->options = DB::table('test_question_options')
 				->where('question_id', $question->id)
 				->get()
 				;
 		}
+		$this->questions = $questions;
 	}
 
 	/**
@@ -93,7 +94,7 @@ class Test extends ModelBase
 	{
 		// Check for valid title
 		if ( trim($this->title ) == '')
-			throw new Exception(JText::_('COM_TESTS_WARNING_PROVIDE_VALID_NAME'));
+			throw new Exception(Lang::get('tests.warning_provide_valid_name'));
 
 		if ( empty($this->alias) )
 			$this->alias = $this->title . date('Y-m-d H:i:s');
@@ -102,14 +103,16 @@ class Test extends ModelBase
 
 		if ( !$this->exists )
 			$this->created_by = Helper::get_current_user()->id;
+		elseif ( $this->created_by != Helper::get_current_user()->id )
+			throw new Exception(Lang::get('all.invalid_request'));
 
 		// Check for valid category
 		if ( !trim($this->catid) )
-			throw new Exception(JText::_('COM_TESTS_WARNING_CATEGORY'));
+			throw new Exception(Lang::get('tests.warning_category'));
 
 		$test = Test::where('alias', $this->alias)->where('catid', $this->catid)->first();
 		if ( $test && ($test->id != $this->id || !$this->id) )
-			throw new Exception(JText::_('COM_TESTS_ERROR_UNIQUE_ALIAS'));
+			throw new Exception(Lang::get('tests.error_unique_alias'));
 
 		return true;
 	}
@@ -222,9 +225,7 @@ class Test extends ModelBase
 
 	public function clean_media_url( $url, $type )
 	{
-		if ( !$url ) {
-			return '';
-		}
+		if ( !$url ) return '';
 
 		return preg_match(URL_FORMAT, $url) ? $url : '';
 	}
@@ -238,9 +239,7 @@ class Test extends ModelBase
 
 		Test::saved(function($test)
 		{
-			$questions = Input::get('questions');
-
-			$test->add_test_questions($questions, $test->id);
+			$test->add_test_questions(Input::get('questions'), $test->id);
 		});
 
 		Test::deleted(function($test)

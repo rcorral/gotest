@@ -18,6 +18,12 @@ if ( $sidebarr ) $content_span -= 2;
 <?php include $tmpl_path . '/nav.php'; ?>
 
 <div class="wrapper container-fluid">
+	<?php if ( $error ): ?>
+	<div class="row-fluid">
+		<div class="error-msg span<?php echo $content_span; ?>"><?php echo $error; ?></div>
+	</div>
+	<?php endif; ?>
+
 	<div class="row-fluid">
 		<?php echo $sidebarl; ?>
 

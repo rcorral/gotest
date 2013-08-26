@@ -1,9 +1,9 @@
 <?php
 // echo '<pre>'; print_r($test);die();
-echo Form::model((array)$test,array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form')); ?>
+echo Form::model((array) $test, array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form')); ?>
 <div class="width-40">
 	<fieldset class="adminform">
-		<legend>Details</legend>
+		<!-- <legend></legend> -->
 			<ul class="adminformlist">
 				<li><?php echo Form::label('title', 'Title'); ?>
 				<?php echo Form::text('title', $test->title); ?></li>
@@ -32,7 +32,7 @@ echo Form::model((array)$test,array('route' => array('tests.store'), 'method' =>
 	<?php if ( !empty( $test->questions ) ): ?>
 	<?php foreach ( $test->questions as $question ): ?>
 		<?php
-		$template = $this->templates->{$question->tqt_type};
+		$template = $templates->{$question->tqt_type};
 
 		// Do all replacements that only need to happen once
 		$html = str_replace(

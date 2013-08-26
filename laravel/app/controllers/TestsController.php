@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\RedirectResponse;
+
 class TestsController extends \BaseController {
 
 	/**
@@ -7,19 +9,47 @@ class TestsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index( $id = 0 )
+	public function index( $id = 0, $from_request = false )
 	{
 		$doc = Document::get_instance();
 		$doc->add_inline_view_file('tests.create.js', array('jquery' => true));
 
 		$test = Test::load_populate($id);
+		$templates = $test->get_templates();
 
-		$this->_buffer = View::make('tests_create', array('test' => $test, 'templates' => $test->get_templates(), 'user' => Helper::get_current_user()));
+		if ( $from_request )
+		{
+			// $types = DB::table('test_question_types')->select('id')->addSelect('type')->remember(1440)
+				// ->lists('type', 'id');
+			$test->fill(Input::except('_token'));
+			$test->questions = array();
+			// $questions = (array) Input::get('questions');
+			// array_walk($questions, function( &$question, $key ) use ( $types )
+			// {
+				// $question['id'] = $key;
+				// $question['title'] = $question['question'];
+				// $question['tqt_type'] = isset($types[$question['type_id']]) ? $types[$question['type_id']] : 1;
+				// $question = (object) $question;
+			// });
+			// $test->questions = $questions;
+			// unset($questions);
+		}
+
+		$this->_buffer = View::make('tests_create', array(
+			'test' => $test,
+			'templates' => $templates,
+			'user' => Helper::get_current_user()
+		));
 
 		return $this->exec();
 	}
 
 	public function show( $id )
+	{
+		return self::index($id);
+	}
+
+	public function edit( $id )
 	{
 		return self::index($id);
 	}
@@ -39,20 +69,12 @@ class TestsController extends \BaseController {
 		}
 		catch (Exception $e)
 		{
-			// DEBUG
-			file_put_contents( '/var/log/rafa.log',
-				'ERROR: - '
-				. var_export($e->getMessage(), true)
-				. "\n\n", FILE_APPEND);
-			die('Handle that error!');
+			$this->set_error($e->getMessage());
+			return $this->index($input['id'], true);
 		}
-		
-		// DEBUG
-		file_put_contents( '/var/log/rafa.log',
-			'log output: - '
-			. var_export($test, true)
-			. "\n\n", FILE_APPEND);
-		die();
+
+		return new RedirectResponse(Redirect::getUrlGenerator()->route('tests.edit', $test->id), 302, array());
+		return Redirect::createRedirect();
 	}
 
 }

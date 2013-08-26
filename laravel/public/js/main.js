@@ -44,6 +44,10 @@ jQuery(function(){
 		})
 	;
 
+	// Set the right height of the main container
+	jQuery('div.wrapper').css({top: jQuery('div.navbar').outerHeight(true)});
+
+	// This needs to go somewhere else
 	jQuery('.intro').animate({
 		left: 0,
 		opacity: 1
