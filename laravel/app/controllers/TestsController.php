@@ -12,17 +12,19 @@ class TestsController extends \BaseController {
 	public function index()
 	{
 		$this->_buffer = View::make('tests', array(
-			'test' => $test,
-			'templates' => $templates,
-			'user' => Helper::get_current_user()
 		));
 
 		return $this->exec();
 	}
 
+	public function create()
+	{
+		return $this->edit();
+	}
+
 	public function show( $id )
 	{
-		return new RedirectResponse(Redirect::getUrlGenerator()->route('tests.edit', $id), 302, array());
+		return Redirect::route('tests.edit', $id);
 	}
 
 	public function edit( $id = 0, $from_request = false )
@@ -82,7 +84,7 @@ class TestsController extends \BaseController {
 			return $this->edit($input['id'], true);
 		}
 
-		return new RedirectResponse(Redirect::getUrlGenerator()->route('tests.edit', $test->id), 302, array());
+		return Redirect::route('tests.edit', $test->id);
 	}
 
 }
