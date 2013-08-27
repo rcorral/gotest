@@ -140,7 +140,7 @@ class Test extends ModelBase
 				'question_type' => $question['type_id'],
 				'seconds' => $question['seconds'],
 				'min_answers' => @$question['min_answers'] ? $question['min_answers'] : 0,
-				'media' => $this->clean_media_url( @$question['media'], @$question['media_type'] ),
+				'media' => $this->clean_media_url( $question['media'], @$question['media_type'] ),
 				'media_type' => @$question['media_type'] ? $question['media_type'] : ''
 				);
 

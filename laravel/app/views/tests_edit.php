@@ -1,8 +1,8 @@
 <?php
 // echo '<pre>'; print_r($test);die();
 echo Form::model((array) $test, array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form')); ?>
-<div class="width-40">
-	<fieldset class="adminform">
+<div>
+	<fieldset>
 		<!-- <legend></legend> -->
 			<ul class="adminformlist">
 				<li><?php echo Form::label('title', 'Title'); ?>
@@ -11,14 +11,15 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 				<li><?php echo Form::label('sub_title', 'Sub title'); ?>
 				<?php echo Form::text('sub_title', $test->sub_title); ?></li>
 
-				<li><?php echo Form::label('published', 'Published'); ?>
+				<!-- Future feature //-->
+				<li class="hidden"><?php echo Form::label('published', 'Published'); ?>
 				<?php echo Form::published('published', $test->published); ?></li>
 
 				<li><?php echo Form::label('catid', 'Subject'); ?>
 				<?php echo Form::categories('catid', $test->catid); ?></li>
 
 				<li><?php echo Form::label('anon', 'Anonymous submission'); ?>
-				<?php echo Form::checkbox('anon'); ?></li>
+				<?php echo Form::checkbox('anon', 1, ($test->anon == 1)); ?></li>
 			</ul>
 	</fieldset>
 	</div>

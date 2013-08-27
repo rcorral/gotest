@@ -2,7 +2,7 @@
 
 Form::macro('published', function( $name = 'published', $value = 'published' )
 {
-	echo Form::select($name, array('published' => 'Active', 'unpublished' => 'Inactive'), $value);
+	echo Form::select($name, array(1 => 'Active', 0 => 'Inactive'), $value);
 });
 
 Form::macro('categories', function( $name = 'catid', $value = 0, $options = array() )

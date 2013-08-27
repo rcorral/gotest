@@ -17,7 +17,11 @@ class ModelBase extends Eloquent
 			$instance->exists = true;
 		}
 
-		return $instance->fill(array_merge($instance->_populate(), (array) $object));
+		$instance->unguard();
+		$instance->fill(array_merge($instance->_populate(), (array) $object));
+		$instance->reguard();
+
+		return $instance;
 	}
 
 	protected function get_object_from_db( $id, $key )

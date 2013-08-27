@@ -9,10 +9,26 @@ class TestsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index( $id = 0, $from_request = false )
+	public function index()
+	{
+		$this->_buffer = View::make('tests', array(
+			'test' => $test,
+			'templates' => $templates,
+			'user' => Helper::get_current_user()
+		));
+
+		return $this->exec();
+	}
+
+	public function show( $id )
+	{
+		return new RedirectResponse(Redirect::getUrlGenerator()->route('tests.edit', $id), 302, array());
+	}
+
+	public function edit( $id = 0, $from_request = false )
 	{
 		$doc = Document::get_instance();
-		$doc->add_inline_view_file('tests.create.js', array('jquery' => true));
+		$doc->add_inline_view_file('tests.edit.js', array('jquery' => true));
 
 		$test = Test::load_populate($id);
 		$templates = $test->get_templates();
@@ -35,23 +51,13 @@ class TestsController extends \BaseController {
 			// unset($questions);
 		}
 
-		$this->_buffer = View::make('tests_create', array(
+		$this->_buffer = View::make('tests_edit', array(
 			'test' => $test,
 			'templates' => $templates,
 			'user' => Helper::get_current_user()
 		));
 
 		return $this->exec();
-	}
-
-	public function show( $id )
-	{
-		return self::index($id);
-	}
-
-	public function edit( $id )
-	{
-		return self::index($id);
 	}
 
 	public function store()
@@ -63,6 +69,9 @@ class TestsController extends \BaseController {
 		$test = Test::load_populate($input['id'], null, false);
 		$test->fill($input);
 
+		if ( !isset($input['anon']) || $input['anon'] != 1 )
+			$test->anon = 0;
+
 		try
 		{
 			$test->save();
@@ -70,11 +79,10 @@ class TestsController extends \BaseController {
 		catch (Exception $e)
 		{
 			$this->set_error($e->getMessage());
-			return $this->index($input['id'], true);
+			return $this->edit($input['id'], true);
 		}
 
 		return new RedirectResponse(Redirect::getUrlGenerator()->route('tests.edit', $test->id), 302, array());
-		return Redirect::createRedirect();
 	}
 
 }
