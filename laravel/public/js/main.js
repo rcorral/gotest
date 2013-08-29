@@ -1,6 +1,7 @@
 jQuery(function(){
 	jQuery(document)
-		.on('click', '.login-action', function(){
+		.on('click', '.login-action', function()
+		{
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
@@ -8,7 +9,8 @@ jQuery(function(){
 				cache: true
 			});
 		})
-		.on('click', '.signup-action', function(){
+		.on('click', '.signup-action', function()
+		{
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
@@ -16,12 +18,18 @@ jQuery(function(){
 				cache: true
 			});
 		})
-		.on('click', '.form-ajax-submit', function(event){
+		.on('click', '.js-dbl-chk', function(event, asked)
+		{
+			return core.double_check();
+		})
+		.on('click', '.form-ajax-submit', function(event)
+		{
 			var form = jQuery('form.' + jQuery(this).data('form-ajax-submit') + ':visible')
 				, data = jQuery.deparam(form.serialize())
 				;
 
-			core._ajax(data, function( data ){
+			core._ajax(data, function( data )
+			{
 				core.parse_request(data);
 			}, {
 				url: form[0]['action'],
@@ -30,17 +38,17 @@ jQuery(function(){
 
 			return false;
 		})
-		.on('submit', '.ajax-frm', function(event){
+		.on('submit', '.ajax-frm', function(event)
+		{
 			return false;
 		})
 	;
 
 	jQuery('#modal-container')
 		.on('keydown', function(e){
-			if ( 13 == e.keyCode ) {
+			if ( 13 == e.keyCode )
 				// Find the form
 				jQuery(this).find('.btn-primary').click();
-			}
 		})
 	;
 
@@ -51,11 +59,13 @@ jQuery(function(){
 	jQuery('.intro').animate({
 		left: 0,
 		opacity: 1
-		}, 400, 'linear', function() {
+		}, 400, 'linear', function()
+		{
 	});
 	jQuery('.home-title').animate({
 	top: 0
-		}, 400, 'linear', function() {
+		}, 400, 'linear', function()
+		{
 	});
 	jQuery('#start').focus();
 });

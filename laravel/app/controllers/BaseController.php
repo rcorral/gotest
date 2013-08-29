@@ -27,6 +27,8 @@ class BaseController extends Controller
 		$doc = Document::get_instance();
 		$doc->add_lib($this->libs);
 
+		// return $this->_buffer;
+
 		// Get the template
 		$this->_buffer = View::make('tmpl/index', array(
 			'error' => $this->get_error_msg(),

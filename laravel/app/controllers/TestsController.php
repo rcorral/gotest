@@ -11,7 +11,11 @@ class TestsController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('tests', array(
+		$doc = Document::get_instance();
+		$doc->add_inline_view_file('tests.index.js', array('jquery' => true));
+
+		$this->_buffer = View::make('tests_index', array(
+			'tests' => Tests::get_tests()
 		));
 
 		return $this->exec();
@@ -85,6 +89,53 @@ class TestsController extends \BaseController {
 		}
 
 		return Redirect::route('tests.edit', $test->id);
+	}
+
+	/**
+	 * Method to delete a test.
+	 *
+	 * @param	int $id A test id
+	 * @return	object Success/Fail ajax response
+	 */
+	public function destroy( $id )
+	{
+		// Sanitize the id
+		$test = Test::load_populate((int) $id);
+
+		if ( !$test->id )
+			return Helper::json_error_response(array('message' => Lang::get('Error deleting.')), 400);
+		elseif ( $test->created_by != Helper::get_current_user()->id )
+			throw new Exception(Lang::get('all.invalid_request'));
+
+		// USE THIS WHEN WE WANT TO COMPLETELY DELETE
+		// Delete questions
+		// $question_ids = DB::table('test_questions')
+			// ->where('test_id', $test->id)
+			// ->lists('id')
+			// ;
+
+		// DB::table('test_question_options')
+			// ->whereIn('question_id', $question_ids)
+			// ->delete()
+			// ;
+		// DB::table('test_questions')
+			// ->whereIn('id', $question_ids)
+			// ->delete()
+			// ;
+
+		// Init sessions model
+		// TODO: FIX THIS SO THAT IT DELETES SESSIONS
+		// $sessions_model = JModel::getInstance( 'Session', 'TestsModel' );
+
+		// Iterate the items to delete each one.
+		// foreach ( $item_ids as $item_id ) {
+			// Delete test sessions and answers associated with them
+			// $sessions_model->delete( $item_id );
+
+			$test->delete();
+		// }
+
+		return Helper::json_success_response(array(), 200);
 	}
 
 }

@@ -229,6 +229,11 @@ core_class.prototype.seconds_to_readable_time = function( seconds, add_to_counte
 	return { time: Math.floor( _seconds / 60 / 60 / 24 ) + add_to_counter, units: 'd' };
 };
 
+core_class.prototype.double_check = function()
+{
+	return confirm('Are you sure?');
+};
+
 var core;
 jQuery(document).ready(function(){
 	core = new core_class;

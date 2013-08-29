@@ -37,6 +37,13 @@ class Test extends ModelBase
 	 */
 	protected $guarded = array('id', 'created_at', 'created_by', 'updated_at');
 
+	/**
+	 * Indicates if the model should soft delete.
+	 *
+	 * @var bool
+	 */
+	protected $softDelete = true;
+
 	public static function load_populate( $id, $key = null, $questions = true )
 	{
 		$instance = parent::load_populate( $id, $key );
