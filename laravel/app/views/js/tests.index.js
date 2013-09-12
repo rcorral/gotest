@@ -1,7 +1,6 @@
 jQuery(document).on('click', 'a.js-delete', function(event)
 {
-	if ( !core.double_check() )
-		return false;
+	if ( !core.double_check() ) return false;
 
 	var $this = jQuery(this);
 

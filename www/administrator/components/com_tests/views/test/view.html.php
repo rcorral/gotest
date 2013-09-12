@@ -27,9 +27,9 @@ class TestsViewTest extends JView
 			return false;
 		}
 
-		Tests::add_script( array( 'timer', 'core', 'socket.io', 'click', 'templates' ) );
+		Tests::add_script(array('timer', 'core', 'socket.io', 'click', 'templates'));
 
-		Tests::addScriptDeclaration( "var api_key = '"
+		Tests::addScriptDeclaration("var api_key = '"
 			. THelper::get_api_key( null, true ). "';" );
 
 		parent::display( $tpl );

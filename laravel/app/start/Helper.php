@@ -76,6 +76,67 @@ class Helper
 	}
 
 	/**
+	 * Session methods
+	 */
+
+	/**
+	 * Function will generate a new unique test session id for the given test_id and user_id
+	 */
+	static function generate_unique_test_id( $test_id, $user_id = null )
+	{
+		if ( !$user_id )
+			$user_id = static::get_current_user()->id;
+
+		$test_id = (int) $test_id;
+		$user_id = (int) $user_id;
+		$date = date( 'Y-m-d H:i:s' );
+		$unique_id = '';
+
+		if ( !$test_id )
+			return false;
+
+		$counter = 0;
+		while ( !$unique_id )
+		{
+			if ( $counter )
+				$_unique = md5( $date . $test_id . $user_id . $counter );
+			else
+				$_unique = md5( $date . $test_id . $user_id );
+
+			$query = DB::table('test_sessions')
+				->select('id')
+				->where('unique_id', $_unique)
+				;
+			if ( !$query->get() ) {
+				DB::table('test_sessions' )->insert(
+					array('test_id' => $test_id, 'user_id' => $user_id, 'unique_id' => $_unique,
+						'is_active' => 1, 'date' => $date)
+					)
+					;
+
+				$unique_id = $_unique;
+			}
+
+			$counter++;
+		}
+
+		return $unique_id;
+	}
+
+	/**
+	 * See if test is still active
+	 */
+	static function is_test_session_active( $test_id, $unique_id )
+	{
+		return DB::table('test_sessions')
+			->select( 'is_active' )
+			->where('test_id', (int) $test_id )
+			->where('unique_id', $unique_id )
+			->pluck('is_active')
+			;
+	}
+
+	/**
 	 * USER METHODS
 	 */
 
@@ -113,6 +174,16 @@ class Helper
 				return false;
 			}
 		}
+	}
+
+	static function get_api_user( $request_key = 'key' )
+	{
+		$model = Sentry::getUserProvider()->createModel();
+
+		if ( !$user = $model->newQuery()->where('api_token', Input::get($request_key))->first())
+			throw new UserNotFoundException("A user could not be found with a login value of [$login].");
+
+		return $user;
 	}
 
 	/**

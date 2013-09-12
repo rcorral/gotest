@@ -22,7 +22,7 @@ class BaseController extends Controller
 		return $this->_buffer;
 	}
 
-	public function exec()
+	public function exec( $options = array() )
 	{
 		$doc = Document::get_instance();
 		$doc->add_lib($this->libs);
@@ -30,11 +30,17 @@ class BaseController extends Controller
 		// return $this->_buffer;
 
 		// Get the template
-		$this->_buffer = View::make('tmpl/index', array(
-			'error' => $this->get_error_msg(),
-			'contents' => (string) $this->_buffer,
-			'that' => $this
-		));
+		if ( isset($options['simple']) )
+			$this->_buffer = View::make('tmpl/simple', array(
+				'error' => $this->get_error_msg(),
+				'contents' => (string) $this->_buffer,
+			));
+		else
+			$this->_buffer = View::make('tmpl/index', array(
+				'error' => $this->get_error_msg(),
+				'contents' => (string) $this->_buffer,
+				'that' => $this
+			));
 
 		return $this->_buffer;
 	}

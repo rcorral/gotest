@@ -83,11 +83,26 @@ class Document
 				"SITEPATH/js/TextboxList.Autocomplete.js"
 				)
 			),
+		'timer' => array(
+			'js' => 'SITEPATH/js/jquery.timer.js'
+			),
 		'deparam' => array(
 			'js' => "SITEPATH/js/jquery.ba-bbq.min.js"
 			),
 		'core' => array(
 			'js' => "SITEPATH/js/core.js"
+			),
+		'templates' => array(
+			'js' => 'SITEPATH/js/templates.js'
+			),
+		'socket.io' => array(
+			'js' => 'http://SITE_HOST:IO_PORT/socket.io/socket.io.js'
+			),
+		'click' => array(
+			'js' => 'SITEPATH/js/click.js'
+			),
+		'presenter_click' => array(
+			'js' => 'SITEPATH/js/presenter_click.js'
 			),
 		'validation' => array(
 			'js' => array(
@@ -108,13 +123,14 @@ class Document
 			)
 		);
 
+	public static $io_port = 8080;
+
 	static function get_instance()
 	{
 		static $instance;
 
-		if ( !$instance ) {
+		if ( !$instance )
 			$instance = new Document();
-		}
 
 		return $instance;
 	}
@@ -124,9 +140,8 @@ class Document
 	 */
 	public function add_meta( $attr, $priority = 10 )
 	{
-		if ( !isset( $this->_meta[$priority] ) ) {
+		if ( !isset( $this->_meta[$priority] ) )
 			$this->_meta[$priority] = array();
-		}
 
 		$this->_meta[$priority][] = $attr;
 
@@ -141,9 +156,8 @@ class Document
 	 */
 	public function add_style_declaration( $content, $priority = 10 )
 	{
-		if ( !isset( $this->_style[$priority] ) ) {
+		if ( !isset( $this->_style[$priority] ) )
 			$this->_style[$priority] = '';
-		}
 
 		$this->_style[$priority] .= $content;
 	}
@@ -159,9 +173,8 @@ class Document
 	 */
 	public function add_script_declaration( $content, $priority = 10 )
 	{
-		if ( !isset( $this->_script[$priority] ) ) {
+		if ( !isset( $this->_script[$priority] ) )
 			$this->_script[$priority] = '';
-		}
 
 		$this->_script[$priority] .= $content;
 
@@ -177,9 +190,8 @@ class Document
 	 */
 	public function add_stylesheet( $src, $attr = array(), $priority = 10 )
 	{
-		if ( !isset( $this->_styles[$priority] ) ) {
+		if ( !isset( $this->_styles[$priority] ) )
 			$this->_styles[$priority] = array();
-		}
 
 		$this->_styles[$priority][$src] = array_merge(array('rel' => 'stylesheet'), (array)$attr);
 	}
@@ -196,9 +208,8 @@ class Document
 	 */
 	public function add_script( $src, $attr = array(), $priority = 10 )
 	{
-		if ( !isset( $this->_scripts[$priority] ) ) {
+		if ( !isset( $this->_scripts[$priority] ) )
 			$this->_scripts[$priority] = array();
-		}
 
 		$this->_scripts[$priority][$src] = array_merge(array('type' => 'text/javascript'), (array)$attr);
 
@@ -223,33 +234,42 @@ class Document
 		static $called = false;
 
 		$site_path = URL::to('/');
+		$host = Request::getHttpHost();
 
-		if ( 'local' != App::environment() ) {
-			if ( !$called ) {
+		if ( 'local' != App::environment() )
+		{
+			if ( !$called )
+			{
 				require dirname(__FILE__) . '/combined-files.php';
 				$this->add_script_declaration(';jQuery.noConflict();');
 				$called = true;
 			}
-		} else {
-			foreach ( (array) $libs as $lib ) {
+		}
+		else
+		{
+			foreach ( (array) $libs as $lib )
+			{
 				// We only want to add this once
-				if ( !isset( $this->_libs[$lib] ) || true === $this->_libs[$lib] ) {
+				if ( true === $this->_libs[$lib] )
 					continue;
-				}
 
-				foreach ( $this->_libs[$lib] as $type => $files ) {
-					if ( 'js' == $type ) {
-						foreach ( (array) $files as $file ) {
-							$this->add_script(str_replace('SITEPATH', $site_path, $file));
-						}
-					} elseif ( 'css' == $type ) {
-						foreach ( (array) $files as $file ) {
+				// Throw error if lib doesn't exist
+				if ( !isset($this->_libs[$lib]) )
+					throw new Exception('Invalid library.', 500);
+					
+
+				foreach ( $this->_libs[$lib] as $type => $files )
+					if ( 'js' == $type )
+						foreach ( (array) $files as $file )
+							$this->add_script(str_replace(array('SITEPATH', 'SITE_HOST', 'IO_PORT'),
+								array($site_path, $host, static::$io_port),
+								$file));
+					elseif ( 'css' == $type )
+						foreach ( (array) $files as $file )
 							$this->add_stylesheet(str_replace('SITEPATH', $site_path, $file));
-						}
-					}
-				}
 
-				switch ($lib) {
+				switch ( $lib )
+				{
 					case 'jquery':
 						$this->add_script_declaration(';jQuery.noConflict();');
 						break;
@@ -276,16 +296,24 @@ class Document
 	{
 		$type = substr($view, (strrpos($view, '.') + 1));
 
-		if ( 'js' == $type ) {
+		if ( 'js' == $type )
+		{
 			ob_start();
 			require app_path() . '/views/js/' . $view;
 			$contents = ob_get_clean();
 
-			if ( isset($options['jquery']) && $options['jquery'] ) {
+			if ( isset($options['jquery']) && $options['jquery'] )
 				$this->add_jquery($contents);
-			} else {
-				$this->add_script($contents);
-			}
+			else
+				$this->add_script_declaration($contents);
+		}
+		elseif ( 'css' == $type )
+		{
+			ob_start();
+			require app_path() . '/views/css/' . $view;
+			$contents = ob_get_clean();
+
+			$this->add_style_declaration($contents);
 		}
 	}
 
@@ -293,23 +321,28 @@ class Document
 	{
 		static $done;
 
-		if ( true === $done )
-			return;
+		if ( true === $done ) return;
 
-		$js = 'var live_site = \'' . URL::to('/'). '/\';';
+		$host = Request::getHttpHost();
+
+		$js = "\nvar live_site = '" . URL::to('/'). '/\'';
+		$js .= "\n\t, in_dev=" . ('local' != App::environment() ? 'false' : 'true');
+		$js .= "\n\t, io_server = 'http://{$host}:" .static::$io_port. '/\'';
 
 		$is_logged_in = 0;
-		if ( Helper::is_logged_in() ) {
+		if ( Helper::is_logged_in() )
+		{
 			$is_logged_in = true;
 			$user = Helper::get_current_user();
-			$js .= "\nvar api_token = '{$user->api_token}';";
+			$js .= "\n\t, api_key = '{$user->api_token}'";
 		}
 
 		$home = (int) Helper::is_home();
-		$js .= "\nvar is_home={$home};";
-		$js .= "\nvar is_loggedin={$is_logged_in};";
+		$js .= "\n\t, is_home={$home}";
+		$js .= "\n\t, is_loggedin={$is_logged_in}";
+		$js .= "\n\t;";
 
-		$this->add_script_declaration( $js );
+		$this->add_script_declaration($js);
 
 		$done = true;
 	}
@@ -336,19 +369,20 @@ class Document
 
 		// Meta tags
 		$used_list = array();
-		foreach ( $this->_meta as $metas ) {
-			foreach ( $metas as $meta ) {
-				if ( isset($meta['name']) ) {
-					if ( isset($used_list[$meta['name']]) ) {
+		foreach ( $this->_meta as $metas )
+		{
+			foreach ( $metas as $meta )
+			{
+				if ( isset($meta['name']) )
+				{
+					if ( isset($used_list[$meta['name']]) )
 						continue;
-					}
 					$used_list[$meta['name']] = true;
 				}
 
 				$buffer .= $this->_tab . '<meta';
-				foreach ( $meta as $key => $value ) {
+				foreach ( $meta as $key => $value )
 					$buffer .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
-				}
 				$buffer .= '>' . $this->_line_end;
 			}
 		}
@@ -358,11 +392,12 @@ class Document
 
 		// Stylesheets
 		$used_list = array();
-		foreach ( $this->_styles as $styles ) {
-			foreach ( $styles as $src => $attr ) {
-				if ( isset($used_list[$src]) ) {
+		foreach ( $this->_styles as $styles )
+		{
+			foreach ( $styles as $src => $attr )
+			{
+				if ( isset($used_list[$src]) )
 					continue;
-				}
 				$used_list[$src] = true;
 
 				$buffer .= $this->_tab . '<link href="' . $src . '" ';
@@ -375,39 +410,37 @@ class Document
 
 		// Scripts
 		$used_list = array();
-		foreach ( $this->_scripts as $prio => $scripts ) {
-			if ( $prio > 5 ) {
+		foreach ( $this->_scripts as $prio => $scripts )
+		{
+			if ( $prio > 5 )
 				break;
-			}
-			foreach ( $scripts as $src => $attr ) {
-				if ( isset($used_list[$src]) ) {
+			foreach ( $scripts as $src => $attr )
+			{
+				if ( isset($used_list[$src]) )
 					continue;
-				}
 				$used_list[$src] = true;
 
 				$buffer .= $this->_tab . '<script src="' . $src . '" ';
-				foreach ( $attr as $key => $value ) {
+				foreach ( $attr as $key => $value )
 					$buffer .= $key . '="' . $value . '"';
-				}
 				$buffer .= '></script>' . $this->_line_end;
 			}
 		}
 
 		// Style declarations
-		foreach ( $this->_style as $style ) {
-			foreach ( $style as $content ) {
-				$buffer .= $this->_tab . '<style type="text/css">' . $this->_line_end;
-				// TODO: Add minifier
-				$buffer .= $content . $this->_line_end;
-				$buffer .= $this->_tab . '</style>' . $this->_line_end;
-			}
+		foreach ( $this->_style as $style )
+		{
+			$buffer .= $this->_tab . '<style type="text/css">' . $this->_line_end;
+			// TODO: Add minifier
+			$buffer .= $style . $this->_line_end;
+			$buffer .= $this->_tab . '</style>' . $this->_line_end;
 		}
 
 		// Script declarations
-		foreach ( $this->_script as $prio => $script ) {
-			if ( $prio > 5 ) {
+		foreach ( $this->_script as $prio => $script )
+		{
+			if ( $prio > 5 )
 				break;
-			}
 			$buffer .= $this->_tab . '<script type="text/javascript">' . $this->_line_end;
 			// TODO: Add minifier
 			$buffer .= $content . $this->_line_end;
@@ -436,29 +469,28 @@ class Document
 
 		// Scripts
 		$used_list = array();
-		foreach ( $this->_scripts as $prio => $scripts ) {
-			if ( $prio < 6 ) {
+		foreach ( $this->_scripts as $prio => $scripts )
+		{
+			if ( $prio < 6 )
 				continue;
-			}
-			foreach ( $scripts as $src => $attr ) {
-				if ( isset($used_list[$src]) ) {
+			foreach ( $scripts as $src => $attr )
+			{
+				if ( isset($used_list[$src]) )
 					continue;
-				}
 				$used_list[$src] = true;
 
 				$buffer .= $this->_tab . '<script src="' . $src . '" ';
-				foreach ( $attr as $key => $value ) {
+				foreach ( $attr as $key => $value )
 					$buffer .= $key . '="' . $value . '"';
-				}
 				$buffer .= '></script>' . $this->_line_end;
 			}
 		}
 
 		// Script declarations
-		foreach ( $this->_script as $prio => $content ) {
-			if ( $prio < 6 ) {
+		foreach ( $this->_script as $prio => $content )
+		{
+			if ( $prio < 6 )
 				continue;
-			}
 			$buffer .= $this->_tab . '<script type="text/javascript">' . $this->_line_end;
 			// TODO: Add minifier
 			$buffer .= $content . $this->_line_end;

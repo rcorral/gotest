@@ -89,6 +89,9 @@ nav li {
 	position: relative;
 	top: 40px;
 }
+.simple .wrapper {
+	top: 0px;
+}
 .home-title {
 	text-align: center;
 	margin: 200px 0 25px 0;

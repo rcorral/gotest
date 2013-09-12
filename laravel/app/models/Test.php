@@ -5,7 +5,7 @@ define('URL_FORMAT',
 	'(([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+'.         // username
 	'(:([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+)?'.      // password
 	'@)?(?#'.                                                  // auth requires @
-	')((([a-z0-9]\.|[a-z0-9][a-z0-9-]*[a-z0-9]\.)*'.                      // domain segments AND
+	')((([a-z0-9]\.|[a-z0-9][a-z0-9-]*[a-z0-9]\.)*'.           // domain segments AND
 	'[a-z][a-z0-9-]*[a-z0-9]'.                                 // top level domain  OR
 	'|((\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])\.){3}'.
 	'(\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])'.                 // IP address
@@ -103,8 +103,8 @@ class Test extends ModelBase
 		if ( trim($this->title ) == '')
 			throw new Exception(Lang::get('tests.warning_provide_valid_name'));
 
-		if ( empty($this->alias) )
-			$this->alias = $this->title . date('Y-m-d H:i:s');
+		// if ( empty($this->alias) )
+			$this->alias = $this->title;
 
 		$this->alias = Helper::string_url_safe($this->alias);
 

@@ -2,6 +2,10 @@
 
 use Illuminate\Http\RedirectResponse;
 
+/**
+ * Handles everything related to creating tests, editing, deleting tests
+ * This class does not handle starting an examination, see TestController
+ */
 class TestsController extends \BaseController {
 
 	/**
@@ -14,7 +18,7 @@ class TestsController extends \BaseController {
 		$doc = Document::get_instance();
 		$doc->add_inline_view_file('tests.index.js', array('jquery' => true));
 
-		$this->_buffer = View::make('tests_index', array(
+		$this->_buffer = View::make('presenter.tests_index', array(
 			'tests' => Tests::get_tests()
 		));
 
@@ -41,10 +45,12 @@ class TestsController extends \BaseController {
 
 		if ( $from_request )
 		{
-			// $types = DB::table('test_question_types')->select('id')->addSelect('type')->remember(1440)
-				// ->lists('type', 'id');
 			$test->fill(Input::except('_token'));
 			$test->questions = array();
+			// This is commented out for now, the idea is to reload the questions
+			// in the case that there was an error on submission.
+			// $types = DB::table('test_question_types')->select('id')->addSelect('type')->remember(1440)
+				// ->lists('type', 'id');
 			// $questions = (array) Input::get('questions');
 			// array_walk($questions, function( &$question, $key ) use ( $types )
 			// {
@@ -57,7 +63,7 @@ class TestsController extends \BaseController {
 			// unset($questions);
 		}
 
-		$this->_buffer = View::make('tests_edit', array(
+		$this->_buffer = View::make('presenter.tests_edit', array(
 			'test' => $test,
 			'templates' => $templates,
 			'user' => Helper::get_current_user()

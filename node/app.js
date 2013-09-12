@@ -2,7 +2,7 @@ var http = require('http')
 	, io = require('socket.io').listen(8080)
 	, in_development = true
 	, argv = require('optimist')
-		.usage('Usage: $0 [--joomla=path]')
+		.usage('Usage: $0 [--domain=path]')
 		.argv;
 	;
 
@@ -36,7 +36,7 @@ var tests = click.tests.setup();
 var client = click.client.setup();
 // channels = click.channels.setup();
 var lang = click.language.setup();
-var joomla_path = argv.joomla || '';
+var site_domain = argv.domain || '';
 
 io.sockets.on('connection', function( socket ) {
 	socket.on('test_begin', function( data ) {
@@ -80,15 +80,15 @@ io.sockets.on('connection', function( socket ) {
 		}
 
 		var site = http.createClient(80, 'localhost');
-		var path = joomla_path + '/index.php?option=com_api&app=tests&resource=question&test_id='
-			+ data.test_id + '&key=' + data.key;
+		var path = 'http://' + site_domain + '/api/question/' + data.test_id;
 
-		if ( data.question_id ) {
-			path += '&question_id=' + data.question_id;
-		}
+		if ( data.question_id )
+			path += '/' + data.question_id;
+
+		path += '?key=' + data.key;
 
 		_debug( 'next_question:requesting', path );
-		var request = site.request( 'GET', path, {'host' : 'localhost'} );
+		var request = site.request( 'GET', path, {'host' : site_domain} );
 		request.end();
 		request.on('response', function(response){
 			response.setEncoding('utf8');

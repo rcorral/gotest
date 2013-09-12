@@ -67,7 +67,7 @@ jQuery(document).on('submit', '.question-selection', function(){
 
 	// Ajax call to com_api to get code to add question
 	core._ajax({
-		key: api_token
+		key: api_key
 	}, function( data ) {
 		if ( data.success ) {
 			jQuery('#questions-wrapper').append( data.html );

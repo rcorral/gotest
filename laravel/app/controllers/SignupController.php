@@ -27,7 +27,7 @@ class SignupController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store($group_name = 'Teacher', $silent_login = true)
+	public function store($group_name = 'teacher', $silent_login = true)
 	{
 		Helper::csrf_check();
 
