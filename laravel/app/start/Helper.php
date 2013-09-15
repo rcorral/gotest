@@ -107,7 +107,9 @@ class Helper
 				->select('id')
 				->where('unique_id', $_unique)
 				;
-			if ( !$query->get() ) {
+			if ( !$query->get() )
+			{
+				// TODO: This insert should maybe go in the Sessions model?
 				DB::table('test_sessions' )->insert(
 					array('test_id' => $test_id, 'user_id' => $user_id, 'unique_id' => $_unique,
 						'is_active' => 1, 'date' => $date)
@@ -147,15 +149,30 @@ class Helper
 
 	static function get_current_user()
 	{
-		try {
+		try
+		{
 			// Get the current active/logged in user
 			return Sentry::getUser();
-		} catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+		}
+		catch ( Cartalyst\Sentry\Users\UserNotFoundException $e )
+		{
 			// User wasn't found, should only happen if the user was deleted
 			// when they were already logged in or had a "remember me" cookie set
 			// and they were deleted.
 			Helper::logout(false);
 			App::abort(401, 'You are not authorized.');
+		}
+	}
+
+	static public function get_user_by_id( $user_id )
+	{
+		try
+		{
+		    return Sentry::findUserById($user_id);
+		}
+		catch ( Cartalyst\Sentry\Users\UserNotFoundException $e)
+		{
+		    return false;
 		}
 	}
 
@@ -237,6 +254,26 @@ class Helper
 		$data['success'] = false;
 		$data['error'] = true;
 		return Response::json((object) $data, $code);
+	}
+
+	static function immediate_redirect( $url, $code = '301' )
+	{
+		switch ( $code )
+		{
+			case '200':
+				$msg = '200 OK';
+				break;
+
+			case '301':
+			default:
+				$msg = '301 Moved Permanently';
+				break;
+		}
+
+		header('HTTP/1.1 ' . $msg);
+		header('Location: ' . $url);
+
+		exit;
 	}
 
 	static function string_url_safe( $string )

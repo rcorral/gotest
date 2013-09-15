@@ -139,14 +139,11 @@ XClick = (function() {
 		// Just in case
 		delete this.timer;
 
-		data = {};
-		data.test_id = this.test_id;
-		data.unique_id = this.unique_id;
-
-		data.option = 'com_api';
-		data.app = 'tests';
-		data.resource = 'complete';
-		data.key = this.api_key;
+		data = {
+			test_id: this.test_id,
+			unique_id: this.unique_id,
+			key: this.api_key
+		};
 
 		core._ajax(
 			data,
@@ -156,7 +153,7 @@ XClick = (function() {
 				jQuery('#test-active').hide();
 				jQuery('#finish_modal').modal('hide');
 				jQuery('#test-completed').slideDown();
-			}, { type: 'POST' });
+			}, { url: live_site + 'test/complete', type: 'POST' });
 	};
 
 	XClick.prototype.emit = function( event, data ) {

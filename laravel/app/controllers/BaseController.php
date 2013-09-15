@@ -8,6 +8,11 @@ class BaseController extends Controller
 	protected $libs = array('jquery', 'bootstrap', 'deparam', 'core', 'main');
 
 	/**
+	 * Buffer  object of child controller
+	 */
+	protected $_buffer;
+
+	/**
 	 * An error to be displayed
 	 *
 	 * @var string

@@ -12,12 +12,14 @@ class SignupController extends \BaseController {
 		$this->_buffer = View::make('signup');
 
 		if ( Request::ajax() )
+		{
 			return Response::json(array('modal' => array(
 				'header' => 'Sign up',
 				'body' => (string) $this->_buffer,
 				'footer' => '<a href="#" class="login-action">(or log in)</a>' . ' | ' . Form::submit('Sign up', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'signup-form')),
 				'options' => array('width' => '250px')
 			)));
+		}
 
 		return $this->exec();
 	}
@@ -27,12 +29,35 @@ class SignupController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store($group_name = 'teacher', $silent_login = true)
+	public function store( $group_name = 'teacher', $silent_login = true )
 	{
 		Helper::csrf_check();
 
-		try {
-			$credentials = Input::only('email', 'password');
+		try
+		{
+			static::register(array(), $group_name, $silent_login);
+
+			if ( $silent_login )
+			{
+				return Response::json(array('redirect' => URL::route('home')), 200);
+			}
+
+			return true;
+		}
+		catch ( Exception $e )
+		{
+			return Response::json(array('message' => $e->getMessage()), 400);
+		}
+	}
+
+	static public function register( $credentials = array(), $group_name = 'teacher', $silent_login = true )
+	{
+		try
+		{
+			if ( empty($credentials) )
+			{
+				$credentials = Input::only('email', 'password');
+			}
 			$credentials['api_token'] = md5(uniqid(rand(), true));
 
 			// Create a unique api_token
@@ -49,27 +74,20 @@ class SignupController extends \BaseController {
 			// Assign the group to the user
 			$user->addGroup(Helper::get_group($group_name));
 
-			if ( $silent_login ) {
-				try {
-					$user = Helper::authenticate($credentials, true);
-
-					return Response::json(array('redirect' => URL::route('home')), 200);
-				} catch (Exception $e) {
-					return Response::json(array('message' => $e->getMessage()), 400);
-				}
-			} else {
-				return true;
+			if ( $silent_login )
+			{
+				$user = Helper::authenticate($credentials, true);
 			}
 		} catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
-			$error = 'Login field is required.';
+			throw new Exception('Login field is required.');
 		} catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
-			$error = 'Password field is required.';
+			throw new Exception('Password field is required.');
 		} catch (Cartalyst\Sentry\Users\UserExistsException $e) {
-			$error = 'User with this login already exists.';
+			throw new Exception('User with this login already exists.');
 		} catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
-			$error = 'Group was not found.';
+			throw new Exception('Group was not found.');
 		}
 
-		return Response::json(array('message' => $error), 400);
+		return $user;
 	}
 }

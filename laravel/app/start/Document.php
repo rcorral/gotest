@@ -59,7 +59,7 @@ class Document
 	 */
 	public $_libs = array(
 		'jquery' => array(
-			'js' => "SITEPATH/js/jquery-2.0.1.min.js"
+			'js' => "SITEPATH/js/jquery-1.10.2.min.js"
 			),
 		'bootstrap' => array(
 			'js' => "SITEPATH/packages/bootstrap/js/bootstrap.min.js",
