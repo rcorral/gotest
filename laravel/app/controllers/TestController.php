@@ -29,7 +29,8 @@ class TestController extends \BaseController {
 			$this->_buffer = View::make('presenter.test_noexists');
 		else
 		{
-			$this->libs = array_merge($this->libs, array('deparam', 'core', 'timer', 'core', 'socket.io', 'presenter_click', 'templates'));
+			$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'presenter_click',
+				'templates'));
 
 			$doc = Document::get_instance();
 			$doc->add_inline_view_file('test.present.css');
@@ -82,6 +83,7 @@ class TestController extends \BaseController {
 		$sessions_model = new Sessions;
 		$session = $sessions_model->get_session_from_short_id($test_id, $unique_short);
 		$test = Test::load_populate($session->test_id, null, false);
+		$doc = Document::get_instance();
 
 		// Lets see if we need to authenticate, check if test is not anonymous and user not logged
 		// **If session id is invalid, it will get caught by the view and show an error page
@@ -115,7 +117,7 @@ class TestController extends \BaseController {
 			}
 		}
 		elseif ( $session->unique_id && $session->is_active && $test->anon )
-		{
+		{// TODO: Allow anonymous tests
 			// Let's check to see if URL has a unique_id if not create it
 			$uri = JFactory::getURI();
 			$unique = $uri->getVar( '_' );
@@ -136,9 +138,27 @@ class TestController extends \BaseController {
 		// If none of the above views have been called, then we are ready to display the test
 		if ( !$this->_buffer )
 		{
-			print_r('wooop');
-			print_r($user);die();
-			$this->_buffer = View::make('student.login_failed');
+			// Check to see that this is even a valid session and that it is active
+			if ( !$session->test_id || !$session->unique_id || !$session->is_active )
+			{
+				$this->_buffer = View::make('student.test_noexists');
+			}
+			else
+			{
+				if ( empty($test) || !$test->id ) throw new Exception('Test does\'t exist.', 500);
+
+				$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'click',
+					'templates'));
+
+				// Set the anon_id
+				if ( $test->anon ) $doc->add_script_declaration("var anon_id = '{$unique}';");
+
+				$doc->add_inline_view_file('test.student.css');
+				$doc->add_script_declaration("var test_uri = '" .Request::url(). "', _token = '" .csrf_token(). "';");
+
+				$this->_buffer = View::make('student.test',
+					array('test' => $test, 'session' => $session, 'user' => $user));
+			}
 		}
 
 		return $this->exec(array('simple' => true));

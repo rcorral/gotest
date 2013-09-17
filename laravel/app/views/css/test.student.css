@@ -1,0 +1,4 @@
+#counter { margin: 0; font-size: 44px; }
+.video-container { height: 0; overflow: hidden; padding-bottom: 56.25%; padding-top: 30px; position: relative; margin-bottom: 12px; }
+.video-container iframe, .video-container object, .video-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.pre-test-hide { display: none; }
