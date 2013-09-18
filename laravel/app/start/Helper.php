@@ -198,7 +198,7 @@ class Helper
 		$model = Sentry::getUserProvider()->createModel();
 
 		if ( !$user = $model->newQuery()->where('api_token', Input::get($request_key))->first())
-			throw new UserNotFoundException("A user could not be found with a login value of [$login].");
+			throw new UserNotFoundException("Invalid user.", 400);
 
 		return $user;
 	}

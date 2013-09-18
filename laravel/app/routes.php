@@ -35,5 +35,6 @@ Route::any('/logout', array('as' => 'logout', function(){
 // API
 Route::resource('/subjects','SubjectsController');
 Route::post('/test/complete','TestController@complete');
+Route::post('/test/answer','TestController@answer');
 Route::get('/api/question/{test_id}/{question_id?}','QuestionController@get')
 	->where(array('test_id' => '[0-9]+', 'question_id' => '[0-9]+'));

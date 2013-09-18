@@ -186,37 +186,26 @@ XClick = (function() {
 		_data = jQuery('#student-form').serialize();
 		data = jQuery.deparam( _data );
 
-		// This means that the question hasn't been answered,
-		// because test_id and unique_id are the only two parameters
-		if ( 2 == Object.size( data ) ) {
-			return false;
-		}
+		// This means that the question hasn't been answered, because test_id and unique_id are the only two parameters
+		if ( 2 == Object.size(data) ) return false;
 
 		data.question_id = this.question.id;
 
 		data.test_id = this.test_id;
 		data.unique_id = this.unique_id;
 
-		data.option = 'com_api';
-		data.app = 'tests';
-		data.resource = 'answer';
-
 		// If test is anonymous, let's keep it that way
-		if ( this.anon_id ) {
-			data.anon_id = this.anon_id;
-		} else {
-			data.key = this.api_key;
-		}
+		if ( this.anon_id ) data.anon_id = this.anon_id;
+		else data.key = this.api_key;
 
-		jQuery('#btn-submit').removeClass('btn-success')
-			.addClass('btn-info').html('Submitting...');
+		jQuery('#btn-submit').removeClass('btn-success').addClass('btn-info').html('Submitting...');
 
 		core._ajax(
 			data,
 			function( data ) {
 				jQuery('#btn-submit').removeClass('btn-info')
 					.addClass('btn-success').html('Submitted');
-			}, { type: 'POST' });
+			}, {url: core.site_url + 'test/answer', type: 'POST'});
 
 		return false;
 	};

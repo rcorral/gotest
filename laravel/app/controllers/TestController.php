@@ -50,10 +50,10 @@ class TestController extends \BaseController {
 	 */
 	public function complete()
 	{
-		$user = Helper::get_api_user();
-
 		try
 		{
+			$user = Helper::get_api_user();
+
 			if ( !$user->hasAccess('teacher') ) throw new JException('Not authorised.', 400);
 
 			$test_id = Input::get('test_id');
@@ -69,7 +69,9 @@ class TestController extends \BaseController {
 				;
 
 			return Helper::json_success_response(array('message' => 'Deactivated'), 201);
-		} catch (Exception $e) {
+		}
+		catch ( Exception $e )
+		{
 			return Helper::json_success_response(array('message' => $e->getMessage()), $e->getCode());
 		}
 	}
@@ -162,6 +164,85 @@ class TestController extends \BaseController {
 		}
 
 		return $this->exec(array('simple' => true));
+	}
+
+	/**
+	 * Used when a student answers a question
+	 */
+	public function answer()
+	{
+		try
+		{
+			$user = Helper::get_api_user();
+			$data = Input::all();
+
+			// Let's make sure that the answer sent matches all the ids in our system
+			$test_data = DB::table('test_tests')
+				->select('test_tests.id AS test_id', 'test_tests.anon',
+					'test_sessions.id AS session_id',
+					'test_questions.id AS question_id',
+					'test_question_types.type AS qtype')
+				->join('test_sessions', 'test_sessions.test_id', '=', 'test_tests.id' )
+				->join('test_questions', 'test_questions.test_id', '=', 'test_tests.id' )
+				->join('test_question_types', 'test_question_types.id', '=', 'test_questions.question_type')
+				->where('test_tests.id', (int) $data['test_id'])
+				->where('test_sessions.unique_id', $data['unique_id'])
+				->where('test_sessions.is_active', '1')
+				->where('test_questions.id', (int) $data['question_id'])
+				->groupBy('test_sessions.id')
+				->first()
+				;
+			if ( empty($test_data) || ($test_data->anon && (!$data['anon_id'] && strlen($data['anon_id']) != 8)) )
+			{
+				throw new Exception('Invalid request.', 400);
+			}
+
+			// Delete all previous answers to this question for this test session
+			$query = DB::table('test_answers')
+				->where('session_id', (int) $test_data->session_id)
+				->where('question_id', (int) $test_data->question_id)
+				;
+			if ( $test_data->anon ) $query->where('anon_user_id', $data['anon_id']);
+			else                    $query->where('user_id', (int) $user->id);
+			// Do delete
+			$query->delete();
+
+			// Add answer(s) to db
+			if ( $test_data->anon ) $row_defaults = array('user_id' => 0, 'anon_user_id' => $data['anon_id']);
+			else                    $row_defaults = array('user_id' => (int) $user->id, 'anon_user_id' => '');
+
+			$row_defaults['session_id'] = (int) $test_data->session_id;
+			$row_defaults['question_id'] = (int) $test_data->question_id;
+
+			$tuples = array();
+
+			// Special treatment for multiple answer questions
+			if ( 'mcma' == $test_data->qtype )
+			{
+				foreach ( $data['answer'] as $value )
+				{
+					$tuples[] = array_merge($row_defaults, array('answer_id' => $value, 'answer_text' => ''));
+				}
+			}
+			else
+			{
+				$answer_id = $answer_text = '';
+
+				if ( 'mcsa' == $test_data->qtype ) $answer_id = (int) $data['answer'];
+				else                               $answer_text = (string) $data['answer'];
+
+				$tuples[] = array_merge($row_defaults, array('answer_id' => $answer_id, 'answer_text' => $answer_text));
+			}
+
+			// Insert data
+			DB::table('test_answers')->insert($tuples);
+
+			return Helper::json_success_response(array('message' => 'Answer submitted'), 201);
+		}
+		catch ( Exception $e )
+		{
+			return Helper::json_success_response(array('message' => $e->getMessage()), $e->getCode());
+		}
 	}
 
 	private function _return_with_unique_id( $test_id )
