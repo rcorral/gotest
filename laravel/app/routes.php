@@ -11,6 +11,8 @@
 |
 */
 
+// TODO: Secure all of the routes for csrf and auth
+
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
 Route::get('/questiontemplate/{type}', array('as' => 'questiontemplate', 'uses' => 'QuestionTemplateController@show'))
@@ -25,6 +27,8 @@ Route::get('/test/{id}/{name}/{unique?}', array('as' => 'test', 'uses' => 'TestC
 // Test taker view
 Route::get('/{id}/{unique}', array('as' => 'take_test', 'uses' => 'TestController@take'))
 	->where(array('id' => '[0-9]+', 'unique' => '[0-9a-zA-Z]{6}'));
+// Sessions
+Route::resource('/sessions', 'SessionsController');
 
 Route::resource('/signup', 'SignupController');
 Route::resource('/login', 'LoginController');

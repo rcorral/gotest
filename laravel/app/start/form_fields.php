@@ -43,3 +43,30 @@ Form::macro('categories', function( $name = 'catid', $value = 0, $options = arra
 
 	return Form::select($name, $select, $value);
 });
+
+Form::macro('cb_id', function( $row_num, $value, $name = 'cid' )
+{
+	return '<input type="checkbox" id="cb' . $row_num . '" name="' . $name . '[]" value="' . $value
+		. '" onclick="core.is_checked(this.checked);" title="' . Lang::get('JGRID_CHECKBOX_ROW_N', array($row_num + 1))
+		. '" />';
+});
+
+/**
+ * Displays active/deactivate image
+ *
+ * @param  $state bool Item is active or inactive
+ */
+Form::macro('item_state', function( $state, $id, $item_type )
+{
+	$current_state = $state ? Lang::get('Publish') : Lang::get('Unublish');
+	$state_to_be = $state ? Lang::get('Unpublish') : Lang::get('Publish');
+	return '<a title="' .$state_to_be. ' ' .Lang::get('Item'). '" class="js-change-state" data-id="'
+		. $id. '" data-action="' .$item_type. '.' .strtolower($state_to_be)
+		. '" href="javascript:void(0);"><span class="state ' . strtolower($current_state)
+		. '"><span class="text">' .$current_state. '</span></span></a>';
+});
+
+Form::macro('csrf', function()
+{
+	return '<input type="hidden" name="_token" value="' .csrf_token(). '">';
+});

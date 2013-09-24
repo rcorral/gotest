@@ -42,6 +42,24 @@ jQuery(function(){
 		{
 			return false;
 		})
+		.on('click', '.js-change-state', function()
+		{
+			var $this = jQuery(this);
+			var data = {
+				id: $this.data('id'),
+				action: 'change_state',
+				state: $this.data('action').split('.').slice(1).join('')
+			};
+			core._ajax(data, function(data)
+			{
+				$this.replaceWith(data.html);
+			}, {
+				url: $this.data('action').split('.').slice(0, 1),
+				type: 'POST'
+			});
+
+			return false;
+		})
 	;
 
 	jQuery('#modal-container')
@@ -55,7 +73,7 @@ jQuery(function(){
 	// Set the right height of the main container
 	jQuery('div.wrapper').css({top: jQuery('div.navbar').outerHeight(true)});
 
-	// This needs to go somewhere else
+	// TODO: This needs to go somewhere else
 	jQuery('.intro').animate({
 		left: 0,
 		opacity: 1

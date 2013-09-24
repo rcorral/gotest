@@ -15,37 +15,49 @@ class Sessions extends ModelBase
 	protected $primary_key = 'id';
 
 	/**
-	 * Get's the session object from the database from the short unique id that was passed
+	 * The attributes that are mass assignable.
 	 *
-	 * @param  test_id int Test id
-	 * @param  unique_short string A portion of the uniqueue id for the session
-	 * @return object The test session object
+	 * @var array
 	 */
-	public function get_session_from_short_id( $test_id, $unique_short )
+	protected $fillable = array('test_id', 'user_id', 'unique_id', 'is_active');
+
+	/**
+	 * Indicates if the model should soft delete.
+	 *
+	 * @var bool
+	 */
+	protected $softDelete = true;
+
+	public static function get_sessions()
 	{
-		static $return;
+		$user = Helper::get_current_user();
 
-		if ( $return ) return $return;
+		$query = DB::table('test_sessions')
+			->select('test_sessions.id', 'test_sessions.date', 'test_sessions.is_active', 'test_sessions.unique_id',
+				'test_tests.id AS test_id', 'test_tests.title', 'test_tests.sub_title', 'test_tests.anon',
+				'test_answers.user_id', 'test_answers.anon_user_id' )
+			->join('test_tests', 'test_tests.id', '=', 'test_sessions.test_id')
+			->join('test_answers', 'test_answers.session_id', '=', 'test_sessions.id')
+			->where('test_sessions.user_id', $user->id)
+			->groupBy(DB::raw('test_sessions.`id`, IF( test_tests.`anon` = 1, test_answers.`anon_user_id`, test_answers.`user_id` )'))
+			;
 
-		$return = (object) array(
-			'test_id' => $test_id,
-			'unique_id' => '',
-			'is_active' => 0
-			);
-
-		if ( $return->test_id && $unique_short )
-		{
-			$result = DB::table('test_sessions')
-				->select('unique_id', 'is_active')
-				->where('is_active', '1')
-				->where('test_id', (int) $return->test_id )
-				->where('unique_id', 'LIKE', $unique_short . '%' )
-				->first()
-				;
-			$return->unique_id = @$result->unique_id;
-			$return->is_active = @$result->is_active;
+		// Filter by active
+		// $active = $this->getState( 'filter.active' );
+		if ( false && null != $active ) {
+			$query->where( 'test_sessions.active` = ' . (int) $active );
 		}
 
-		return $return;
+		// This is ugly and there is probably a better way
+		$a = $query->getBindings();
+		$_query = DB::table(DB::raw('(' . str_replace('?', array_shift($a), $query->toSql()). ') AS q'));
+
+		$_query->select('id', 'date', 'is_active', 'unique_id', 'test_id', 'title', 'sub_title',
+				DB::raw('IF(anon = 1, COUNT(anon_user_id), COUNT(user_id) ) AS `count`'))
+			->orderBy('title', 'ASC')
+			->groupBy('id')
+			;
+
+		return $_query->paginate(Helper::paginate_by());
 	}
 }

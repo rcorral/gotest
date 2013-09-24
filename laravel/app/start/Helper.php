@@ -75,6 +75,11 @@ class Helper
 		return $row;
 	}
 
+	static function paginate_by()
+	{
+		return 50;
+	}
+
 	/**
 	 * Session methods
 	 */
@@ -109,12 +114,9 @@ class Helper
 				;
 			if ( !$query->get() )
 			{
-				// TODO: This insert should maybe go in the Sessions model?
-				DB::table('test_sessions' )->insert(
-					array('test_id' => $test_id, 'user_id' => $user_id, 'unique_id' => $_unique,
-						'is_active' => 1, 'date' => $date)
-					)
-					;
+				Sessions::create(array('test_id' => $test_id, 'user_id' => $user_id, 'unique_id' => $_unique,
+					'is_active' => 1)
+				);
 
 				$unique_id = $_unique;
 			}

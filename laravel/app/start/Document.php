@@ -335,6 +335,7 @@ class Document
 			$is_logged_in = true;
 			$user = Helper::get_current_user();
 			$js .= "\n\t, api_key = '{$user->api_token}'";
+			$js .= "\n\t, _token = '" .csrf_token(). "'";
 		}
 
 		$home = (int) Helper::is_home();

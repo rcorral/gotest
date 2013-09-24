@@ -1,5 +1,3 @@
-<?php
-?>
 <div>
 	<table class="tests-list">
 		<thead>

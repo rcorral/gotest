@@ -99,6 +99,8 @@ core_class.prototype._ajax = function( data, success, opts ) {
 		options = this._merge_objects( options, opts );
 	}
 
+	if ( !data._token ) data._token = _token;
+
 	return jQuery.ajax({
 		url: options.url,
 		dataType: options.dataType,
