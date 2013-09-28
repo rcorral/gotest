@@ -1,20 +1,21 @@
 Things to do:
 - Presenter
-	x Login
+	- Login
 	x Upload questions
 	x Download questions
 	x Create questions
 	x Present questions
 	x View data
-	- Categories
+	x Categories
+	- Add filters to the forms, to filter the rows
 - Audience
-	x Login some identifier (id or name)
+	- Login some identifier (id or name)
 	x Answer questions
 	x Limited by timer
 
 Roadmap:
-Move away from Joomla.
-Allow to login with other authentications that allow us to pull email address.
+x Move away from Joomla.
+- Allow to login with other authentications that allow us to pull email address.
 
 Slogan:
 Simple online testing testing for all.

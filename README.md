@@ -15,4 +15,4 @@ Required node.js modules
 
 Starting node server
 --------------------------
-node app.js [--joomla=/clicker]
+node app.js --domain=myexam.local

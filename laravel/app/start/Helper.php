@@ -89,24 +89,20 @@ class Helper
 	 */
 	static function generate_unique_test_id( $test_id, $user_id = null )
 	{
-		if ( !$user_id )
-			$user_id = static::get_current_user()->id;
+		if ( !$user_id ) $user_id = static::get_current_user()->id;
 
 		$test_id = (int) $test_id;
 		$user_id = (int) $user_id;
 		$date = date( 'Y-m-d H:i:s' );
 		$unique_id = '';
 
-		if ( !$test_id )
-			return false;
+		if ( !$test_id ) return false;
 
 		$counter = 0;
 		while ( !$unique_id )
 		{
-			if ( $counter )
-				$_unique = md5( $date . $test_id . $user_id . $counter );
-			else
-				$_unique = md5( $date . $test_id . $user_id );
+			if ( $counter ) $_unique = md5( $date . $test_id . $user_id . $counter );
+			else $_unique = md5( $date . $test_id . $user_id );
 
 			$query = DB::table('test_sessions')
 				->select('id')
@@ -243,6 +239,28 @@ class Helper
 		if ( $redirect ) {
 			return Redirect::route('home');
 		}
+	}
+
+	static function has_tests()
+	{
+		$user = self::get_current_user();
+
+		return DB::table('test_tests')
+			->where('created_by', $user->id)
+			// ->remember(15)
+			->pluck('id')
+			;
+	}
+
+	static function has_sessions()
+	{
+		$user = self::get_current_user();
+
+		return DB::table('test_sessions')
+			->where('user_id', $user->id)
+			// ->remember(15)
+			->pluck('id')
+			;
 	}
 
 	static function json_success_response( $data, $code = 200 )

@@ -28,7 +28,7 @@
 				<th>Active</th>
 				<th>Date</th>
 				<th>Tests taken</th>
-				<th></th>
+				<th>Download Results</th>
 				<th>Delete</th>
 			</tr>
 		</thead>
@@ -48,13 +48,13 @@
 					<?php echo Form::item_state($session->is_active, $session->id, 'sessions'); ?>
 				</td>
 				<td class="center">
-					<?php echo date( 'm/d/Y g:ia', strtotime( $session->date ) ); ?>
+					<?php echo date( 'm/d/Y g:ia', strtotime( $session->created_at ) ); ?>
 				</td>
 				<td class="center">
 					<?php echo $session->count; ?>
 				</td>
 				<td class="center">
-					<a href="index.php?option=com_tests&amp;view=session_results&amp;id=<?php echo $session->id; ?>" target="_blank">Download</a>
+					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank">Download</a>
 				</td>
 				<td><a href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger js-delete">x</a></td>
 			</tr>

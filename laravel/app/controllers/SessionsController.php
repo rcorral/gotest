@@ -14,12 +14,30 @@ class SessionsController extends \BaseController {
 	 */
 	public function index()
 	{
-		// $doc = Document::get_instance();
-		// $doc->add_inline_view_file('tests.index.js', array('jquery' => true));
-
 		$this->_buffer = View::make('presenter.sessions', array(
 			'user' => Helper::get_current_user(),
 			'sessions' => Sessions::get_sessions()
+		));
+
+		return $this->exec();
+	}
+
+	/**
+	 * Show the results of a test
+	 */
+	public function show( $id )
+	{
+		$user = Helper::get_current_user();
+		$session = Sessions::get_session($id);
+		$test = Test::load_populate($session->test_id, null, true);
+
+		// This more than likely means that user can't view these results
+		if ( !$test->id ) throw new Exception(Lang::get('Test not valid'), 400);
+		if ( $test->created_by != $user->id ) throw new Exception(Lang::get('Test not valid'), 400);
+
+		$this->_buffer = View::make('presenter.sessions_results', array(
+			'test' => $test,
+			'student_answers' => $session->get_student_answers($test->anon)
 		));
 
 		return $this->exec();
@@ -59,48 +77,22 @@ class SessionsController extends \BaseController {
 	}
 
 	/**
-	 * Method to delete a test.
+	 * Method to delete a session.
 	 *
-	 * @param	int $id A test id
+	 * @param	int $id A session id
 	 * @return	object Success/Fail ajax response
 	 */
 	public function destroy( $id )
 	{
 		// Sanitize the id
-		$test = Test::load_populate((int) $id);
+		$session = Sessions::load_populate((int) $id);
 
-		if ( !$test->id )
+		if ( !$session->id )
 			return Helper::json_error_response(array('message' => Lang::get('Error deleting.')), 400);
-		elseif ( $test->created_by != Helper::get_current_user()->id )
+		elseif ( $session->user_id != Helper::get_current_user()->id )
 			throw new Exception(Lang::get('all.invalid_request'));
 
-		// USE THIS WHEN WE WANT TO COMPLETELY DELETE
-		// Delete questions
-		// $question_ids = DB::table('test_questions')
-			// ->where('test_id', $test->id)
-			// ->lists('id')
-			// ;
-
-		// DB::table('test_question_options')
-			// ->whereIn('question_id', $question_ids)
-			// ->delete()
-			// ;
-		// DB::table('test_questions')
-			// ->whereIn('id', $question_ids)
-			// ->delete()
-			// ;
-
-		// Init sessions model
-		// TODO: FIX THIS SO THAT IT DELETES SESSIONS
-		// $sessions_model = JModel::getInstance( 'Session', 'TestsModel' );
-
-		// Iterate the items to delete each one.
-		// foreach ( $item_ids as $item_id ) {
-			// Delete test sessions and answers associated with them
-			// $sessions_model->delete( $item_id );
-
-			$test->delete();
-		// }
+		$session->delete();
 
 		return Helper::json_success_response(array(), 200);
 	}

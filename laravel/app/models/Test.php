@@ -44,12 +44,11 @@ class Test extends ModelBase
 	 */
 	protected $softDelete = true;
 
-	public static function load_populate( $id, $key = null, $questions = true )
+	public static function load_populate( $id, $key = null, $load_questions = true )
 	{
 		$instance = parent::load_populate( $id, $key );
 
-		if ( $questions )
-			$instance->load_questions();
+		if ( $load_questions ) $instance->load_questions();
 
 		return $instance;
 	}
@@ -130,15 +129,13 @@ class Test extends ModelBase
 	 */
 	public function add_test_questions( $data, $test_id )
 	{
-		if ( empty( $data ) )
-			return true;
+		if ( empty($data) ) return true;
 
 		$question_ids = array();
 		foreach ( $data as $question_id => $question )
 		{
 			$question['question'] = trim( $question['question'] );
-			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] )
-				continue;
+			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] ) continue;
 
 			$table = DB::table('test_questions');
 			$_data = array(
@@ -195,8 +192,7 @@ class Test extends ModelBase
 				foreach ( $question['options'] as $option_id => $option )
 				{
 					$option = trim( $option );
-					if ( empty( $option ) )
-						continue;
+					if ( empty( $option ) ) continue;
 
 					try
 					{
@@ -224,8 +220,7 @@ class Test extends ModelBase
 			->delete()
 			;
 
-		if ( !empty( $errors ) )
-			throw new Exception(implode("\n", $errors));
+		if ( !empty( $errors ) ) throw new Exception(implode("\n", $errors));
 
 		return true;
 	}
