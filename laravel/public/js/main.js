@@ -2,21 +2,29 @@ jQuery(function(){
 	jQuery(document)
 		.on('click', '.login-action', function()
 		{
+			var href = jQuery(this).attr('href');
+
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
-				url: '/login',
+				url: href.indexOf('http') >= 0 ? href : '/login',
 				cache: true
 			});
+
+			return false;
 		})
 		.on('click', '.signup-action', function()
 		{
+			var href = jQuery(this).attr('href');
+
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
-				url: '/signup',
+				url: href.indexOf('http') >= 0 ? href : '/signup',
 				cache: true
 			});
+
+			return false;
 		})
 		.on('click', '.js-dbl-chk', function(event, asked)
 		{
@@ -33,7 +41,7 @@ jQuery(function(){
 				core.parse_request(data);
 			}, {
 				url: form[0]['action'],
-				type: 'POST'
+				type: form.attr('method') || 'POST'
 			});
 
 			return false;

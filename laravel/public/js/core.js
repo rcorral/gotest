@@ -51,7 +51,11 @@ core_class.prototype.modal_close = function() {
 core_class.prototype.parse_request = function(req) {
 	if ( typeof req.modal !== 'undefined' ) this.modal(req.modal);
 
-	if ( typeof req.redirect !== 'undefined' ) window.location.replace(req.redirect);
+	if ( typeof req.redirect !== 'undefined' )
+	{
+		if ( 'current.location' == req.redirect ) window.location = window.location.href;
+		else window.location.replace(req.redirect);
+	}
 
 	if ( typeof req.exec !== 'undefined' ) this.eval(req);
 };

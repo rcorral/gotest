@@ -13,6 +13,12 @@ Things to do:
 	x Answer questions
 	x Limited by timer
 
+- General
+	- Forgot username/password
+	- Handle Exceptions
+	- Email validation when registering
+	- Sign up or Register? - http://ux.stackexchange.com/questions/11936/when-to-use-join-register-or-sign-up - register sounds better?
+
 Roadmap:
 x Move away from Joomla.
 - Allow to login with other authentications that allow us to pull email address.

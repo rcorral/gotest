@@ -15,6 +15,10 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 
+// Test taker view
+Route::get('/{id}/{unique}', array('as' => 'take_test', 'uses' => 'TestController@take'))
+	->where(array('id' => '[0-9]+', 'unique' => '[0-9a-zA-Z]{6}'));
+
 // Guest routes
 Route::group(array('before' => 'guest'), function()
 {
@@ -34,9 +38,6 @@ Route::group(array('before' => 'auth'), function()
 	// Presenter view
 	Route::get('/test/{id}/{name}/{unique?}', array('as' => 'test', 'uses' => 'TestController@present'))
 		->where(array('id' => '[0-9]+', 'name' => '[0-9a-zA-Z\-]+', 'unique' => '[0-9a-zA-Z]{32}'));
-	// Test taker view
-	Route::get('/{id}/{unique}', array('as' => 'take_test', 'uses' => 'TestController@take'))
-		->where(array('id' => '[0-9]+', 'unique' => '[0-9a-zA-Z]{6}'));
 	// Sessions
 	Route::resource('/sessions', 'SessionsController');
 

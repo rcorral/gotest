@@ -110,7 +110,8 @@ class TestController extends \BaseController {
 				}
 				else
 				{
-					$this->_buffer = View::make('student.login');
+					$this->libs = array_merge($this->libs, array('deparam', 'core'));
+					$this->_buffer = View::make('student.login')->nest('login_form', 'login', array('student' => true));
 				}
 			}
 			catch ( Exception $e )

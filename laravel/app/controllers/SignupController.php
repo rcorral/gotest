@@ -9,14 +9,15 @@ class SignupController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('signup');
+		$this->_buffer = View::make('signup', array('student' => Input::get('student', false)));
 
 		if ( Request::ajax() )
 		{
 			return Response::json(array('modal' => array(
 				'header' => 'Sign up',
 				'body' => (string) $this->_buffer,
-				'footer' => '<a href="#" class="login-action">(or log in)</a>' . ' | ' . Form::submit('Sign up', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'signup-form')),
+				'footer' => (Input::get('no_login', 0) ? '' : '<a href="#" class="btn login-action">Log in</a>' . ' ')
+					. Form::submit('Sign up', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'signup-form')),
 				'options' => array('width' => '250px')
 			)));
 		}
@@ -35,11 +36,17 @@ class SignupController extends \BaseController {
 
 		try
 		{
+			// Override group
+			if ( ($student = Input::get('student')) && 'student' == $student )
+			{
+				$group_name = 'student';
+			}
+
 			static::register(array(), $group_name, $silent_login);
 
 			if ( $silent_login )
 			{
-				return Response::json(array('redirect' => URL::route('home')), 200);
+				return Response::json(array('redirect' => 'current.location'), 200);
 			}
 
 			return true;

@@ -125,3 +125,19 @@ nav li {
 footer {
 	text-align: center;
 }
+
+.btn-login-google {
+	background: transparent url('../images/social/Google-White-signin-Long-Base-20dp.png') no-repeat 0 0px;
+	text-indent:-9999px;
+	height: 60px;
+	width: 294px;
+	display: block;
+}
+
+.btn-login-google:hover {
+	background: transparent url('../images/social/Google-White-signin-Long-Hover-20dp.png') no-repeat 0 0px;
+}
+
+.btn-login-google:active {
+	background: transparent url('../images/social/Google-White-signin-Long-Press-20dp.png') no-repeat 0 0px;
+}

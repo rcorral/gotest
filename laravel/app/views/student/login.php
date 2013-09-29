@@ -4,9 +4,9 @@
 		<p></p>
 		<div class="hero-unit">
 			<h1>Welcome.</h1>
-			<p></p>
+			<p>You must log in before starting the exam.</p>
 			<p>
-				<a href="<?php echo Request::create(Request::url(), 'GET', array('auth' => 1))->fullUrl(); ?>" class="btn btn-primary btn-large">Please login to continue</a>
+				<?php echo $login_form; ?>
 			</p>
 		</div>
 	</div>
