@@ -12,12 +12,14 @@ class LoginController extends \BaseController {
 		$this->_buffer = View::make('login');
 
 		if ( Request::ajax() )
+		{
 			return Response::json(array('modal' => array(
 				'header' => 'Log in',
 				'body' => (string) $this->_buffer,
 				'footer' => '<a href="#" class="signup-action">(or sign up)</a>' . ' | ' . Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
 				'options' => array('width' => '250px')
 			)));
+		}
 
 		return $this->exec();
 	}
@@ -29,12 +31,20 @@ class LoginController extends \BaseController {
 	{
 		Helper::csrf_check();
 
-		try {
+		try
+		{
 			$user = Helper::authenticate(Input::only('email', 'password'), true);
 
-			return Response::json(array('redirect' => URL::route('home')), 200);
-		} catch (Exception $e) {
-			return Response::json(array('message' => $e->getMessage()), 400);
+			if ( Request::ajax() )
+			{
+				return Response::json(array('redirect' => URL::route('home')), 200);
+			}
+
+			return Redirect::route('home');
+		}
+		catch ( Exception $e )
+		{
+			throw new Exception($e->getMessage(), 400);
 		}
 	}
 }

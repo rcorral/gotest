@@ -35,13 +35,17 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::guest('login');
-});
-
-
-Route::filter('auth.basic', function()
-{
-	return Auth::basic();
+	if ( !Helper::is_logged_in() )
+	{
+		if ( Request::ajax() )
+		{
+			return Response::json(array('redirect' => URL::route('login.index')), 200);
+		}
+		else
+		{
+			return Redirect::route('login.index');
+		}
+	}
 });
 
 /*
@@ -57,7 +61,17 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+	if ( Helper::is_logged_in() )
+	{
+		if ( Request::ajax() )
+		{
+			return Response::json(array('redirect' => URL::route('home')), 200);
+		}
+		else
+		{
+			return Redirect::route('home');
+		}
+	}
 });
 
 /*
