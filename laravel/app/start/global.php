@@ -74,6 +74,8 @@ require app_path().'/start/Helper.php';
 require app_path().'/start/Document.php';
 require app_path().'/start/form_fields.php';
 
+if ( 'local' == App::environment() ) Mail::pretend();
+
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File

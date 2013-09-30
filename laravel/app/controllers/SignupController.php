@@ -53,7 +53,7 @@ class SignupController extends \BaseController {
 		}
 		catch ( Exception $e )
 		{
-			return Response::json(array('message' => $e->getMessage()), 400);
+			return Response::json(array('message' => $e->getMessage()), ($e->getCode() ? $e->getCode() : 400));
 		}
 	}
 
@@ -65,6 +65,21 @@ class SignupController extends \BaseController {
 			{
 				$credentials = Input::only('email', 'password');
 			}
+
+			$validator = Validator::make(
+				$credentials,
+				array(
+					'email' => 'required|email|unique:users,email',
+					'password' => 'required|min:' . ('teacher' == $group_name ? 8 : 4)
+				)
+			);
+
+			if ( $validator->fails() )
+			{
+				$messages = $validator->messages();
+				throw new Exception($messages->first(), 400);
+			}
+
 			$credentials['api_token'] = md5(uniqid(rand(), true));
 
 			// Create a unique api_token
