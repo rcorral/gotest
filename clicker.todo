@@ -9,15 +9,17 @@ Things to do:
 	x Categories
 	- Add filters to the forms, to filter the rows
 - Audience
-	- Login some identifier (id or name)
+	x Login some identifier (id or name)
 	x Answer questions
 	x Limited by timer
 
 - General
-	- Forgot username/password
+	x Forgot password
 	- Handle Exceptions
-	- Email validation when registering
+	x Email validation when registering
 	- Sign up or Register? - http://ux.stackexchange.com/questions/11936/when-to-use-join-register-or-sign-up - register sounds better?
+	- Welcome email
+	- My account page
 
 Roadmap:
 x Move away from Joomla.

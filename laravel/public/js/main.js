@@ -26,6 +26,20 @@ jQuery(function(){
 
 			return false;
 		})
+		.on('click', '.js-ajax-link', function()
+		{
+			var href = jQuery(this).attr('href');
+			if ( href.indexOf('http') == -1 ) throw 'invalid.link';
+
+			core._ajax({}, function(data){
+				core.parse_request(data);
+			}, {
+				url: href,
+				cache: false
+			});
+
+			return false;
+		})
 		.on('click', '.js-dbl-chk', function(event, asked)
 		{
 			return core.double_check();
@@ -46,6 +60,7 @@ jQuery(function(){
 
 			return false;
 		})
+		// This is just so that the form is not submited via the normal browser function
 		.on('submit', '.ajax-frm', function(event)
 		{
 			return false;

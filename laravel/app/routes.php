@@ -24,6 +24,14 @@ Route::group(array('before' => 'guest'), function()
 {
 	Route::resource('/signup', 'SignupController');
 	Route::resource('/login', 'LoginController');
+
+	// Recover password
+	Route::get('/recover', array('as' => 'recover', 'uses' => 'LoginController@recover'));
+	Route::post('/recover', 'LoginController@recover_send');
+	Route::get('/reset/{reset_code}', array('as' => 'reset', 'uses' => 'LoginController@reset_show'))
+		->where(array('reset_code' => '[0-9a-zA-Z]{32,}'));
+	Route::post('/reset/{reset_code}', 'LoginController@reset_password')
+		->where(array('reset_code' => '[0-9a-zA-Z]{32,}'));
 });
 
 // Logged in routes

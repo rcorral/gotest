@@ -4,6 +4,9 @@ echo Form::label('email', 'E-Mail Address');
 echo Form::text('email');
 echo Form::label('password', 'Password');
 echo Form::password('password');
+?>
+<a href="<?php echo URL::to('recover'); ?>" class="js-ajax-link">Forgot your password?</a>
+<?php
 if ( !Request::ajax() )
 {
 	echo '<a href="' .Url::route('signup.index', array('no_login' => '1', 'student' => (isset($student) && $student) ? 1 : 0)). '" class="btn signup-action">Register</a>';

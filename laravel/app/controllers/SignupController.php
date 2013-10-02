@@ -9,7 +9,7 @@ class SignupController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('signup', array('student' => Input::get('student', false)));
+		$this->_buffer = View::make('account.signup', array('student' => Input::get('student', false)));
 
 		if ( Request::ajax() )
 		{
