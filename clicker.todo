@@ -1,6 +1,6 @@
 Things to do:
 - Presenter
-	- Login
+	x Login
 	x Upload questions
 	x Download questions
 	x Create questions
@@ -15,7 +15,7 @@ Things to do:
 
 - General
 	x Forgot password
-	- Handle Exceptions
+	x Handle Exceptions
 	x Email validation when registering
 	- Sign up or Register? - http://ux.stackexchange.com/questions/11936/when-to-use-join-register-or-sign-up - register sounds better?
 	- Welcome email
@@ -28,3 +28,7 @@ x Move away from Joomla.
 Slogan:
 Simple online testing testing for all.
 Build, manage and give tests online.
+
+
+Ideas
+	- Maybe after a student logs in, rather than showing the current "Create a test page" We would show a page that has a text box where they would enter the unique URL to the test they need to take

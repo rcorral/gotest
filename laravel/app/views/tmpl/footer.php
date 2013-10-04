@@ -2,6 +2,6 @@
 
 	<div class="row-fluid">
 		<footer class="span12">
-			<p>&copy; MyExam 2012</p>
+			<p>&copy; MyExam <?php echo date('Y'); ?></p>
 		</footer>
 	</div>

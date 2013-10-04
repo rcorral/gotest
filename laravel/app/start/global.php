@@ -50,7 +50,33 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
 App::error(function(Exception $exception, $code)
 {
+	if ( 'Exception' == get_class($exception) )
+	{
+		if ( Request::ajax() )
+		{
+			return Helper::json_error_response(array('message' => $exception->getMessage()), $exception->getCode());
+		}
+	}
+	else
+	{
+		Log::error($exception);
+	}
+
+	$controller = new ErrorController;
+	return $controller->show($exception->getMessage(), $exception->getCode());
+});
+
+App::fatal(function($exception)
+{
+	if ( Request::ajax() )
+	{
+		return Helper::json_error_response(array('message' => $exception->getMessage()), $exception->getCode());
+	}
+
 	Log::error($exception);
+
+	$controller = new ErrorController;
+	return $controller->show($exception->getMessage(), $exception->getCode());
 });
 
 /*
