@@ -51,6 +51,8 @@ core_class.prototype.modal_close = function() {
 core_class.prototype.parse_request = function(req) {
 	if ( typeof req.modal !== 'undefined' ) this.modal(req.modal);
 
+	if ( typeof req.alert !== 'undefined' ) _alert(req.alert);
+
 	if ( typeof req.redirect !== 'undefined' )
 	{
 		if ( 'current.location' == req.redirect ) window.location = window.location.href;

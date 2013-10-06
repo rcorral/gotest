@@ -24,7 +24,7 @@
 					<?php if ( $has_sessions ) : ?>
 					<li><a href="<?php echo URL::route('sessions.index'); ?>" class="sessions-action">Sessions</a></li>
 					<?php endif; ?>
-					<li><a href="#account" class="account-action"><?php echo ($user->first_name ? ucfirst(strtolower($user->first_name)) : $user->email); ?></a></li>
+					<li><a href="<?php echo URL::route('account.index'); ?>" class="account-action">Account</a></li>
 					<li><a href="<?php echo URL::route('logout'); ?>" class="logout-action">Log out</a></li>
 					<?php endif; ?>
 				</ul>

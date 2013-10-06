@@ -266,14 +266,14 @@ class Helper
 	static function json_success_response( $data, $code = 200 )
 	{
 		$data['success'] = true;
-		return Response::json((object) $data, $code);
+		return Response::json((object) $data, ($code ? $code : 200));
 	}
 
 	static function json_error_response( $data, $code = 400 )
 	{
 		$data['success'] = false;
 		$data['error'] = true;
-		return Response::json((object) $data, $code);
+		return Response::json((object) $data, ($code ? $code : 400));
 	}
 
 	static function immediate_redirect( $url, $code = '301' )

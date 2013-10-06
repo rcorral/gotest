@@ -37,6 +37,8 @@ Route::group(array('before' => 'guest'), function()
 // Logged in routes
 Route::group(array('before' => 'auth'), function()
 {
+	Route::resource('/account', 'AccountController');
+
 	Route::get('/questiontemplate/{type}', array('as' => 'questiontemplate', 'uses' => 'QuestionTemplateController@show'))
 		->where('type', '[a-z]+');
 
