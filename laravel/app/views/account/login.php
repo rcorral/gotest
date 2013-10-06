@@ -9,7 +9,7 @@ echo Form::password('password');
 <?php
 if ( !Request::ajax() )
 {
-	echo '<a href="' .Url::route('signup.index', array('no_login' => '1', 'student' => (isset($student) && $student) ? 1 : 0)). '" class="btn signup-action">Register</a>';
+	echo '<a href="' .Url::route('register.index', array('no_login' => '1', 'student' => (isset($student) && $student) ? 1 : 0)). '" class="btn register-action">Register</a>';
 	echo Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form'));
 }
 echo Form::close();

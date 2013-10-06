@@ -11,7 +11,7 @@
 				<ul class="nav pull-right">
 					<?php if ( !Helper::is_logged_in() ): ?>
 					<li><a href="#login" class="login-action">Log in</a></li>
-					<li><a href="#signup" class="signup-action">Sign up</a></li>
+					<li><a href="#register" class="register-action">Register</a></li>
 					<?php else:
 					$user = Helper::get_current_user();
 					$has_sessions = Helper::has_sessions();

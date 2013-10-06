@@ -13,14 +13,14 @@ jQuery(function(){
 
 			return false;
 		})
-		.on('click', '.signup-action', function()
+		.on('click', '.register-action', function()
 		{
 			var href = jQuery(this).attr('href');
 
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
-				url: href.indexOf('http') >= 0 ? href : '/signup',
+				url: href.indexOf('http') >= 0 ? href : '/register',
 				cache: true
 			});
 

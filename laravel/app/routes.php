@@ -22,7 +22,7 @@ Route::get('/{id}/{unique}', array('as' => 'take_test', 'uses' => 'TestControlle
 // Guest routes
 Route::group(array('before' => 'guest'), function()
 {
-	Route::resource('/signup', 'SignupController');
+	Route::resource('/register', 'RegisterController');
 	Route::resource('/login', 'LoginController');
 
 	// Recover password

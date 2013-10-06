@@ -217,7 +217,7 @@ class AuthGoogle
 		else
 		{
 			// Register user and authenticate them
-			$user = SignupController::register($data, 'student', true);
+			$user = RegisterController::register($data, 'student', true);
 
 			// Add openid_identifier if user is new
 			DB::table('user_profiles')->insert(array(

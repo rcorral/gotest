@@ -16,7 +16,7 @@ class LoginController extends \BaseController {
 			return Response::json(array('modal' => array(
 				'header' => 'Log in',
 				'body' => (string) $this->_buffer,
-				'footer' => '<a href="#" class="btn signup-action">Register</a>' . ' ' . Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
+				'footer' => '<a href="#" class="btn register-action">Register</a>' . ' ' . Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
 				'options' => array('width' => '250px')
 			)));
 		}

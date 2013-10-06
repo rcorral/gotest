@@ -1,6 +1,6 @@
 <?php
 
-class SignupController extends \BaseController {
+class RegisterController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,15 +9,15 @@ class SignupController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('account.signup', array('student' => Input::get('student', false)));
+		$this->_buffer = View::make('account.register', array('student' => Input::get('student', false)));
 
 		if ( Request::ajax() )
 		{
 			return Response::json(array('modal' => array(
-				'header' => 'Sign up',
+				'header' => 'Register',
 				'body' => (string) $this->_buffer,
 				'footer' => (Input::get('no_login', 0) ? '' : '<a href="#" class="btn login-action">Log in</a>' . ' ')
-					. Form::submit('Sign up', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'signup-form')),
+					. Form::submit('Register', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'register-form')),
 				'options' => array('width' => '250px')
 			)));
 		}
