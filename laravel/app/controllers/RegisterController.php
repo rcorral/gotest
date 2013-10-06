@@ -100,6 +100,16 @@ class RegisterController extends \BaseController {
 			{
 				$user = Helper::authenticate($credentials, true);
 			}
+
+			Mail::send(array('emails.welcome', 'emails.welcome_text'), array(),
+				function($message) use ($user)
+				{
+					$from = Config::get('mail.from');
+					$message->from($from['address'], $from['name']);
+
+					$message->to($user->email)->subject('Welcome to ' . Config::get('app.domain'));
+				}
+			);
 		} catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
 			throw new Exception('Login field is required.');
 		} catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {

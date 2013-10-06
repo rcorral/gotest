@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Reset your password</title>
+		<title>Welcome!</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
 		<!-- <link rel="icon" type="image/x-icon" href=""> -->
@@ -67,17 +67,13 @@
 		<div class="wrapper">
 			<div class="container">
 				<div class="header">
-					<h1 class="title">Hello,</h1>
-					<span class="byline">Forgot your password?</span>
+					<h1 class="title">Welcome</h1>
+					<span class="byline">Thanks for registering!</span>
 				</div>
 				<div class="description">
-					<p>We received a request to reset the password for your account. To reset your password, click on the button below:</p>
+					<p><?php echo Config::get('app.site_name'); ?> allows you to create tests for free!</p>
 
-					<p>
-						<a href="<?php echo $reset_url; ?>" class="button">Reset your password now</a>
-					</p>
-
-					<p>Or copy and paste the URL into your browser: <?php echo $reset_url; ?></p>
+					<p>Grading is made easy with <?php echo Config::get('app.domain'); ?>.<br /><a href="<?php echo Config::get('app.url'); ?>">Start testing today!</a></p>
 				</div>
 
 				<div class="view-messages"> 
