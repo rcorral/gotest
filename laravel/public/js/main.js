@@ -2,7 +2,7 @@ jQuery(function(){
 	jQuery(document)
 		.on('click', '.login-action', function()
 		{
-			var href = jQuery(this).attr('href');
+			var href = jQuery(this).prop('href');
 
 			core._ajax({}, function(data){
 				core.parse_request(data);
@@ -15,7 +15,7 @@ jQuery(function(){
 		})
 		.on('click', '.register-action', function()
 		{
-			var href = jQuery(this).attr('href');
+			var href = jQuery(this).prop('href');
 
 			core._ajax({}, function(data){
 				core.parse_request(data);
@@ -28,7 +28,7 @@ jQuery(function(){
 		})
 		.on('click', '.js-ajax-link', function()
 		{
-			var href = jQuery(this).attr('href');
+			var href = jQuery(this).prop('href');
 			if ( href.indexOf('http') == -1 ) throw 'invalid.link';
 
 			core._ajax({}, function(data){
@@ -55,7 +55,7 @@ jQuery(function(){
 				core.parse_request(data);
 			}, {
 				url: form[0]['action'],
-				type: form.attr('method') || 'POST'
+				type: form.prop('method') || 'POST'
 			});
 
 			return false;
@@ -114,18 +114,4 @@ jQuery(function(){
 
 	// Set the right height of the main container
 	jQuery('div.wrapper').css({top: jQuery('div.navbar').outerHeight(true)});
-
-	// TODO: This needs to go somewhere else
-	jQuery('.intro').animate({
-		left: 0,
-		opacity: 1
-		}, 400, 'linear', function()
-		{
-	});
-	jQuery('.home-title').animate({
-	top: 0
-		}, 400, 'linear', function()
-		{
-	});
-	jQuery('#start').focus();
 });

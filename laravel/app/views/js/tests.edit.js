@@ -58,7 +58,9 @@ jQuery('#questions-wrapper').on('click', '.remove-answer', function(){
 });
 
 jQuery(document).on('submit', '.question-selection', function(){
-	type = jQuery('form.question-selection input[name="question_type"]:checked').val();
+	if ( !is_loggedin ) return check_logged_in();
+
+	var type = jQuery('form.question-selection input[name="question_type"]:checked').val();
 
 	if ( !type ) {
 		_alert( 'Please make a selection.' );
@@ -66,9 +68,7 @@ jQuery(document).on('submit', '.question-selection', function(){
 	};
 
 	// Ajax call to com_api to get code to add question
-	core._ajax({
-		key: api_key
-	}, function( data ) {
+	core._ajax({}, function( data ) {
 		if ( data.success ) {
 			jQuery('#questions-wrapper').append( data.html );
 			core.modal_close();
@@ -78,19 +78,26 @@ jQuery(document).on('submit', '.question-selection', function(){
 	return false;
 });
 
-jQuery('form.create-form').on('click', '#catid option[value="-1"]', function(e) {
-	$this = jQuery(this);
-	$this.parent().val(0);
+jQuery('form.create-form')
+	.on('click', '#catid option[value="-1"]', function(e) {
+		var $this = jQuery(this);
+		$this.parent().val(0);
 
-	core.modal({
-		header: 'New Subject',
-		body: jQuery('#create-subject-frm-wrapper').html(),
-		footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled form-ajax-submit" data-form-ajax-submit="create-subject-frm">Create</button>'
-	});
-});
+		if ( !is_loggedin ) return check_logged_in();
+
+		core.modal({
+			header: 'New Subject',
+			body: jQuery('#create-subject-frm-wrapper').html(),
+			footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled form-ajax-submit" data-form-ajax-submit="create-subject-frm">Create</button>'
+		});
+	})
+	.on('submit', function() {
+		if ( !is_loggedin ) return check_logged_in();
+	}
+);
 
 jQuery(document).on('keyup', '.create-subject-frm #subject', function(){
-	$btn = jQuery('#modal-container').find('button.btn-primary');
+	var $btn = jQuery('#modal-container').find('button.btn-primary');
 	if ( this.value && $btn.hasClass('disabled') )
 		$btn.removeClass('disabled');
 	else if ( !this.value )
@@ -102,3 +109,10 @@ jQuery(document).on('keyup', '.create-subject-frm #subject', function(){
 	else
 		option.html('');
 });
+
+function check_logged_in()
+{
+	jQuery('.register-action').prop({href: '/register?preaction=1'}).click();
+
+	return false;
+}

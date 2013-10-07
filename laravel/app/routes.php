@@ -19,6 +19,9 @@ Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('/{id}/{unique}', array('as' => 'take_test', 'uses' => 'TestController@take'))
 	->where(array('id' => '[0-9]+', 'unique' => '[0-9a-zA-Z]{6}'));
 
+// Allow the create view without being logged in
+Route::get('/create', array('as' => 'create', 'uses' => 'TestsController@create'));
+
 // Guest routes
 Route::group(array('before' => 'guest'), function()
 {
@@ -43,7 +46,6 @@ Route::group(array('before' => 'auth'), function()
 		->where('type', '[a-z]+');
 
 	// Create, edit, delete tests
-	Route::get('/create', array('as' => 'create', 'uses' => 'TestsController@create'));
 	Route::resource('/tests', 'TestsController');
 	// Presenter view
 	Route::get('/test/{id}/{name}/{unique?}', array('as' => 'test', 'uses' => 'TestController@present'))

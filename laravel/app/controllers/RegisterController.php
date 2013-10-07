@@ -9,14 +9,18 @@ class RegisterController extends \BaseController {
 	 */
 	public function index()
 	{
-		$this->_buffer = View::make('account.register', array('student' => Input::get('student', false)));
+		$pre_action = Input::get('preaction', false);
+		$this->_buffer = View::make('account.register',
+			array('student' => Input::get('student', false), 'pre_action' => $pre_action)
+		);
 
 		if ( Request::ajax() )
 		{
 			return Response::json(array('modal' => array(
 				'header' => 'Register',
 				'body' => (string) $this->_buffer,
-				'footer' => (Input::get('no_login', 0) ? '' : '<a href="#" class="btn login-action">Log in</a>' . ' ')
+				'footer' => ((Input::get('no_login', 0) || $pre_action) ? ''
+						: '<a href="#" class="btn login-action">Log in</a>' . ' ')
 					. Form::submit('Register', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'register-form')),
 				'options' => array('width' => '250px')
 			)));
@@ -42,9 +46,17 @@ class RegisterController extends \BaseController {
 				$group_name = 'student';
 			}
 
-			static::register(array(), $group_name, $silent_login);
+			$user = static::register(array(), $group_name, $silent_login);
 
-			if ( $silent_login )
+			if ( Input::get('preaction') )
+			{
+				$js = "window.is_loggedin=1;";
+				$js .= "window.api_key = '{$user->api_token}';";
+				$js .= "window._token = '" .csrf_token(). "';";
+				$js .= 'core.modal_close();';
+				return Response::json(array('exec' => $js), 200);
+			}
+			elseif ( $silent_login )
 			{
 				return Response::json(array('redirect' => 'current.location'), 200);
 			}

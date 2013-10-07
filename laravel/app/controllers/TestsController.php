@@ -60,6 +60,9 @@ class TestsController extends \BaseController {
 			// unset($questions);
 		}
 
+		// This is so that the request from the homepage works
+		if ( !$test->id && !$test->title ) $test->title = Input::get('title', '');
+
 		$this->_buffer = View::make('presenter.tests_edit', array(
 			'test' => $test,
 			'templates' => $templates,

@@ -98,7 +98,7 @@ nav li {
 	position: relative;
 	top: -1000px;
 }
-.intro {
+.intro-form {
 	position: relative;
 	left: -2000px;
 	opacity: 0;
@@ -106,7 +106,7 @@ nav li {
 	width: 700px;
 	margin: 0 auto;
 }
-.intro input[type="text"] {
+.intro-form input[type="text"] {
 	width: 500px;
 	height: 50px;
 	line-height: 50px;
