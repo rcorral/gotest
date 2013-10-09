@@ -64,8 +64,7 @@ class Document
 		'bootstrap' => array(
 			'js' => "SITEPATH/packages/bootstrap/js/bootstrap.min.js",
 			'css' => array(
-				"SITEPATH/packages/bootstrap/css/bootstrap.css",
-				"SITEPATH/packages/bootstrap/css/bootstrap-responsive.css"
+				"SITEPATH/packages/bootstrap/css/bootstrap.min.css",
 				)
 			),
 		'colorbox' => array(
@@ -275,6 +274,7 @@ class Document
 						break;
 
 					case 'bootstrap':
+						$this->add_meta(array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge'), 1);
 						$this->add_meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'), 1);
 						break;
 

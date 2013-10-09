@@ -8,20 +8,26 @@ $content_span = 12;
 <head>
 <meta charset="UTF-8">
 <?php echo $doc->get_head(); ?>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+	<script src="/js/html5shiv.js"></script>
+	<script src="/js/respond.min.js"></script>
+<![endif]-->
 </head>
 <body class="simple">
+<div id="wrap">
+	<div class="container">
+		<?php if ( $error ): ?>
+		<div class="row">
+			<div class="error-msg span<?php echo $content_span; ?>"><?php echo $error; ?></div>
+		</div>
+		<?php endif; ?>
 
-<div class="wrapper container-fluid">
-	<?php if ( $error ): ?>
-	<div class="row-fluid">
-		<div class="error-msg span<?php echo $content_span; ?>"><?php echo $error; ?></div>
-	</div>
-	<?php endif; ?>
-
-	<div class="row-fluid">
-		<section class="content span<?php echo $content_span; ?>">
-			<?php echo $contents; ?>
-		</section>
+		<div class="row">
+			<section class="content span<?php echo $content_span; ?>">
+				<?php echo $contents; ?>
+			</section>
+		</div>
 	</div>
 </div>
 <div>

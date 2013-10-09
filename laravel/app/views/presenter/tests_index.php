@@ -15,7 +15,7 @@
 				<td><a href="<?php echo Url::route('tests.edit', $test->id); ?>"><?php echo $test->title; ?></a></td>
 				<td><?php echo $test->sub_title; ?></td>
 				<td><?php echo $test->category_title; ?></td>
-				<td><a href="<?php echo Url::route('test', array('id' => $test->id, 'name' => $test->alias)); ?>" class="btn" target="_blank">Start Session</a></td>
+				<td><a href="<?php echo Url::route('test', array('id' => $test->id, 'name' => $test->alias)); ?>" class="btn btn-default" target="_blank">Start Session</a></td>
 				<td><a href="<?php echo Url::route('tests.destroy', $test->id); ?>" class="btn btn-danger js-delete">x</a></td>
 			</tr>
 			<?php endforeach; else: ?>

@@ -7,7 +7,7 @@ Templates = (function() {
 	Templates.prototype.mcsa = function( question ) {
 		html = '';
 
-		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+		html += '<div class="col-md-12"><legend>' + question.title + '</legend></div>';
 
 		// Display media
 		html += this.render_media( question );
@@ -15,7 +15,7 @@ Templates = (function() {
 		for ( var i = 0; i < question.options.length; i++ ) {
 			option = question.options[i];
 
-			html += '<div class="span12">';
+			html += '<div class="col-md-12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="radio">';
 			html += '<input type="radio" name="answer" value="' +option.id+ '" id="option_'
@@ -31,7 +31,7 @@ Templates = (function() {
 	Templates.prototype.mcma = function( question ) {
 		html = '';
 
-		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+		html += '<div class="col-md-12"><legend>' + question.title + '</legend></div>';
 
 		// Display media
 		html += this.render_media( question );
@@ -39,7 +39,7 @@ Templates = (function() {
 		for ( var i = 0; i < question.options.length; i++ ) {
 			option = question.options[i];
 
-			html += '<div class="span12">';
+			html += '<div class="col-md-12">';
 			html += '<div class="control-group">';
 			html += '<label for="option_' +option.id+ '" class="checkbox">';
 			html += '<input type="checkbox" name="answer[]" value="' +option.id+ '" id="option_'
@@ -55,12 +55,12 @@ Templates = (function() {
 	Templates.prototype.fitb = function( question ) {
 		html = '';
 
-		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+		html += '<div class="col-md-12"><legend>' + question.title + '</legend></div>';
 
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="span12">';
+		html += '<div class="col-md-12">';
 		html += '<div class="control-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge" />';
 		html += '</div>';
@@ -72,12 +72,12 @@ Templates = (function() {
 	Templates.prototype.fitbma = function( question ) {
 		html = '';
 
-		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+		html += '<div class="col-md-12"><legend>' + question.title + '</legend></div>';
 
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="span12">';
+		html += '<div class="col-md-12">';
 		html += '<div class="control-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge" />';
 		html += '</div>';
@@ -89,12 +89,12 @@ Templates = (function() {
 	Templates.prototype.essay = function( question ) {
 		html = '';
 
-		html += '<div class="span12"><legend>' + question.title + '</legend></div>';
+		html += '<div class="col-md-12"><legend>' + question.title + '</legend></div>';
 
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="span12">';
+		html += '<div class="col-md-12">';
 		html += '<div class="control-group">';
 		html += '<textarea name="answer" rows="10"></textarea>';
 		html += '</div>';
@@ -111,17 +111,17 @@ Templates = (function() {
 		_return = '';
 		switch ( question.media_type ) {
 			case 'link':
-				_return = '<div class="span7"><p><a href="' + question.media + '">'
+				_return = '<div class="col-md-7"><p><a href="' + question.media + '">'
 					+ question.media + '</a></p></div>';
 				break;
 
 			case 'image':
-				_return = '<div class="span7"><p><img src="'
+				_return = '<div class="col-md-7"><p><img src="'
 					+ question.media + '" class="img-polaroid" /></p></div>';
 				break;
 
 			case 'youtube':
-				_return = '<div class="span7"><div class="video-container">'
+				_return = '<div class="col-md-7"><div class="video-container">'
 					+ '<iframe id="ytplayer" '
 					+ 'src="https://www.youtube.com/embed/' +question.media+ '" '
 					+ 'frameborder="0"></iframe>'

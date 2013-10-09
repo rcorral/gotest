@@ -13,7 +13,7 @@ echo Form::model((array) $user, array('route' => array('account.store'), 'method
 
 <?php
 echo Form::submit('Save', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'account-form'));
-echo '<a href="' . Url::route('tests.index') . '" class="btn js-dbl-chk">' . Lang::get('Cancel') . '</a>';
+echo '<a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a>';
 echo Form::close();
 ?>
 </div>

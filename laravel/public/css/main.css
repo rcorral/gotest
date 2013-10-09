@@ -1,3 +1,11 @@
+/* Because IE is dumb */
+/* http://getbootstrap.com/getting-started/#browsers */
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
+
 * {
 	margin: 0;
 	padding: 0;
@@ -13,6 +21,51 @@ h1 {
 section {
 	width: 100%;
 }
+
+/******************
+ *   Navigation   *
+ *****************/
+
+body { padding-top: 70px; }
+.simple { padding-top: 0; }
+
+/**************
+ *   Footer   *
+ *************/
+
+/* Sticky footer styles */
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+/* Set the fixed height of the footer here */
+footer {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+.container .credit {
+  margin: 20px 0;
+}
+footer > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/************
+ *   Home   *
+ ***********/
+
 .button {
 	background-color: #f5f5f5;
 	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
@@ -52,46 +105,6 @@ section {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
-nav {
-	width: 100%;
-	height: 50px;
-	position: fixed;
-	z-index: 9;
-	top: 0;
-	display: block;
-	background: #dd577a; /* Old browsers */
-	background: -moz-linear-gradient(top, #dd577a 0%, #db6d89 44%, #db728c 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dd577a), color-stop(44%,#db6d89), color-stop(100%,#db728c)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #dd577a 0%,#db6d89 44%,#db728c 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #dd577a 0%,#db6d89 44%,#db728c 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dd577a', endColorstr='#db728c',GradientType=0 ); /* IE6-9 */
-}
-nav a {
-	color: #FFFFFF;
-	text-decoration: none;
-}
-nav a:hover {
-	color: #FFF0CF;
-}
-nav ul {
-	float: right;
-	margin-right: 50px;
-}
-nav li {
-	float: left;
-	list-style: none;
-	line-height: 50px;
-	padding-left: 25px;
-}
-.wrapper {
-	position: relative;
-	top: 40px;
-}
-.simple .wrapper {
-	top: 0px;
-}
 .home-title {
 	text-align: center;
 	margin: 200px 0 25px 0;
@@ -122,9 +135,10 @@ nav li {
 	margin: 0;
 	padding: 0;
 }
-footer {
-	text-align: center;
-}
+
+/*************
+ *   Login   *
+ ************/
 
 .btn-login-google {
 	background: transparent url('../images/social/Google-White-signin-Long-Base-20dp.png') no-repeat 0 0px;
@@ -133,11 +147,9 @@ footer {
 	width: 294px;
 	display: block;
 }
-
 .btn-login-google:hover {
 	background: transparent url('../images/social/Google-White-signin-Long-Hover-20dp.png') no-repeat 0 0px;
 }
-
 .btn-login-google:active {
 	background: transparent url('../images/social/Google-White-signin-Long-Press-20dp.png') no-repeat 0 0px;
 }

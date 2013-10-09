@@ -1,8 +1,8 @@
-<div class="container-fluid">
-	<div class="row-fluid">
-	<div class="span12">
+<div class="container">
+	<div class="row">
+	<div class="col-md-12">
 		<p></p>
-		<div class="hero-unit">
+		<div class="jumbotron">
 			<h1>This is awkward...</h1>
 			<p>Test is non-existent!</p>
 			<p>

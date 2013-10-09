@@ -1,3 +1,15 @@
+/* Because IE is dumb */
+/* http://getbootstrap.com/getting-started/#browsers */
+if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+	var msViewportStyle = document.createElement("style");
+	msViewportStyle.appendChild(
+		document.createTextNode(
+			"@-ms-viewport{width:auto!important}"
+		)
+	);
+	document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+}
+
 jQuery(function(){
 	jQuery(document)
 		.on('click', '.login-action', function()
@@ -7,7 +19,7 @@ jQuery(function(){
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
-				url: href.indexOf('http') >= 0 ? href : '/login',
+				url: href.indexOf('#') == -1 ? href : '/login',
 				cache: true
 			});
 
@@ -20,7 +32,7 @@ jQuery(function(){
 			core._ajax({}, function(data){
 				core.parse_request(data);
 			}, {
-				url: href.indexOf('http') >= 0 ? href : '/register',
+				url: href.indexOf('#') == -1 ? href : '/register',
 				cache: true
 			});
 
@@ -28,7 +40,7 @@ jQuery(function(){
 		})
 		.on('click', '.js-ajax-link', function()
 		{
-			var href = jQuery(this).prop('href');
+			var href = jQuery(this).attr('href');
 			if ( href.indexOf('http') == -1 ) throw 'invalid.link';
 
 			core._ajax({}, function(data){

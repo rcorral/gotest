@@ -7,7 +7,13 @@ Things to do:
 	x Present questions
 	x View data
 	x Categories
+	- Points per question
+	- Randomize answers
 	- Add filters to the forms, to filter the rows
+	- More question types
+		- true/false
+	- Symbols help
+		- Allow copy pasta of symbols, such as exponents and other math ones
 - Audience
 	x Login some identifier (id or name)
 	x Answer questions
@@ -32,3 +38,38 @@ Build, manage and give tests online.
 
 Ideas
 	- Maybe after a student logs in, rather than showing the current "Create a test page" We would show a page that has a text box where they would enter the unique URL to the test they need to take
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+¼ ½ ¾ ¹ ² ³ ° ≡ ≠ ≈ ‰ ∞ ∑ ≤ ≥ ± µ π · ¿ × ÷ + - ‹›
+
+‾ ← ↑ → ↓ ¡ ¢ ¤ √ ∛ ∜ ∫ ∂ ∆ ∏ ∟ ∩ ƒ ⁄ ∠ ‖ ⊥
+
+Ã Ä Å À Á Â Æ Ç Ë È É Ê Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö Ø Ù Ú Û Ü Ý Ÿ Þ ß ×
+
+ã ä å à á â æ ç ë è é ê ì í î ï ð ñ ò ó ô õ ö ø ù ú û ü ý ÿ þ ™ ® ©
+
+Example fraction 2⁄5 use the Ax / Ax editor buttons.

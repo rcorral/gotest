@@ -88,7 +88,7 @@ jQuery('form.create-form')
 		core.modal({
 			header: 'New Subject',
 			body: jQuery('#create-subject-frm-wrapper').html(),
-			footer: '<button data-dismiss="modal" aria-hidden="true" class="btn">Close</button> <button class="btn btn-primary disabled form-ajax-submit" data-form-ajax-submit="create-subject-frm">Create</button>'
+			footer: '<button data-dismiss="modal" aria-hidden="true" class="btn btn-default">Close</button> <button class="btn btn-primary disabled form-ajax-submit" data-form-ajax-submit="create-subject-frm">Create</button>'
 		});
 	})
 	.on('submit', function() {

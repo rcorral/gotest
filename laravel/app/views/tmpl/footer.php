@@ -1,7 +1,5 @@
-	<hr>
-
-	<div class="row-fluid">
-		<footer class="span12">
-			<p>&copy; MyExam <?php echo date('Y'); ?></p>
-		</footer>
+<footer>
+	<div class="container">
+		<p class="text-muted credit">&copy; MyExam <?php echo date('Y'); ?></p>
 	</div>
+</footer>
