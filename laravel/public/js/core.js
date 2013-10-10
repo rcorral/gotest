@@ -19,14 +19,13 @@ core_class.prototype.modal = function(data) {
 	}
 
 	if ( data.options ) {
-		if ( data.options.width ) {
-			this.modal_container.css({width: data.options.width});
-		};
+		// if ( data.options.width ) this.modal_container.css({width: data.options.width});
+		// else this.modal_container.css({width: 'auto'});
 	}
 
 	html = '';
 	if ( data.header )
-		html += '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3>' + data.header + '</h3></div>';
+		html += '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 id="modal-label" class="modal-title">' + data.header + '</h4></div>';
 
 	if ( data.body )
 		html += '<div class="modal-body">' + data.body + '</div>';
@@ -34,13 +33,12 @@ core_class.prototype.modal = function(data) {
 	if ( data.footer )
 		html += '<div class="modal-footer">' + data.footer + '</div>';
 
-	this.modal_container.html(html).modal().css(
-		(jQuery(document).width() <= 751 ? {margin:'30px auto'} : {'margin-left':function () { return -(jQuery(this).width() / 2);}})
-	);
+	this.modal_container.find('.modal-content:first').html(html);
+	this.modal_container.modal()
+		// .css((jQuery(document).width() <= 751 ? {margin:'30px auto'} : {'margin-left':function () { return -(jQuery(this).width() / 2);}}));
 	setTimeout(function(){
 		$el = core.modal_container.find('input[type="text"]:first');
-		if ( $el[0] )
-			$el[0].focus();
+		if ( $el[0] ) $el[0].focus();
 	}, 500);
 };
 

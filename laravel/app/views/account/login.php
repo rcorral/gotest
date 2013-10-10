@@ -1,11 +1,19 @@
 <?php
-echo Form::open(array('url' => 'login', 'method' => 'post', 'class' => 'login-form'));
-echo Form::label('email', 'E-Mail Address');
-echo Form::text('email');
-echo Form::label('password', 'Password');
-echo Form::password('password');
+echo Form::open(array('url' => 'login', 'method' => 'post', 'class' => 'login-form form-horizontal', 'role' => 'form'));
+echo '<div class="form-group">';
+	echo Form::label('email', 'E-Mail Address', array('class' => 'col-lg-3 control-label'));
+	echo '<div class="col-lg-9">';
+		echo Form::text('email', '', array('class' => 'form-control', 'placeholder' => 'Email'));
+	echo '</div>';
+echo '</div>';
+echo '<div class="form-group">';
+	echo Form::label('password', 'Password', array('class' => 'col-lg-3 control-label'));
+	echo '<div class="col-lg-9">';
+		echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Password'));
+	echo '</div>';
+echo '</div>';
 ?>
-<a href="<?php echo URL::to('recover'); ?>" class="js-ajax-link">Forgot your password?</a>
+<a href="<?php echo URL::to('recover'); ?>" class="js-ajax-link pull-right">Forgot your password?</a>
 <?php
 if ( !Request::ajax() )
 {

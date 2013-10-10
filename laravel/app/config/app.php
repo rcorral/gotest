@@ -22,7 +22,7 @@ return array(
 	|
 	| The public name of the site
 	*/
-	'site_name' => 'Test your way',
+	'site_name' => 'GoTest!',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return array(
 	|
 	| The vanilla domain name
 	*/
-	'domain' => 'TestYourWay.com',
+	'domain' => 'GoTest.org',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://testyourway.com',
+	'url' => 'http://gotest.org',
 
 	/*
 	|--------------------------------------------------------------------------

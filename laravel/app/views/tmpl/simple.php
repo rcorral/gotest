@@ -31,7 +31,7 @@ $content_span = 12;
 	</div>
 </div>
 <div>
-	<div id="modal-container" class="modal hide fade" role="dialog" aria-hidden="true"></div>
+	<div class="modal fade" id="modal-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"></div></div></div>
 </div>
 
 <?php echo $doc->get_footer(); ?>
