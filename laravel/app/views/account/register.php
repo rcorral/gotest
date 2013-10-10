@@ -24,5 +24,5 @@ if ( $pre_action )
 	echo Form::hidden('preaction', 'preaction');
 }
 if ( !Request::ajax() )
-	echo Form::submit('Register', array('class' => 'form-ajax-submit', 'data-form-ajax-submit' => 'register-frm'));
+	echo Form::button('Register', array('class' => 'form-ajax-submit', 'data-form-ajax-submit' => 'register-frm'));
 echo Form::close();

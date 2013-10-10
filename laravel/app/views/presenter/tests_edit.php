@@ -85,7 +85,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 	</div>
 <?php
 echo Form::hidden('id', $test->id);
-echo Form::submit('Save');
+echo Form::button('Save');
 echo '<a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a>';
 echo Form::close();
 ?>

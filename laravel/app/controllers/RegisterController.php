@@ -21,7 +21,7 @@ class RegisterController extends \BaseController {
 				'body' => (string) $this->_buffer,
 				'footer' => ((Input::get('no_login', 0) || $pre_action) ? ''
 						: '<a href="#" class="btn btn-default login-action">Log in</a>' . ' ')
-					. Form::submit('Register', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'register-form')),
+					. Form::button('Register', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'register-form')),
 				'options' => array('width' => '250px')
 			)));
 		}

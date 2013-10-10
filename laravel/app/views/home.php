@@ -6,7 +6,7 @@
 			<?php echo Form::text('title', '', array('placeholder' => 'Enter A Test Name')); ?>
 		</div>
 	<?php
-	echo Form::submit('Get Started!', array('class' => 'started'));
+	echo Form::button('Get Started!', array('class' => 'started'));
 	echo Form::close();
 	?>
 </section>

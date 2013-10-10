@@ -16,7 +16,7 @@ class LoginController extends \BaseController {
 			return Response::json(array('modal' => array(
 				'header' => 'Log in',
 				'body' => (string) $this->_buffer,
-				'footer' => '<a href="#" class="btn btn-default register-action">Register</a>' . ' ' . Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
+				'footer' => '<a href="#" class="btn btn-default register-action">Register</a>' . ' ' . Form::button('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
 				'options' => array('width' => '250px')
 			)));
 		}
@@ -62,7 +62,7 @@ class LoginController extends \BaseController {
 			return Response::json(array('modal' => array(
 				'header' => 'Recover',
 				'body' => (string) $this->_buffer,
-				'footer' => Form::submit('Submit', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'recover-form')),
+				'footer' => Form::button('Submit', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'recover-form')),
 				'options' => array('width' => '250px')
 			)));
 		}
@@ -128,7 +128,7 @@ class LoginController extends \BaseController {
 			return Response::json(array('modal' => array(
 				'header' => Lang::get('It\'s on its way!'),
 				'body' => (string) $this->_buffer,
-				'footer' => Form::submit('Got it!', array('class' => 'btn btn-primary', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')),
+				'footer' => Form::button('Got it!', array('class' => 'btn btn-primary', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')),
 				'options' => array('width' => '300px')
 			)));
 		}
@@ -196,7 +196,7 @@ class LoginController extends \BaseController {
 			return Response::json(array('modal' => array(
 				'header' => 'Log in',
 				'body' => (string) $this->_buffer,
-				'footer' => Form::submit('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
+				'footer' => Form::button('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form')),
 				'options' => array('width' => '250px')
 			)));
 		}
