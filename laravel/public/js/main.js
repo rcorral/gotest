@@ -58,19 +58,26 @@ jQuery(function(){
 		})
 		.on('click', '.form-ajax-submit', function(event)
 		{
-			var form = jQuery('form.' + jQuery(this).data('form-ajax-submit') + ':visible')
-				, data = jQuery.deparam(form.serialize())
+			var $form = jQuery('form.' + jQuery(this).data('form-ajax-submit') + ':visible')
+				, data = jQuery.deparam($form.serialize())
 				;
 
 			core._ajax(data, function( data )
 			{
 				core.parse_request(data);
 			}, {
-				url: form[0]['action'],
-				type: form.prop('method') || 'POST'
+				url: $form[0]['action'],
+				type: $form.prop('method') || 'POST'
 			});
 
 			return false;
+		})
+		// Trigger form submission
+		.on('click', '.form-submit', function()
+		{
+			var $form = jQuery('form.' + jQuery(this).data('form-submit') + ':visible');
+
+			if ( $form[0] ) $form.submit();
 		})
 		// This is just so that the form is not submited via the normal browser function
 		.on('submit', '.ajax-frm', function(event)

@@ -41,7 +41,7 @@ Form::macro('categories', function( $name = 'catid', $value = 0, $options = arra
 
 	$loop_children($select, $children);
 
-	return Form::select($name, $select, $value);
+	return Form::select($name, $select, $value, array('class' => 'form-control'));
 });
 
 Form::macro('cb_id', function( $row_num, $value, $name = 'cid' )
@@ -58,12 +58,13 @@ Form::macro('cb_id', function( $row_num, $value, $name = 'cid' )
  */
 Form::macro('item_state', function( $state, $id, $item_type )
 {
-	$current_state = $state ? Lang::get('Publish') : Lang::get('Unublish');
-	$state_to_be = $state ? Lang::get('Unpublish') : Lang::get('Publish');
-	return '<a title="' .$state_to_be. ' ' .Lang::get('Item'). '" class="js-change-state" data-id="'
+	$current_state = $state ? Lang::get('Active') : Lang::get('Inactive');
+	$state_to_be = $state ? Lang::get('Inactivate') : Lang::get('Active');
+	$btn_class = $state ? 'success' : 'default';
+	$glyph = $state ? 'glyphicon-ok' : 'glyphicon-remove';
+	return '<a title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
 		. $id. '" data-action="' .$item_type. '.' .strtolower($state_to_be)
-		. '" href="javascript:void(0);"><span class="state ' . strtolower($current_state)
-		. '"><span class="text">' .$current_state. '</span></span></a>';
+		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span> <span>' .$current_state. '</span></a>';
 });
 
 Form::macro('csrf', function()

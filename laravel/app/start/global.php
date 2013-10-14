@@ -56,14 +56,18 @@ App::error(function(Exception $exception, $code)
 		{
 			return Helper::json_error_response(array('message' => $exception->getMessage()), $exception->getCode());
 		}
+		else
+		{
+			$controller = new ErrorController;
+			return $controller->show($exception->getMessage(), $exception->getCode());
+		}
 	}
 	else
 	{
 		Log::error($exception);
 	}
 
-	$controller = new ErrorController;
-	return $controller->show($exception->getMessage(), $exception->getCode());
+	// TODO: return Redirect::to('404');
 });
 
 App::fatal(function($exception)

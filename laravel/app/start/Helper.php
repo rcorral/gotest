@@ -44,15 +44,27 @@ class Helper
 	 * TEST METHODS
 	 */
 
+	static function get_question_types()
+	{
+		$types = array(
+			'mcsa' => (object) array('id' => 1, 'type' => 'mcsa', 'title' => 'Multiple choice single answer'),
+			'mcma' => (object) array('id' => 2, 'type' => 'mcma', 'title' => 'Multiple choice multiple answer'),
+			'fitb' => (object) array('id' => 3, 'type' => 'fitb', 'title' => 'Fill in the blank'),
+			'fitbma' => (object) array('id' => 4, 'type' => 'fitbma', 'title' => 'Fill in the blank multiple answer'),
+			'essay' => (object) array('id' => 5, 'type' => 'essay', 'title' => 'Essay')
+			);
+
+		return $types;
+	}
+
 	static function get_question_templates()
 	{
-		$types = DB::table('test_question_types')
-			->get()
-			;
+		$types = self::get_question_types();
 
 		$templates = array();
-		foreach ( $types as $type ) {
-			$templates[$type->type] = $type;
+		foreach ( $types as $type )
+		{
+			$templates[$type->type] = self::get_question_type($type->type);
 		}
 
 		return $templates;
@@ -63,16 +75,46 @@ class Helper
 	 */
 	static function get_question_type( $type )
 	{
-		if ( !$type )
-			return '';
+		if ( !$type ) return '';
 
-		$row = DB::table('test_question_types')
-			->select('id', 'title', 'html')
-			->where('type', $type)
-			->first()
-			;
+		$questions = self::get_question_types();
+		$options = array(
+			'seconds' => true,
+			'minimum_answers' => true,
+			'media' => true,
+			'answers' => true,
+			'answer_type' => 'radio', // radio or checkbox
+			);
 
-		return $row;
+		switch ( $type ) {
+			case 'mcsa':
+				$options['minimum_answers'] = false;
+				break;
+
+			case 'mcma':
+				$options['answer_type'] = 'radio';
+				break;
+
+			case 'fitb':
+				$options['minimum_answers'] = false;
+				break;
+
+			case 'fitbma':
+				$options['answer_type'] = 'radio';
+				break;
+
+			case 'essay':
+				$options['minimum_answers'] = false;
+				$options['answers'] = false;
+				break;
+
+			default: return false;
+		}
+
+		$question = $questions[$type];
+		$question->html = (string) View::make('tmpl.questions', $options);
+
+		return $question;
 	}
 
 	static function paginate_by()

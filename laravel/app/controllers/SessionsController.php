@@ -58,7 +58,7 @@ class SessionsController extends \BaseController {
 
 					try
 					{
-						$session->is_active = ('publish' == $input['state'] ? 1 : 0);
+						$session->is_active = ('active' == $input['state'] ? 1 : 0);
 						$session->save();
 						return Helper::json_success_response(array(
 							'html' => Form::item_state($session->is_active, $session->id, 'sessions')

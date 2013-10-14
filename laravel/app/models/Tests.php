@@ -57,6 +57,6 @@ class Tests extends Eloquent
 
 		$query->orderBy('test_tests.title', 'asc');
 
-		return $query->get();
+		return $query->paginate(Helper::paginate_by());
 	}
 }

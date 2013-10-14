@@ -1,5 +1,9 @@
 jQuery('.add-question').on('click', function(){
-	core.inline_popup( '<p>Select type of question:</p><form class="question-selection"><p><ul><li><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> <label for="type-mcsa">Multiple choice single answer</label></li><li><input type="radio" name="question_type" value="mcma" id="type-mcma" /> <label for="type-mcma">Multiple choice multiple answer</label></li><li><input type="radio" name="question_type" value="fitb" id="type-fitb" /> <label for="type-fitb">Fill in the blank</label></li><li><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> <label for="type-fitbma">Fill in the blank multiple answer</label></li><li><input type="radio" name="question_type" value="essay" id="type-essay" /> <label for="type-essay">Essay</label></li></ul><input type="submit" name="select" value="Select" /></form></p>' );
+	core.modal({
+		header: 'Select type of question',
+		body: '<form class="question-selection" role="form"><div class="checkbox"><label for="type-mcsa"><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> Multiple choice single answer</label></div><div class="checkbox"><label for="type-mcma"><input type="radio" name="question_type" value="mcma" id="type-mcma" /> Multiple choice multiple answer</label></div><div class="checkbox"><label for="type-fitb"><input type="radio" name="question_type" value="fitb" id="type-fitb" /> Fill in the blank</label></div><div class="checkbox"><label for="type-fitbma"><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> Fill in the blank multiple answer</label></div><div class="checkbox"><label for="type-essay"><input type="radio" name="question_type" value="essay" id="type-essay" /> Essay</label></div></form>',
+		footer: '<button class="btn btn-primary form-submit" data-form-submit="question-selection">Select</button>'
+	});
 	return false;
 });
 

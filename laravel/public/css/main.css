@@ -22,6 +22,29 @@ section {
 	width: 100%;
 }
 
+form select.form-control {
+	padding-top: 9px;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+/******************
+ *   Glyphicons   *
+ *****************/
+
+/* Hide descriptions of text */
+.glyphicon span {
+	display: none;
+}
+
+/* Colors used for glyphs */
+/*.green {color: #228B22;}*/
+.green {color: #008B00;}
+/*.red {color: #CD2626;}*/
+.red {color: #CD0000;}
+
 /******************
  *   Navigation   *
  *****************/
@@ -152,4 +175,26 @@ footer > .container {
 }
 .btn-login-google:active {
 	background: transparent url('../images/social/Google-White-signin-Long-Press-20dp.png') no-repeat 0 0px;
+}
+
+/*************
+ *   Tests   *
+ ************/
+
+.tests-list tbody > tr > td, .sessions-list tbody > tr > td, tbody > tr > td.middle {
+    vertical-align: middle;
+}
+
+.create-form .panel .panel-heading h3 {
+	margin-top: 10px;
+}
+
+.radio-buttons input {
+	display: none;
+}
+.radio-buttons .btn {
+	margin-left: -5px;
+}
+.radio-buttons input:checked + label {
+	background-color: #ccc;
 }

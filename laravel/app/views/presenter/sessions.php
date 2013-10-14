@@ -1,5 +1,6 @@
-<form action="<?php echo URL::to('sessions.index'); ?>" method="post" name="adminForm" id="adminForm">
-	<?php /*
+<div>
+<?php /*
+	<form action="<?php echo URL::to('sessions.index'); ?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo Lang::get('JSEARCH_FILTER_LABEL'); ?></label>
@@ -16,47 +17,50 @@
 		</div>
 	</fieldset>
 	<div class="clr"> </div>
+	<div>
+		<?php echo Form::csrf(); ?>
+	</div>
+</form>
 	*/ ?>
-
-	<table class="sessions-list">
+	<table class="sessions-list table table-striped table-hover">
 		<thead>
-			<tr>
+			<tr><?php /*
 				<th width="1%">
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Lang::get('Check All'); ?>" onclick="core.check_all(this)" />
-				</th>
+				</th>*/ ?>
 				<th>Title</th>
-				<th>Active</th>
-				<th>Date</th>
-				<th>Tests taken</th>
-				<th>Download Results</th>
-				<th>Delete</th>
+				<th width="12%">Status</th>
+				<th width="160px">Date</th>
+				<th width="9%">Tests taken</th>
+				<th width="160px">Download Results</th>
+				<th width="60px">Delete</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php foreach ( $sessions as $i => $session ) : ?>
-			<tr class="row<?php echo $i % 2; ?>">
-				<td class="center">
+			<tr class="row<?php echo $i % 2; ?>"><?php /*
+				<td>
 					<?php echo Form::cb_id($i, $session->id); ?>
-				</td>
+				</td>*/ ?>
 				<td>
 					<?php echo $session->title; // TODO: Prevent xss here, escape this ?>
 					<?php if ( $session->is_active ) : ?>
 					<!--<a href="<?php echo URL::to('take_test', array('id' => $session->test_id, 'unique' => substr($session->unique_id, 0, 6))); ?>" target="_blank">[administer]</a>-->
 					<?php endif; ?>
 				</td>
-				<td class="center">
+				<td>
 					<?php echo Form::item_state($session->is_active, $session->id, 'sessions'); ?>
 				</td>
-				<td class="center">
+				<td>
 					<?php echo date( 'm/d/Y g:ia', strtotime( $session->created_at ) ); ?>
 				</td>
-				<td class="center">
+				<td align="center">
 					<?php echo $session->count; ?>
 				</td>
-				<td class="center">
-					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank">Download</a>
+				<td>
+					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank" class="btn btn-default">Download</a>
 				</td>
-				<td><a href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger js-delete">x</a></td>
+				<td align="center"><button type="button" href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -68,8 +72,4 @@
 			</tr>
 		</tfoot>
 	</table>
-
-	<div>
-		<?php echo Form::csrf(); ?>
-	</div>
-</form>
+</div>
