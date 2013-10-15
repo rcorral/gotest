@@ -7,6 +7,8 @@ Things to do:
 	x Present questions
 	x View data
 	x Categories
+	- Interactive tests checkbox
+	- Change seconds to minutes
 	- Points per question
 	- Randomize answers
 	- Add filters to the forms, to filter the rows
@@ -14,7 +16,6 @@ Things to do:
 		- true/false
 	- Symbols help
 		- Allow copy pasta of symbols, such as exponents and other math ones
-	- Interactive tests checkbox
 - Audience
 	x Login some identifier (id or name)
 	x Answer questions

@@ -88,8 +88,8 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 <?php
 echo Form::hidden('id', $test->id);
 echo '<div class="form-group pull-right">';
+	echo '<a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a> ';
 	echo Form::button('Save', array('type' => 'submit', 'class' => 'btn btn-primary'));
-	echo ' <a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a>';
 echo '</div>';
 echo Form::close();
 ?>

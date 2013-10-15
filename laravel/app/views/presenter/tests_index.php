@@ -16,7 +16,7 @@
 				<td><?php echo $test->sub_title; ?></td>
 				<td><?php echo $test->category_title; ?></td>
 				<td><a href="<?php echo Url::route('test', array('id' => $test->id, 'name' => $test->alias)); ?>" class="btn btn-default" target="_blank">Start Session</a></td>
-				<td align="center"><a href="<?php echo Url::route('tests.destroy', $test->id); ?>" class="btn btn-danger js-delete">x</a></td>
+				<td align="center"><button type="button" href="<?php echo Url::route('tests.destroy', $test->id); ?>" class="btn btn-danger btn-sm js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
 			</tr>
 			<?php endforeach; else: ?>
 			<tr>
