@@ -131,10 +131,11 @@ class Test extends ModelBase
 	{
 		if ( empty($data) ) return true;
 
+		$order = 0;
 		$question_ids = array();
 		foreach ( $data as $question_id => $question )
 		{
-			$question['question'] = trim( $question['question'] );
+			$question['question'] = trim($question['question']);
 			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] ) continue;
 
 			$table = DB::table('test_questions');
@@ -144,8 +145,9 @@ class Test extends ModelBase
 				'question_type' => $question['type_id'],
 				'seconds' => $question['seconds'],
 				'min_answers' => @$question['min_answers'] ? $question['min_answers'] : 0,
-				'media' => $this->clean_media_url( $question['media'], @$question['media_type'] ),
-				'media_type' => @$question['media_type'] ? $question['media_type'] : ''
+				'media' => $this->clean_media_url($question['media'], @$question['media_type']),
+				'media_type' => @$question['media_type'] ? $question['media_type'] : '',
+				'order' => $order // Reset the ordering depending on how they came from the request
 				);
 
 			// This means that this question already exists so lets add the id to the array
@@ -162,10 +164,6 @@ class Test extends ModelBase
 				// Insert
 				else
 				{
-					$_data['order'] = (int) DB::table('test_questions')
-						->where( 'test_id', (int) $test_id )
-						->max('order') + 1
-						;
 					$qid = (int) $table->insertGetId($_data);
 				}
 			}
@@ -184,7 +182,7 @@ class Test extends ModelBase
 			if ( isset( $question['options'] ) && !empty( $question['options'] ) )
 			{
 				// Delete all previous question options
-					DB::table('test_question_options')
+				DB::table('test_question_options')
 					->where('question_id', $qid)
 					->delete()
 					;
@@ -211,6 +209,8 @@ class Test extends ModelBase
 					}
 				}
 			}
+
+			$order++;
 		}
 
 		// Delete all questions that are not on request

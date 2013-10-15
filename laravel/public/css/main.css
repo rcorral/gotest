@@ -189,6 +189,32 @@ footer > .container {
 	margin-top: 10px;
 }
 
+.question-wrapper h4 {
+	cursor: pointer;
+}
+.question-wrapper h4 > span {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+
+	font-size: 11px;
+	color: #A7A7A7;
+	padding-right: 4px;
+	position: relative;
+	top: -1px;
+}
+.question-wrapper h4 > span.collapsed {
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+
+	top: -2px;
+}
+
 .radio-buttons input {
 	display: none;
 }
@@ -196,5 +222,5 @@ footer > .container {
 	margin-left: -5px;
 }
 .radio-buttons input:checked + label {
-	background-color: #ccc;
+	background-color: #E8E8E8;
 }

@@ -88,6 +88,9 @@ class Document
 		'deparam' => array(
 			'js' => "SITEPATH/js/jquery.ba-bbq.min.js"
 			),
+		'sortable' => array(
+			'js' => "SITEPATH/js/jquery.sortable.js"
+			),
 		'core' => array(
 			'js' => "SITEPATH/js/core.js"
 			),

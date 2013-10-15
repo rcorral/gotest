@@ -1,5 +1,5 @@
 <div class="question-wrapper list-group-item">
-	<h4>QUESTION_TYPE<button class="remove-question btn btn-danger btn-xs pull-right" type="button" title="Remove"><span class="glyphicon glyphicon-remove"></span></button></h4>
+	<h4><span class="glyphicon glyphicon-play"></span>QUESTION_TYPE<button class="remove-question btn btn-danger btn-xs pull-right" type="button" title="Remove"><span class="glyphicon glyphicon-remove"></span></button></h4>
 	<div>
 		<input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />
 		<div class="form-group">
@@ -22,7 +22,7 @@
 		<div class="form-group">
 			<?php echo Form::label('media-QID', 'Media'); ?>
 			<div class="input-group">
-				<?php echo Form::text('questions[QID][media]', 'QUESTION_MEDIA', array('id' => 'media-QID', 'class' => 'form-control', 'placeholder' => 'Link, image or YouTube url')); ?>
+				<?php echo Form::text('questions[QID][media]', 'QUESTION_MEDIA', array('id' => 'media-QID', 'class' => 'form-control js-media-text', 'placeholder' => 'Link, image or YouTube url')); ?>
 
 				<div class="input-group-btn radio-buttons">
 					<input type="radio" id="media-link-QID" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK />

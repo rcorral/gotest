@@ -7,6 +7,36 @@ jQuery('.add-question').on('click', function(){
 	return false;
 });
 
+jQuery('.js-questions-wrapper')
+	.on('keyup', '.js-media-text', function()
+	{
+		var $this = jQuery(this),
+			val = $this.val()
+			qid = $this.prop('id').replace('media-', '');
+			;
+
+		if ( val.match(/^https?:\/\/(www\.)?youtube\.com/) || val.match(/^https?:\/\/youtu\.be/) )
+		{
+			jQuery('#media-yt-' + qid).prop({checked: 'checked'});
+		}
+		else if ( val.match(/^https?:\/\/.*?\.(jpg|jpeg|png|gif)$/) )
+		{
+			jQuery('#media-image-' + qid).prop({checked: 'checked'});
+		}
+		else if ( val.match(/^https?:\/\//) )
+		{
+			jQuery('#media-link-' + qid).prop({checked: 'checked'});
+		}
+	})
+	.on('click', '.question-wrapper h4', function()
+	{
+		var $this = jQuery(this);
+		$this.find('span:first').toggleClass('collapsed');
+		$this.next().slideToggle();
+	})
+	.sortable({handle: 'h4', forcePlaceholderSize: true})
+	;
+
 // Add new answer rows
 jQuery('#questions-wrapper').on('click', '.add-new-answer', function(){
 	// Increase auto increment of answers
@@ -61,13 +91,14 @@ jQuery('#questions-wrapper').on('click', '.remove-answer', function(){
 	return false;
 });
 
+// Add a new question
 jQuery(document).on('submit', '.question-selection', function(){
 	if ( !is_loggedin ) return check_logged_in();
 
 	var type = jQuery('form.question-selection input[name="question_type"]:checked').val();
 
 	if ( !type ) {
-		_alert( 'Please make a selection.' );
+		_alert('Please make a selection.');
 		return false;
 	};
 
@@ -76,6 +107,7 @@ jQuery(document).on('submit', '.question-selection', function(){
 		if ( data.success ) {
 			jQuery('#questions-wrapper').append( data.html );
 			core.modal_close();
+			jQuery('.js-questions-wrapper').sortable('destroy').sortable({handle: 'h4', forcePlaceholderSize: true});
 		};
 	}, {url: core.site_url + 'questiontemplate/' + type});
 

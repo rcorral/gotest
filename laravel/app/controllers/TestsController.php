@@ -36,6 +36,7 @@ class TestsController extends \BaseController {
 	{
 		$doc = Document::get_instance();
 		$doc->add_inline_view_file('tests.edit.js', array('jquery' => true));
+		array_push($this->libs, 'sortable');
 
 		$test = Test::load_populate($id);
 		$templates = $test->get_templates();
