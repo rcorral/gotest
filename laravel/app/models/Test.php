@@ -198,7 +198,7 @@ class Test extends ModelBase
 							array(
 								'question_id' => $qid,
 								'title' => $option,
-								'valid' => @in_array( $option_id, @$question['answers'] )
+								'valid' => @in_array($option_id, @$question['answers']) ? 1 : 0
 							))
 							;
 					}
@@ -220,7 +220,7 @@ class Test extends ModelBase
 			->delete()
 			;
 
-		if ( !empty( $errors ) ) throw new Exception(implode("\n", $errors));
+		if ( !empty( $errors ) ) throw new Exception(implode('<br />', $errors));
 
 		return true;
 	}

@@ -16,7 +16,7 @@ body {
 h1 {
 	font-size: 60px;
 	font-weight: 300;
-	padding-top: 50px;
+	/*padding-top: 50px;*/
 }
 section {
 	width: 100%;
@@ -24,6 +24,15 @@ section {
 
 form select.form-control {
 	padding-top: 9px;
+}
+
+.jumbotron h1 {
+	font-weight: 400;
+	padding-top: 0;
+	margin: 5px 0 15px;
+}
+.jumbotron ul {
+	margin-left: 15px;
 }
 
 .pointer {
@@ -223,4 +232,20 @@ footer > .container {
 }
 .radio-buttons input:checked + label {
 	background-color: #E8E8E8;
+}
+
+/*************
+ * Presenter *
+ ************/
+
+#presenter-form .controlls {
+	max-width: 201px;
+	margin: 30px auto 10px;
+}
+
+#form-data {
+	margin-top: 15px;
+}
+#form-data legend.lead {
+	font-size: 25px;
 }

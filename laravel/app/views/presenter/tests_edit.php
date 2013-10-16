@@ -1,5 +1,5 @@
 <div class="row">
-<div class="col-lg-6 col-lg-offset-3">
+<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-lg-offset-3">
 <?php
 echo Form::model((array) $test, array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form', 'role' => 'form')); ?>
 	<div class="form-group">
@@ -68,16 +68,16 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 			$option_template = $matches[1];
 			$options_html = '';
 			$counter = 1;
-			foreach ( $question->options as $option ) {
+			foreach ( $question->options as $option )
+			{
 				$options_html .= str_replace(
-					array( 'COUNTER', 'OPTION_TITLE',
-						'OPTION_VALID' ),
-					array( $counter, $option->title,
-						( $option->valid ? 'checked="checked"' : '' ) ),
-					$option_template );
+					array('COUNTER', 'OPTION_TITLE', 'OPTION_VALID'),
+					array($counter, $option->title, ($option->valid ? 'checked="checked"' : '')),
+					$option_template
+				);
 				$counter++;
 			}
-			$html = str_replace( 'OPTIONS_INSERT', $options_html, $html );
+			$html = str_replace('OPTIONS_INSERT', $options_html, $html);
 
 			echo $html;
 			?>

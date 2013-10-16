@@ -1,5 +1,5 @@
 <div class="row">
-<div class="col-lg-4 col-lg-offset-4">
+<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-4">
 <?php
 echo Form::model((array) $user, array('route' => array('account.store'), 'method' => 'post', 'class' => 'account-form ajax-frm', 'role' => 'form'));
 echo '<div class="form-group">';
