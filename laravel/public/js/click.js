@@ -41,7 +41,7 @@ XClick = (function()
 			{
 				xclick.timer.stop();
 			}
-			jQuery('#counter').removeClass('text-error').removeClass('text-success');
+			jQuery('#counter').removeClass('text-danger').removeClass('text-success');
 
 			if ( !data || !data.question )
 			{
@@ -108,14 +108,14 @@ XClick = (function()
 				xclick.timer.pause();
 				if ( xclick.seconds_left )
 				{
-					jQuery('#counter').addClass('text-error');
+					jQuery('#counter').addClass('text-danger');
 				}
 			} else if ( 'play' == data.action )
 			{
 				xclick.timer.play();
 				if ( xclick.seconds_left )
 				{
-					jQuery('#counter').removeClass('text-error');
+					jQuery('#counter').removeClass('text-danger');
 					jQuery('#counter').addClass('text-success');
 					setTimeout("jQuery('#counter').removeClass('text-success');", 2000);
 					jQuery('#btn-submit').slideDown();
@@ -297,7 +297,7 @@ XClick = (function()
 		if ( 'pause' == action )
 		{
 			autostart = false;
-			jQuery('#counter').addClass('text-error');
+			jQuery('#counter').addClass('text-danger');
 		}
 		else
 		{

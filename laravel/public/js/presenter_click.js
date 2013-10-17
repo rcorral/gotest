@@ -220,7 +220,7 @@ XClick = (function()
 		}
 
 		// Reset color on counter
-		jQuery('#counter').removeClass('text-error');
+		jQuery('#counter').removeClass('text-danger');
 
 		// Display the very original time
 		xclick.display_time( core.seconds_to_readable_time( this.seconds_left, this.seconds_left % 60 ) );
@@ -295,7 +295,7 @@ jQuery(document).ready(function()
 			}
 			else if ( xclick.timer )
 			{
-				jQuery(this).addClass('text-success').removeClass('text-error');
+				jQuery(this).addClass('text-success').removeClass('text-danger');
 			}
 		}, function()
 		{
@@ -305,7 +305,7 @@ jQuery(document).ready(function()
 			}
 			else if ( xclick.timer )
 			{
-				jQuery(this).addClass('text-error')
+				jQuery(this).addClass('text-danger')
 					.removeClass('text-warning')
 					.removeClass('text-success');
 			}

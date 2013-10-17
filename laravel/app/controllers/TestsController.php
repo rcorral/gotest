@@ -82,8 +82,7 @@ class TestsController extends \BaseController {
 		$test = Test::load_populate($input['id'], null, false);
 		$test->fill($input);
 
-		if ( !isset($input['anon']) || $input['anon'] != 1 )
-			$test->anon = 0;
+		if ( !isset($input['anon']) || $input['anon'] != 1 ) $test->anon = 0;
 
 		try
 		{

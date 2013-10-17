@@ -138,12 +138,26 @@ class Test extends ModelBase
 			$question['question'] = trim($question['question']);
 			if ( empty( $question['question'] ) || !$test_id || !$question['type_id'] ) continue;
 
+			$seconds = 0;
+			if ( $question['seconds'] )
+			{
+				if ( false !== ($pos = strpos($question['seconds'], '.')) )
+				{
+					$seconds = (substr($question['seconds'], 0, $pos) * 60) + ((float) substr($question['seconds'], $pos) * 60);
+				}
+				else
+				{
+					// Make seconds out of the minutes
+					$seconds = $question['seconds'] * 60;
+				}
+			}
+
 			$table = DB::table('test_questions');
 			$_data = array(
 				'title' => $question['question'],
 				'test_id' => $test_id,
 				'question_type' => $question['type_id'],
-				'seconds' => $question['seconds'],
+				'seconds' => $seconds,
 				'min_answers' => @$question['min_answers'] ? $question['min_answers'] : 0,
 				'media' => $this->clean_media_url($question['media'], @$question['media_type']),
 				'media_type' => @$question['media_type'] ? $question['media_type'] : '',

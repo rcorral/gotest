@@ -36,6 +36,9 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 			<?php
 			$template = $templates->{$question->tqt_type};
 
+			// Convert the seconds to minutes
+			$question->seconds = str_replace('.0', '', number_format($question->seconds / 60, 1));
+
 			// Do all replacements that only need to happen once
 			$html = str_replace(
 				array( 'TYPE_ID', 'QUESTION_TYPE', 'QID', 'QUESTION_TITLE',

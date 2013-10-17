@@ -8,8 +8,8 @@
 		</div>
 		<?php if ( $seconds ): ?>
 		<div class="form-group">
-			<?php echo Form::label('seconds-QID', 'Seconds'); ?>
-			<?php echo Form::text('questions[QID][seconds]', 'QUESTION_SECONDS', array('id' => 'seconds-QID', 'class' => 'form-control', 'placeholder' => 'Seconds')); ?>
+			<?php echo Form::label('seconds-QID', 'Minutes'); ?>
+			<?php echo Form::text('questions[QID][seconds]', 'QUESTION_SECONDS', array('id' => 'seconds-QID', 'class' => 'form-control', 'placeholder' => 'Minutes')); ?>
 		</div>
 		<?php endif; ?>
 		<?php if ( $minimum_answers ): ?>

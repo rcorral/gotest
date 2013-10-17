@@ -16,8 +16,7 @@ class QuestionController extends \BaseController {
 			$user = Helper::get_api_user();
 			$model = new Question();
 
-			if ( !$user->hasAccess('teacher') )
-				throw new Exception('Not authorised.');
+			if ( !$user->hasAccess('teacher') ) throw new Exception('Not authorised.');
 
 			$question = $model->get_question($test_id, $question_id);
 
