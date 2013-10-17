@@ -158,10 +158,9 @@ class TestController extends \BaseController {
 				if ( $test->anon ) $doc->add_script_declaration("var anon_id = '{$unique}';");
 
 				$doc->add_inline_view_file('test.student.css');
-				$doc->add_script_declaration("var test_uri = '" .Request::url(). "', _token = '" .csrf_token(). "';");
+				$doc->add_script_declaration("var test_uri = '" .Request::url(). "';");
 
-				$this->_buffer = View::make('student.test',
-					array('test' => $test, 'session' => $session, 'user' => $user));
+				$this->_buffer = View::make('student.test', array('test' => $test, 'session' => $session, 'user' => $user));
 			}
 		}
 

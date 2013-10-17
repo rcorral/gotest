@@ -97,7 +97,7 @@ XClick = (function()
 					jQuery('#complete-test-btn').removeClass('disabled');
 				};
 			});
-			timer.set({ time : 1000, autostart : true });
+			timer.set({time: 1000, autostart: true});
 
 			jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
 			jQuery('.post-test-hide').slideUp('slow');
@@ -167,8 +167,8 @@ XClick = (function()
 
 				jQuery('#test-active').hide();
 				jQuery('#finish_modal').modal('hide');
-				jQuery('#test-completed').slideDown();
-			}, { url: live_site + 'test/complete', type: 'POST' });
+				jQuery('#test-completed').removeClass('hide').slideDown();
+			}, {url: live_site + 'test/complete', type: 'POST'});
 	};
 
 	XClick.prototype.emit = function( event, data )

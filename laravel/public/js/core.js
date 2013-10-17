@@ -64,9 +64,8 @@ core_class.prototype.parse_request = function(req) {
  * Creates an iframe to log user out
  */
 core_class.prototype.logout = function() {
-	ifrm = document.createElement( 'IFRAME' );
-	ifrm.setAttribute( 'src', this.site_url + '/logout'
-		+ jtoken + '=1' );
+	ifrm = document.createElement('IFRAME');
+	ifrm.setAttribute('src', this.site_url + 'logout');
 	ifrm.style.width = '1px';
 	ifrm.style.height = '1px';
 	ifrm.style.display = 'none';

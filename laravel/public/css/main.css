@@ -34,6 +34,15 @@ form select.form-control {
 .jumbotron ul {
 	margin-left: 15px;
 }
+.jumbotron label {
+	font-weight: 200;
+}
+.jumbotron hr {
+	border-color: #D7D7D7;
+}
+.jumbotron form .form-group label + div {
+	padding-top: 11px;
+}
 
 .pointer {
 	cursor: pointer;
@@ -242,6 +251,18 @@ footer > .container {
 	max-width: 201px;
 	margin: 30px auto 10px;
 }
+
+/*************
+ *  Student  *
+ ************/
+
+.student .controlls {
+	margin: 30px auto 10px;
+}
+
+/****************
+ * Tests Shared *
+ ***************/
 
 #form-data {
 	margin-top: 15px;

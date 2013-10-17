@@ -18,7 +18,7 @@ Templates = (function()
 			option = question.options[i];
 
 			html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">';
-			html += '<div class="control-group">';
+			html += '<div class="form-group">';
 			html += '<div class="radio">';
 			html += '<label for="option_' +option.id+ '">';
 			html += '<input type="radio" name="answer" value="' +option.id+ '" id="option_' + option.id + '" /> ';
@@ -45,7 +45,7 @@ Templates = (function()
 			option = question.options[i];
 
 			html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">';
-			html += '<div class="control-group">';
+			html += '<div class="form-group">';
 			html += '<div class="checkbox">';
 			html += '<label for="option_' +option.id+ '">';
 			html += '<input type="checkbox" name="answer[]" value="' +option.id+ '" id="option_' + option.id + '" /> ';
@@ -68,7 +68,7 @@ Templates = (function()
 		html += this.render_media( question );
 
 		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">';
-		html += '<div class="control-group">';
+		html += '<div class="form-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge form-control" />';
 		html += '</div>';
 		html += '</div>';
@@ -86,7 +86,7 @@ Templates = (function()
 		html += this.render_media( question );
 
 		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">';
-		html += '<div class="control-group">';
+		html += '<div class="form-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge form-control" />';
 		html += '</div>';
 		html += '</div>';
@@ -104,7 +104,7 @@ Templates = (function()
 		html += this.render_media( question );
 
 		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">';
-		html += '<div class="control-group">';
+		html += '<div class="form-group">';
 		html += '<textarea name="answer" rows="10" placeholder="Answer...." class="form-control"></textarea>';
 		html += '</div>';
 		html += '</div>';

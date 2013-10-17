@@ -103,6 +103,7 @@ class LoginController extends \BaseController {
 			Mail::send(array('emails.recover', 'emails.recover_text'), array('reset_url' => URL::to('reset', array('reset_code' => $reset_code))),
 				function($message) use ($user)
 				{
+					$from = Config::get('mail.from');
 					$message->from($from['address'], $from['name']);
 
 					$message->to($user->email)->subject('Reset your password');

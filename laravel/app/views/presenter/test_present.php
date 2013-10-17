@@ -17,7 +17,7 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 				</div>
 				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 clearfix">
 					<!-- Next/Prev buttons -->
-					<div class="control-group well well-sm pull-left controlls">
+					<div class="form-group well well-sm pull-left controlls">
 						<button type="button" name="previous" onclick="xclick.submit(this.name);" id="btn-previous" class="btn btn-default disabled" disabled="disabled"><i class="glyphicon glyphicon-arrow-left"></i></button>
 						<button type="button" name="next" onclick="xclick.submit(this.name);" id="btn-next" class="btn btn-default disabled">Next <i class="glyphicon glyphicon-arrow-right"></i></button>
 						<button type="button" id="complete-test-btn" onclick="xclick.complete_prompt();" class="btn btn-danger disabled"><i class="glyphicon glyphicon-remove"></i></button>
@@ -41,8 +41,8 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 			<p class="post-test-hide"></p>
 			<div class="row post-test-hide" id="pre-test-info">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<div class="container">
 				<div class="jumbotron">
+				<div class="container">
 					<h1>Let's get started!</h1>
 					<p></p>
 					<p>Give this link to students:</p>
@@ -64,31 +64,43 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 	</div>
 </div>
 <div id="test-completed" class="container hide">
+	<p></p>
 	<div class="jumbotron">
+	<div class="container">
 		<h1>Test completed</h1>
 		<p></p>
 		<p>All done!</p>
 	</div>
+	</div>
 </div>
 
 <!-- Finish Modal -->
-<div class="modal hide fade" id="finish_modal" tabindex="-1" role="dialog" aria-labelledby="finish_label" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="finish_label">Complete Test?</h3>
-	</div>
-	<div class="modal-body">
-	<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">No yet</button>
-	<button class="btn btn-primary">Submit</button>
-	</div>
-</div>
+<div class="modal fade" id="finish_modal" tabindex="-1" role="dialog" aria-labelledby="finish_label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="finish_label" class="modal-title">Complete Test?</h4>
+			</div>
+			<div class="modal-body">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">No yet</button>
+				<button class="btn btn-primary">Submit</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- Test non existent -->
-<div class="modal hide fade" id="non_existent_modal" tabindex="-1" role="dialog" aria-labelledby="non_existent_label" aria-hidden="true">
-	<div class="modal-header">
-		<h3 id="non_existent_label">Non existent test.</h3>
-	</div>
-	<div class="modal-body">
-		There is not a unique identifier for the session on this test. Please close this window and administer the test again.
-	</div>
-</div>
+<div class="modal fade" id="non_existent_modal" tabindex="-1" role="dialog" aria-labelledby="non_existent_label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 id="non_existent_label" class="modal-title">Non existent test.</h4>
+			</div>
+			<div class="modal-body">
+				<p>There is not a unique identifier for the session on this test.</p>
+				<p>Please close this window and administer the test again.</p>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

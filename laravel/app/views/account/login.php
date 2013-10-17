@@ -17,7 +17,7 @@ echo '</div>';
 <?php
 if ( !Request::ajax() )
 {
-	echo '<a href="' .Url::route('register.index', array('no_login' => '1', 'student' => (isset($student) && $student) ? 1 : 0)). '" class="btn register-action">Register</a>';
+	echo '<a href="' .Url::route('register.index', array('no_login' => '1', 'student' => (isset($student) && $student) ? 1 : 0)). '" class="btn btn-default register-action">Register</a> ';
 	echo Form::button('Log in', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'login-form'));
 }
 echo Form::close();
