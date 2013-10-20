@@ -39,6 +39,9 @@ core_class.prototype.modal = function(data) {
 	setTimeout(function(){
 		$el = core.modal_container.find('input[type="text"]:first');
 		if ( $el[0] ) $el[0].focus();
+
+		// Initialize tooltips
+		core.modal_container.find('.tooltips').popover({placement: 'auto bottom', trigger: 'hover focus', container: 'body'});
 	}, 500);
 };
 

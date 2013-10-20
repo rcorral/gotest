@@ -89,14 +89,14 @@ jQuery(function(){
 			var $this = jQuery(this);
 			var data = {
 				id: $this.data('id'),
-				action: 'change_state',
-				state: $this.data('action').split('.').slice(1).join('')
+				action: $this.data('action'),
+				state: $this.data('call').split('.').slice(1).join('')
 			};
 			core._ajax(data, function(data)
 			{
 				$this.replaceWith(data.html);
 			}, {
-				url: $this.data('action').split('.').slice(0, 1),
+				url: $this.data('call').split('.').slice(0, 1),
 				type: 'POST'
 			});
 

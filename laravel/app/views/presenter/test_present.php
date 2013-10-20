@@ -17,9 +17,9 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 				</div>
 				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 clearfix">
 					<!-- Next/Prev buttons -->
-					<div class="form-group well well-sm pull-left controlls">
-						<button type="button" name="previous" onclick="xclick.submit(this.name);" id="btn-previous" class="btn btn-default disabled" disabled="disabled"><i class="glyphicon glyphicon-arrow-left"></i></button>
-						<button type="button" name="next" onclick="xclick.submit(this.name);" id="btn-next" class="btn btn-default disabled">Next <i class="glyphicon glyphicon-arrow-right"></i></button>
+					<div class="form-group well well-sm pull-left controls">
+						<button type="button" name="previous" onclick="xclick.change_question(this.name);" id="btn-previous" class="btn btn-default disabled" disabled="disabled"><i class="glyphicon glyphicon-arrow-left"></i></button>
+						<button type="button" name="next" onclick="xclick.change_question(this.name);" id="btn-next" class="btn btn-default disabled">Next <i class="glyphicon glyphicon-arrow-right"></i></button>
 						<button type="button" id="complete-test-btn" onclick="xclick.complete_prompt();" class="btn btn-danger disabled"><i class="glyphicon glyphicon-remove"></i></button>
 					</div>
 				</div>
@@ -43,13 +43,19 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<div class="jumbotron">
 				<div class="container">
-					<h1>Let's get started!</h1>
+					<h1><?php echo $test->interactive ? 'Let\'s get started!' : 'Start testing!'; ?></h1>
 					<p></p>
 					<p>Give this link to students:</p>
 					<p><a href="<?php echo $unique_url; ?>" onclick="return false;"><?php echo $unique_url; ?></a></p>
+					<?php if ( $test->interactive ): ?>
 					<p>
 						<button type="button" class="btn btn-primary btn-lg" onclick="xclick.start_test();">Start testing</button>
 					</p>
+					<?php else: ?>
+					<p>
+						When you're ready, you can deactivate the test from the <a href="<?php echo URL::route('sessions.index'); ?>" class="js-sessions-page">sessions</a> page.
+					</p>
+					<?php endif; ?>
 				</div>
 				</div>
 				</div>

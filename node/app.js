@@ -38,8 +38,11 @@ var client = click.client.setup();
 var lang = click.language.setup();
 var site_domain = argv.domain || '';
 
-io.sockets.on('connection', function( socket ) {
-	socket.on('test_begin', function( data ) {
+io.sockets.on('connection', function( socket )
+{
+	// Interactive tests
+	socket.on('test_begin', function( data )
+	{
 		if ( !tests.validate_request_data( data, true, true ) ) {
 			_debug( 'test_begin:not_presenter' );
 			socket.disconnect();
@@ -61,13 +64,13 @@ io.sockets.on('connection', function( socket ) {
 	socket.on('next_question', function( data, fn ) {
 		var _return_type = 'success', _return_msg = { msg: lang._( 'msg_success' ) };
 
-		if ( !tests.validate_request_data( data, true, true ) ) {
+		if ( !tests.validate_request_data(data, true) ) {
 			_debug( 'next_question:not_presenter' );
 			socket.disconnect();
 			return;
 		}
 
-		if ( !tests.test_exists( data.test_id, data.uid ) ) {
+		if ( data.isp && !tests.test_exists(data.test_id, data.uid) ) {
 			fn( 'error', { msg: lang._( 'test_not_init' ) } );
 			return;
 		};
@@ -75,39 +78,50 @@ io.sockets.on('connection', function( socket ) {
 		// Generate room name from request
 		var room = data.test_id + '-' + data.uid;
 
-		if ( !fn ) {
-			fn = function(){}
-		}
+		if ( !fn ) fn = function(){}
 
 		var site = http.createClient(80, 'localhost');
 		var path = 'http://' + site_domain + '/api/question/' + data.test_id;
 
-		if ( data.question_id )
-			path += '/' + data.question_id;
+		// Is presenter?
+		path += '/' + (data.isp ? 1 : 0);
+
+		if ( data.session ) path += '/' + data.session;
+		if ( data.question_id ) path += '/' + data.question_id;
 
 		path += '?key=' + data.key;
 
-		_debug( 'next_question:requesting', path );
-		var request = site.request( 'GET', path, {'host' : site_domain} );
+		_debug('next_question:requesting', path);
+		var request = site.request('GET', path, {'host' : site_domain});
 		request.end();
-		request.on('response', function(response){
+		request.on('response', function(response)
+		{
 			response.setEncoding('utf8');
 
-			if ( 200 != response.statusCode ) {
-				fn( 'error', { msg: lang._( 'no_php_connection' ) } );
+			if ( 200 != response.statusCode )
+			{
+				fn('error', {msg: lang._('no_php_connection')});
 				return;
-			};
+			}
 
 			var body = '';
-			response.on('data', function(chunk) {
+			response.on('data', function(chunk)
+			{
 				body += chunk;
 			});
 
-			response.on('end', function() {
-				test = tests.set_question( data.test_id, data.uid, body );
-				_debug( 'next_question:test', test );
-				io.sockets.in(room)
-					.emit('next_question', { type: 'question', question: test.cq, offset: 0 });
+			response.on('end', function()
+			{
+				if ( data.isp )
+				{
+					test = tests.set_question(data.test_id, data.uid, body);
+					_debug( 'next_question:test', test );
+					io.sockets.in(room).emit('next_question', {type: 'question', question: test.cq, offset: 0});
+				}
+				else
+				{
+					socket.emit('next_question', {type: 'question', question: body, offset: 0});
+				}
 			});
 		});
 	});

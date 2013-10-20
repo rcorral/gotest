@@ -19,18 +19,21 @@ class TestController extends \BaseController {
 	{
 		// If there is no unique id then generate one and redirect
 		if ( !$unique_id )
+		{
 			return Redirect::route('test', array('id' => $test_id, 'name' => $name,
 				'unique' => $this->_return_with_unique_id($test_id, $name, $unique_id))
 			);
+		}
 
 		$test = Test::load_populate($test_id);
 
 		if ( !$test->id || !Helper::is_test_session_active($test->id, $unique_id) )
+		{
 			$this->_buffer = View::make('presenter.test_noexists');
+		}
 		else
 		{
-			$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'presenter_click',
-				'templates'));
+			$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'presenter_click', 'templates'));
 
 			$doc = Document::get_instance();
 			$doc->add_inline_view_file('test.present.css');
@@ -151,14 +154,13 @@ class TestController extends \BaseController {
 			{
 				if ( empty($test) || !$test->id ) throw new Exception('Test does\'t exist.', 500);
 
-				$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'click',
-					'templates'));
+				$this->libs = array_merge($this->libs, array('deparam', 'timer', 'core', 'socket.io', 'click', 'templates'));
 
 				// Set the anon_id
 				if ( $test->anon ) $doc->add_script_declaration("var anon_id = '{$unique}';");
 
 				$doc->add_inline_view_file('test.student.css');
-				$doc->add_script_declaration("var test_uri = '" .Request::url(). "';");
+				$doc->add_script_declaration("var test_uri = '" .Request::url(). "', is_interactive = " .($test->interactive ? 'true' : 'false'). ";");
 
 				$this->_buffer = View::make('student.test', array('test' => $test, 'session' => $session, 'user' => $user));
 			}
@@ -179,8 +181,8 @@ class TestController extends \BaseController {
 
 			// Let's make sure that the answer sent matches all the ids in our system
 			$test_data = DB::table('test_tests')
-				->select('test_tests.id AS test_id', 'test_tests.anon',
-					'test_sessions.id AS session_id',
+				->select('test_tests.id AS test_id', 'test_tests.anon', 'test_tests.interactive', 'test_tests.seconds',
+					'test_sessions.id AS session_id', 'test_sessions.last_question',
 					'test_questions.id AS question_id',
 					'test_question_types.type AS qtype')
 				->join('test_sessions', 'test_sessions.test_id', '=', 'test_tests.id' )
@@ -193,20 +195,48 @@ class TestController extends \BaseController {
 				->groupBy('test_sessions.id')
 				->first()
 				;
+
 			if ( empty($test_data) || ($test_data->anon && (!$data['anon_id'] && strlen($data['anon_id']) != 8)) )
 			{
 				throw new Exception('Invalid request.', 400);
 			}
 
+			// If test is interactive, students can only submit answers for the current question
+			if ( $test_data->interactive && $test_data->question_id != $test_data->last_question )
+			{
+				throw new Exception('Unable to submit answer for this question.', 400);
+			}
+
 			// Delete all previous answers to this question for this test session
 			$query = DB::table('test_answers')
+				->select('created_at')
 				->where('session_id', (int) $test_data->session_id)
-				->where('question_id', (int) $test_data->question_id)
 				;
 			if ( $test_data->anon ) $query->where('anon_user_id', $data['anon_id']);
 			else                    $query->where('user_id', (int) $user->id);
-			// Do delete
-			$query->delete();
+
+			// If test is NOT interactive then we want to make sure that answers are not submitted past the allowed time, if there is a time limit
+			if ( !$test_data->interactive && $test_data->seconds && ($first_answer = $query->orderBy('created_at', 'ASC')->first()) && !empty($first_answer) )
+			{
+				// Test if too much time has elapsed. +20 seconds to try and compensate for latency
+				if ( (time() - strtotime($first_answer->created_at)) > ($test_data->seconds + 20) )
+				{
+					throw new Exception('Time for this session has expired.', 400);
+				}
+			}
+
+			$query->where('question_id', (int) $test_data->question_id);
+
+			$answers = $query->get();
+			$created_at = date('Y-m-d H:i:s');
+			if ( !empty($answers) && $answers[0]->created_at && '0000-00-00 00:00:00' !== $answers[0]->created_at )
+			{
+				// Override created_at timestamp if we are resubmitting the answer, we don't want to reset the timestamp
+				$created_at = $answers[0]->created_at;
+
+				// Do delete of previous answers
+				$query->delete();
+			}
 
 			// Add answer(s) to db
 			if ( $test_data->anon ) $row_defaults = array('user_id' => 0, 'anon_user_id' => $data['anon_id']);
@@ -214,6 +244,7 @@ class TestController extends \BaseController {
 
 			$row_defaults['session_id'] = (int) $test_data->session_id;
 			$row_defaults['question_id'] = (int) $test_data->question_id;
+			$row_defaults['created_at'] = $created_at;
 
 			$tuples = array();
 
@@ -242,17 +273,16 @@ class TestController extends \BaseController {
 		}
 		catch ( Exception $e )
 		{
-			return Helper::json_success_response(array('message' => $e->getMessage()), $e->getCode());
+			return Helper::json_error_response(array('message' => $e->getMessage()), $e->getCode());
 		}
 	}
 
 	private function _return_with_unique_id( $test_id )
 	{
 		// Lets generate id for this test
-		$unique_id = Helper::generate_unique_test_id($test_id);
+		$unique_id = Helper::generate_unique_test_id($test_id, Input::get('title'));
 
-		if ( !$unique_id )
-			throw new Exception('Error creating unique ID for test.', 500);
+		if ( !$unique_id ) throw new Exception('Error creating unique ID for test.', 500);
 
 		return $unique_id;
 	}

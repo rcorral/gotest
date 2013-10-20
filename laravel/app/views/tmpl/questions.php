@@ -2,35 +2,41 @@
 	<h4><span class="glyphicon glyphicon-play"></span>QUESTION_TYPE<button class="remove-question btn btn-danger btn-xs pull-right" type="button" title="Remove"><span class="glyphicon glyphicon-remove"></span></button></h4>
 	<div>
 		<input type="hidden" name="questions[QID][type_id]" value="TYPE_ID" />
-		<div class="form-group">
-			<?php echo Form::label('question-QID', 'Question'); ?>
-			<?php echo Form::text('questions[QID][question]', 'QUESTION_TITLE', array('id' => 'question-QID', 'class' => 'form-control', 'placeholder' => 'Question title')); ?>
+
+		<div class="row js-qtitle-minutes">
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-<?php echo $is_interactive ? 10 : 12; ?>" data-classes="form-group col-xs-12 col-sm-12 col-md-12 col-lg-10">
+				<?php echo Form::label('question-QID', 'Question'); ?>
+				<?php echo Form::text('questions[QID][question]', 'QUESTION_TITLE', array('id' => 'question-QID', 'class' => 'form-control', 'placeholder' => 'Question title')); ?>
+			</div>
+			<?php if ( $seconds ): ?>
+			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-2<?php echo !$is_interactive ? ' hide' : ''; ?>">
+				<?php echo Form::label('seconds-QID', 'Minutes'); ?>
+				<?php echo Form::text('questions[QID][seconds]', 'QUESTION_SECONDS', array('id' => 'seconds-QID', 'class' => 'form-control', 'placeholder' => 'Minutes')); ?>
+			</div>
+			<?php endif; ?>
 		</div>
-		<?php if ( $seconds ): ?>
-		<div class="form-group">
-			<?php echo Form::label('seconds-QID', 'Minutes'); ?>
-			<?php echo Form::text('questions[QID][seconds]', 'QUESTION_SECONDS', array('id' => 'seconds-QID', 'class' => 'form-control', 'placeholder' => 'Minutes')); ?>
-		</div>
-		<?php endif; ?>
-		<?php if ( $minimum_answers ): ?>
+		<?php /* TODO: Make this work */ if ( false && $minimum_answers ): ?>
 		<div class="form-group">
 			<?php echo Form::label('min-answers-QID', 'Minimum Answers'); ?>
-			<?php echo Form::text('questions[QID][min_answers]', 'QUESTION_MIN_ANSWERS', array('id' => 'min-answers-QID', 'class' => 'form-control', 'placeholder' => 'Seconds')); ?>
+			<?php echo Form::text('questions[QID][min_answers]', 'QUESTION_MIN_ANSWERS', array('id' => 'min-answers-QID', 'class' => 'form-control', 'placeholder' => 'Min answers')); ?>
 		</div>
 		<?php endif; ?>
 		<?php if ( $media ): ?>
-		<div class="form-group">
+		<div class="form-group media-group">
 			<?php echo Form::label('media-QID', 'Media'); ?>
 			<div class="input-group">
 				<?php echo Form::text('questions[QID][media]', 'QUESTION_MEDIA', array('id' => 'media-QID', 'class' => 'form-control js-media-text', 'placeholder' => 'Link, image or YouTube url')); ?>
 
-				<div class="input-group-btn radio-buttons">
-					<input type="radio" id="media-link-QID" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK />
-					<label class="btn btn-default" for="media-link-QID">Link</label>
-					<input type="radio" id="media-image-QID" name="questions[QID][media_type]" value="image" OPTION_VALID_IMAGE />
-					<label class="btn btn-default" for="media-image-QID">Image</label>
-					<input type="radio" id="media-yt-QID" name="questions[QID][media_type]" value="youtube" OPTION_VALID_YOUTUBE />
-					<label class="btn btn-default" for="media-yt-QID">YouTube</label>
+				<div class="input-group-btn btn-group" data-toggle="buttons">
+					<label class="btn btn-default" for="media-link-QID">
+						<input type="radio" id="media-link-QID" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK />Link
+					</label>
+					<label class="btn btn-default" for="media-image-QID">
+						<input type="radio" id="media-image-QID" name="questions[QID][media_type]" value="image" OPTION_VALID_IMAGE />Image
+					</label>
+					<label class="btn btn-default" for="media-yt-QID">
+						<input type="radio" id="media-yt-QID" name="questions[QID][media_type]" value="youtube" OPTION_VALID_YOUTUBE />YouTube
+					</label>
 				</div>
 			</div>
 		</div>

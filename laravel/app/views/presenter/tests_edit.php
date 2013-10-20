@@ -23,6 +23,26 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 		<?php echo Form::categories('catid', $test->catid); ?>
 	</div>
 
+	<div class="form-group">
+		<div class="clearfix">
+			<?php echo Form::label('', 'Test type'); ?>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<label class="tooltips btn btn-default<?php echo !$test->interactive ? ' active' : ''; ?>" data-title="Self Administered" data-content="This options allows students to take the test on their own. You'll just need to provide them with a link to the test.">
+				<?php echo Form::radio('interactive', 0, !$test->interactive); ?> Self Administered
+			</label>
+
+			<label class="tooltips btn btn-default<?php echo $test->interactive ? ' active' : ''; ?>" data-title="Interactive" data-content="Use this option to test as you teach. Questions will be pushed out to student devices when you want, students will only be able to answer the current question.">
+				<?php echo Form::radio('interactive', 1, $test->interactive); ?> Interactive
+			</label>
+		</div>
+	</div>
+
+	<div class="form-group js-not-interactive"<?php echo $test->interactive ? ' style="display:none;"' : ''; ?>>
+		<?php echo Form::label('seconds', 'Test minutes'); ?>
+		<?php echo Form::text('seconds', $test->seconds, array('class' => 'form-control', 'placeholder' => 'Minutes to complete test')); ?>
+	</div>
+
 		<?php /*
 		<?php echo Form::label('anon', 'Anonymous submission'); ?>
 		<?php echo Form::checkbox('anon', 1, ($test->anon == 1)); ?>*/ ?>

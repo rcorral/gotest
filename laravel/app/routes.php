@@ -62,5 +62,5 @@ Route::group(array('before' => 'auth'), function()
 Route::resource('/subjects','SubjectsController');
 Route::post('/test/complete','TestController@complete');
 Route::post('/test/answer','TestController@answer');
-Route::get('/api/question/{test_id}/{question_id?}','QuestionController@get')
-	->where(array('test_id' => '[0-9]+', 'question_id' => '[0-9]+'));
+Route::get('/api/question/{test_id}/{isp}/{session}/{question_id?}','QuestionController@get')
+	->where(array('test_id' => '[0-9]+', 'isp' => '0|1', 'session' => '[0-9a-zA-Z]{32}', 'question_id' => '[0-9]+'));

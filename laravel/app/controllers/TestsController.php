@@ -15,6 +15,9 @@ class TestsController extends \BaseController {
 	 */
 	public function index()
 	{
+		$doc = Document::get_instance();
+		$doc->add_inline_view_file('tests.index.js', array('jquery' => true));
+
 		$this->_buffer = View::make('presenter.tests_index', array(
 			'tests' => Tests::get_tests()
 		));
@@ -39,6 +42,9 @@ class TestsController extends \BaseController {
 		array_push($this->libs, 'sortable');
 
 		$test = Test::load_populate($id);
+
+		View::share('is_interactive', $test->interactive);
+
 		$templates = $test->get_templates();
 
 		if ( $from_request )
@@ -64,6 +70,9 @@ class TestsController extends \BaseController {
 		// This is so that the request from the homepage works
 		if ( !$test->id && !$test->title ) $test->title = Input::get('title', '');
 
+		// Convert the seconds to minutes
+		$test->seconds = str_replace('.0', '', number_format($test->seconds / 60, 1));
+
 		$this->_buffer = View::make('presenter.tests_edit', array(
 			'test' => $test,
 			'templates' => $templates,
@@ -78,6 +87,49 @@ class TestsController extends \BaseController {
 		Helper::csrf_check();
 
 		$input = Input::except('_token');
+
+		// If this is just an ajax ction
+		if ( isset($input['action']) )
+		{
+			switch ( $input['action'] )
+			{
+				case 'change_interactive':
+					$test = Test::load_populate($input['id'], null, false);
+
+					try
+					{
+						$test->interactive = ('interactive' == $input['state'] ? 1 : 0);
+						$test->save();
+						return Helper::json_success_response(array(
+							'html' => Form::test_interactive($test->interactive, $test->id)
+						));
+					}
+					catch (Exception $e)
+					{
+						return Helper::json_error_response(array('message' => Lang::get('Error Updating.')), 400);
+					}
+
+					break;
+				default:
+					throw new Exception('', 400);
+			}
+		}
+
+		// Fix the seconds
+		$seconds = 0;
+		if ( $input['seconds'] )
+		{
+			if ( false !== ($pos = strpos($input['seconds'], '.')) )
+			{
+				$seconds = (substr($input['seconds'], 0, $pos) * 60) + ((float) substr($input['seconds'], $pos) * 60);
+			}
+			else
+			{
+				// Make seconds out of the minutes
+				$seconds = $input['seconds'] * 60;
+			}
+		}
+		$input['seconds'] = $seconds;
 
 		$test = Test::load_populate($input['id'], null, false);
 		$test->fill($input);

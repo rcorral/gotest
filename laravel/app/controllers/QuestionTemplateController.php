@@ -10,11 +10,12 @@ class QuestionTemplateController extends \BaseController
 	 */
 	public function show( $type )
 	{
-		if ( !$type )
-			throw new JException( Lang::get('api_tests.no_type') );
+		if ( !$type ) throw new JException(Lang::get('api_tests.no_type'));
+
+		View::share('is_interactive', (bool) Input::get('interactive', 0));
 
 		// Lets check that this type actually exists
-		$question = Helper::get_question_type( $type );
+		$question = Helper::get_question_type($type);
 
 		if ( !$question || empty($question) ) throw new JException(JText::_('PLG_API_TESTS_QUESTION_UNAVAILABLE'));
 

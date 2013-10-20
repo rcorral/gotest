@@ -9,7 +9,11 @@ Things to do:
 	x Categories
 	x Change seconds to minutes
 	- Interactive tests checkbox
+	- Timed tests as well as timed questions
+	- Fixed answer types, some don't need radio buttons
 	- Points per question
+	- Reorganize create a test form
+	- Have a help section with what everything means. Maybe use tooltips.
 	- Randomize answers
 	- Add filters to the forms, to filter the rows
 	- More question types
@@ -28,6 +32,10 @@ Things to do:
 	x Sign up or Register? - http://ux.stackexchange.com/questions/11936/when-to-use-join-register-or-sign-up - register sounds better?
 	x Welcome email
 	x My account page
+	- Go through database schema and make sure everything has unsigned where it needs to
+
+- Server
+	- Install new relic
 
 Roadmap:
 x Move away from Joomla.

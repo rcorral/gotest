@@ -19,7 +19,7 @@ class Sessions extends ModelBase
 	 *
 	 * @var array
 	 */
-	protected $fillable = array('test_id', 'user_id', 'unique_id', 'is_active');
+	protected $fillable = array('test_id', 'user_id', 'title', 'unique_id', 'is_active');
 
 	/**
 	 * Indicates if the model should soft delete.
@@ -33,12 +33,11 @@ class Sessions extends ModelBase
 		$user = Helper::get_current_user();
 
 		$query = DB::table('test_sessions')
-			->select('test_sessions.id', 'test_sessions.created_at',
-				'test_sessions.is_active', 'test_sessions.unique_id',
-				'test_tests.id AS test_id', 'test_tests.title', 'test_tests.sub_title', 'test_tests.anon',
+			->select('test_sessions.id', 'test_sessions.title', 'test_sessions.created_at', 'test_sessions.is_active', 'test_sessions.unique_id',
+				'test_tests.id AS test_id', 'test_tests.title As test_title', 'test_tests.sub_title', 'test_tests.anon',
 				'test_answers.user_id', 'test_answers.anon_user_id' )
 			->join('test_tests', 'test_tests.id', '=', 'test_sessions.test_id')
-			->join('test_answers', 'test_answers.session_id', '=', 'test_sessions.id')
+			->join('test_answers', 'test_answers.session_id', '=', 'test_sessions.id', 'left')
 			->where('test_sessions.user_id', $user->id)
 			->whereNull('test_sessions.deleted_at')
 			->groupBy(DB::raw('test_sessions.`id`, IF( test_tests.`anon` = 1, test_answers.`anon_user_id`, test_answers.`user_id` )'))
@@ -54,7 +53,7 @@ class Sessions extends ModelBase
 		$a = $query->getBindings();
 		$_query = DB::table(DB::raw('(' . str_replace('?', array_shift($a), $query->toSql()). ') AS q'));
 
-		$_query->select('id', 'created_at', 'is_active', 'unique_id', 'test_id', 'title', 'sub_title',
+		$_query->select('id', 'title', 'created_at', 'is_active', 'unique_id', 'test_id', 'test_title', 'sub_title',
 				DB::raw('IF(anon = 1, COUNT(anon_user_id), COUNT(user_id) ) AS `count`'))
 			->orderBy('title', 'ASC')
 			->groupBy('id')
@@ -131,10 +130,23 @@ class Sessions extends ModelBase
 				->where('unique_id', 'LIKE', $unique_short . '%' )
 				->first()
 				;
-			$return->unique_id = @$result->unique_id;
-			$return->is_active = @$result->is_active;
+			if ( $result )
+			{
+				$return->unique_id = $result->unique_id;
+				$return->is_active = $result->is_active;
+			}
 		}
 
 		return $return;
+	}
+
+	public static function get_session_from_long_id( $id, $test_id )
+	{
+		return DB::table('test_sessions')
+			->where('is_active', '1')
+			->where('test_id', (int) $test_id )
+			->where('unique_id', $id )
+			->first()
+			;
 	}
 }

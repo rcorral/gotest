@@ -28,12 +28,13 @@
 				<th width="1%">
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Lang::get('Check All'); ?>" onclick="core.check_all(this)" />
 				</th>*/ ?>
-				<th>Title</th>
-				<th width="12%">Status</th>
-				<th width="160px">Date</th>
-				<th width="9%">Tests taken</th>
-				<th width="160px">Download Results</th>
-				<th width="60px">Delete</th>
+				<th>Test</th>
+				<th>Session title</th>
+				<th width="10%">Status</th>
+				<th width="152px">Date</th>
+				<th width="8%">Tests taken</th>
+				<th width="138px">Download Results</th>
+				<th width="58px">Delete</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,10 +44,13 @@
 					<?php echo Form::cb_id($i, $session->id); ?>
 				</td>*/ ?>
 				<td>
-					<?php echo $session->title; // TODO: Prevent xss here, escape this ?>
+					<?php echo $session->test_title; // TODO: Prevent xss here, escape this ?>
 					<?php if ( $session->is_active ) : ?>
 					<!--<a href="<?php echo URL::to('take_test', array('id' => $session->test_id, 'unique' => substr($session->unique_id, 0, 6))); ?>" target="_blank">[administer]</a>-->
 					<?php endif; ?>
+				</td>
+				<td>
+					<?php echo $session->title; ?>
 				</td>
 				<td>
 					<?php echo Form::item_state($session->is_active, $session->id, 'sessions'); ?>

@@ -106,7 +106,7 @@ XClick = (function()
 		return false;
 	};
 
-	XClick.prototype.submit = function( type )
+	XClick.prototype.change_question = function( type )
 	{
 		if ( !this.unique_id || !this.test_started ) return;
 
@@ -139,6 +139,8 @@ XClick = (function()
 		msg = {};
 
 		if ( question_order ) msg.question_id = question_order;
+
+		msg.session = this.unique_id;
 
 		this.emit('next_question', msg);
 	};
@@ -232,7 +234,7 @@ XClick = (function()
 
 			xclick.display_time(core.seconds_to_readable_time(xclick.seconds_left));
 			// Change question
-			if ( 0 == xclick.seconds_left ) xclick.submit('next');
+			if ( 0 == xclick.seconds_left ) xclick.change_question('next');
 		});
 
 		this.timer.set({time : 1000, autostart : true});
@@ -311,6 +313,15 @@ jQuery(document).ready(function()
 			}
 		}
 	);
+
+	// Self Administered tests
+	jQuery(document).on('click', '.js-sessions-page', function()
+	{
+		opener.window.location.href = jQuery(this).prop('href');
+		close();
+		return false;
+	})
+	;
 
 	jQuery('#finish_modal')
 		.on('show', function()

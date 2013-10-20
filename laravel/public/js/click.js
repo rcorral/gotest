@@ -13,6 +13,7 @@ XClick = (function()
 		this.unique_id = jQuery('#unique-id').val();
 		this.test_initialized = false;
 		this.test_started = false;
+		this.is_interactive = is_interactive;
 		this.question = {};
 		this.api_key = api_key;
 		this.anon_id = typeof anon_id == 'undefined' ? '' : anon_id;
@@ -39,16 +40,21 @@ XClick = (function()
 
 			if ( xclick.timer )
 			{
-				xclick.timer.stop();
+				// Stop if test is interactive as the next question may have a timer
+				if ( xclick.is_interactive ) xclick.timer.stop();
+				// Continue the global timer
+				else xclick.timer.play();
 			}
+
 			jQuery('#counter').removeClass('text-danger').removeClass('text-success');
 
 			if ( !data || !data.question )
 			{
 				if ( 'test' == data.type )
 				{
-					xclick.update_test_status( data );
-				};
+					xclick.update_test_status(data);
+				}
+
 				return;
 			}
 
@@ -70,23 +76,56 @@ XClick = (function()
 				{
 					jQuery('.pre-test-hide').slideDown('slow').removeClass('pre-test-hide');
 					jQuery('.post-test-hide').slideUp('slow');
+
+					if ( !xclick.is_interactive )
+					{
+						jQuery('#complete-test-btn').removeClass('disabled');
+
+						xclick.set_timer(Number(question.test_seconds) ? (question.test_seconds - data.offset) : question.test_seconds, data.timer_action);
+					}
 				});
 			};
 
 			// Clean up anything left over from the previous question
-			jQuery('#btn-submit').removeClass('btn-success')
-				.removeClass('btn-info').html('Submit');
+			jQuery('#btn-submit').removeClass('btn-success').removeClass('btn-info').html('Submit');
 
 			template = templates.parse( question.question_type, question );
-			xclick.set_timer( Number( question.seconds )
-				? ( question.seconds - data.offset ) : question.seconds, data.timer_action  );
 
 			document.getElementById('form-data').innerHTML = template;
-			if ( 0 == question.seconds || ( question.seconds - data.offset ) > 0 )
+			document.getElementById('question-order').value = Number(question.order);
+
+			if ( xclick.is_interactive )
+			{
+				xclick.set_timer(Number(question.seconds) ? (question.seconds - data.offset) : question.seconds, data.timer_action);
+			}
+			else
+			{
+				xclick.current_question = question;
+
+				if ( question.order > 0 )
+				{
+					jQuery('#btn-previous').removeClass('disabled').removeAttr('disabled');
+				}
+				else
+				{
+					jQuery('#btn-previous').addClass('disabled').attr('disabled', 'disabled');
+				}
+
+				if ( question.order == question.max_order )
+				{
+					jQuery('#btn-next').addClass('disabled').attr('disabled', 'disabled');
+				}
+				else
+				{
+					jQuery('#btn-next').removeClass('disabled').removeAttr('disabled');
+				}
+			}
+
+			if ( 0 == question.seconds || (question.seconds - data.offset) > 0 )
 			{
 				jQuery('#btn-submit').slideDown();
 			}
-		}
+		};
 		socket.on('current_question', function(data)
 		{
 			update_question( data, 'current_question' );
@@ -132,8 +171,7 @@ XClick = (function()
 		{
 			xclick._debug('in:complete', data);
 
-			jQuery('#test-active').hide();
-			jQuery('#test-completed').removeClass('hide').slideDown();
+			xclick.complete();
 		});
 
 		return socket;
@@ -174,14 +212,63 @@ XClick = (function()
 			};
 		});
 
-		xclick.start_timer.set({ time : 1000, autostart : true });
+		xclick.start_timer.set({time: 1000, autostart: true});
 
-		this.emit('current_question');
+		if ( this.is_interactive )
+		{
+			this.emit('current_question');
+		}
+		else
+		{
+			xclick.next_question();
+		}
 	}
+
+	/**
+	 * Goes to the next/prev question
+	 */
+	XClick.prototype.change_question = function( type )
+	{
+		if ( !this.unique_id || !this.test_started ) return;
+
+		// Stop timer if it exists to compensate for latency
+		if ( this.timer ) this.timer.stop();
+
+		_question_order = jQuery('#question-order').val();
+		if ( 'next' == type && _question_order == xclick.current_question.max_order )
+		{
+			xclick.complete_prompt();
+			return;
+		}
+
+		if ( 'next' == type )
+		{
+			question_order = Number( _question_order ) + 1
+		}
+		else
+		{
+			question_order = Number( _question_order ) - 1;
+		}
+
+		xclick.next_question( question_order );
+
+		return false;
+	};
+
+	XClick.prototype.next_question = function( question_order )
+	{
+		msg = {};
+
+		if ( question_order ) msg.question_id = question_order;
+
+		msg.session = this.unique_id;
+
+		this.emit('next_question', msg);
+	};
 
 	XClick.prototype.update_test_status = function( data )
 	{
-		if ( this.test_started || this.test_initialized ) return;
+		if ( this.test_started || this.test_initialized || !this.is_interactive ) return;
 
 		if ( !data.initialized )
 		{
@@ -197,12 +284,28 @@ XClick = (function()
 		jQuery('#pre-test-info h1').slideUp('fast', function()
 		{
 			jQuery('#pre-test-info p.pre-test-hide').slideUp();
-			jQuery(this).html( h1 ).slideDown( 'slow' );
+			jQuery(this).html(h1).slideDown('slow');
 			setTimeout(function()
 			{
-				jQuery('#pre-test-info p.pre-test-hide').html( p ).slideDown('slow');
+				jQuery('#pre-test-info p.pre-test-hide').html(p).slideDown('slow');
 			}, 3000);
 		});
+	};
+
+	XClick.prototype.complete_prompt = function()
+	{
+		jQuery('#finish_modal').modal('show');
+	};
+
+	// Complte for self admined tests
+	XClick.prototype.complete = function()
+	{
+		// Just in case
+		delete this.timer;
+
+		jQuery('#test-active').hide();
+		jQuery('#finish_modal').modal('hide');
+		jQuery('#test-completed').removeClass('hide').slideDown();
 	};
 
 	XClick.prototype.submit = function()
@@ -330,6 +433,9 @@ XClick = (function()
 		{
 			jQuery('#btn-submit').slideUp();
 			xclick.timer.stop();
+
+			// Finish the test for the user
+			if ( !this.is_interactive ) xclick.complete();
 		}
 		else
 		{
@@ -390,4 +496,9 @@ jQuery(document).ready(function()
 		jQuery('#pre-test-info h1').html('Connection error');
 		jQuery('#pre-test-info p.pre-test-hide').html('This is the worst error. Something is very very wrong.').slideDown();
 	}
+
+	jQuery('#finish_modal button.btn-primary').on('click', function()
+	{
+		xclick.complete();
+	});
 });

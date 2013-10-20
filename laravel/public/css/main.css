@@ -48,6 +48,10 @@ form select.form-control {
 	cursor: pointer;
 }
 
+div.popover {
+	z-index: 99999;
+}
+
 /******************
  *   Glyphicons   *
  *****************/
@@ -233,30 +237,27 @@ footer > .container {
 	top: -2px;
 }
 
-.radio-buttons input {
-	display: none;
+.media-group .input-group {
+	width: 100%;
 }
-.radio-buttons .btn {
-	margin-left: -5px;
+.media-group .input-group input {
+	float: left;
+	max-width: 348px;
 }
-.radio-buttons input:checked + label {
-	background-color: #E8E8E8;
+.media-group .input-group .input-group-btn {
+	float: left;
+	min-width: 190px;
 }
 
 /*************
  * Presenter *
  ************/
 
-#presenter-form .controlls {
-	max-width: 201px;
-	margin: 30px auto 10px;
-}
-
 /*************
  *  Student  *
  ************/
 
-.student .controlls {
+.student .single-control {
 	margin: 30px auto 10px;
 }
 
@@ -264,6 +265,10 @@ footer > .container {
  * Tests Shared *
  ***************/
 
+#test-active .controls {
+	max-width: 201px;
+	margin: 30px auto 10px;
+}
 #form-data {
 	margin-top: 15px;
 }

@@ -62,9 +62,24 @@ Form::macro('item_state', function( $state, $id, $item_type )
 	$state_to_be = $state ? Lang::get('Inactivate') : Lang::get('Active');
 	$btn_class = $state ? 'success' : 'default';
 	$glyph = $state ? 'glyphicon-ok' : 'glyphicon-remove';
-	return '<a title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
-		. $id. '" data-action="' .$item_type. '.' .strtolower($state_to_be)
-		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span> <span>' .$current_state. '</span></a>';
+	return '<button title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
+		. $id. '" data-action="change_state" data-call="' .$item_type. '.' .strtolower($state_to_be)
+		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span> <span>' .$current_state. '</span></button>';
+});
+
+/**
+ * Displays test interactive image
+ *
+ * @param  $state bool Item is interactive
+ */
+Form::macro('test_interactive', function( $state, $id )
+{
+	$state_to_be = $state ? Lang::get('Self-Administered') : Lang::get('Interactive');
+	$btn_class = $state ? 'success' : 'default';
+	$is = $state ? Lang::get('Yes') : Lang::get('No');
+	return '<button title="' .$state_to_be. ' ' .Lang::get('Test'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
+		. $id. '" data-action="change_interactive" data-call="tests.' .strtolower($state_to_be)
+		. '" href="javascript:void(0);">' .$is. '</button>';
 });
 
 Form::macro('csrf', function()

@@ -119,7 +119,7 @@ class Helper
 
 	static function paginate_by()
 	{
-		return 50;
+		return 3;
 	}
 
 	/**
@@ -129,7 +129,7 @@ class Helper
 	/**
 	 * Function will generate a new unique test session id for the given test_id and user_id
 	 */
-	static function generate_unique_test_id( $test_id, $user_id = null )
+	static function generate_unique_test_id( $test_id, $title = '', $user_id = null )
 	{
 		if ( !$user_id ) $user_id = static::get_current_user()->id;
 
@@ -141,6 +141,7 @@ class Helper
 		if ( !$test_id ) return false;
 
 		$counter = 0;
+		// Get a unique id
 		while ( !$unique_id )
 		{
 			if ( $counter ) $_unique = md5( $date . $test_id . $user_id . $counter );
@@ -152,8 +153,8 @@ class Helper
 				;
 			if ( !$query->get() )
 			{
-				Sessions::create(array('test_id' => $test_id, 'user_id' => $user_id, 'unique_id' => $_unique,
-					'is_active' => 1)
+				Sessions::create(array('test_id' => $test_id, 'user_id' => $user_id, 'title' => $title,
+					'unique_id' => $_unique, 'is_active' => 1)
 				);
 
 				$unique_id = $_unique;
