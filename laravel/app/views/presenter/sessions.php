@@ -70,7 +70,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="15">
+				<td colspan="15" align="center">
 					<?php echo $sessions->links(); ?>
 				</td>
 			</tr>

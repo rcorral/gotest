@@ -119,7 +119,7 @@ class Helper
 
 	static function paginate_by()
 	{
-		return 3;
+		return 50;
 	}
 
 	/**

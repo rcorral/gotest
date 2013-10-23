@@ -111,11 +111,13 @@ jQuery(function(){
 			core._ajax({}, function( data )
 			{
 				if ( data.success )
+				{
 					$this.parent().parent().slideUp('slow', function(){
 						$this.remove();
 					});
+				}
 			}, {
-				url: $this.prop('href'),
+				url: $this.prop('href') ? $this.prop('href') : $this.attr('href'),
 				type: 'DELETE'
 			});
 
