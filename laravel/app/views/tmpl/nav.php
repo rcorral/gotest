@@ -12,21 +12,22 @@
 	<div class="collapse navbar-collapse navbar-ex1-collapse">
 		<ul class="nav navbar-nav navbar-right">
 			<?php if ( !Helper::is_logged_in() ): ?>
-			<li class="active"><a href="#login" class="login-action">Log in</a></li>
+			<li><a href="#login" class="login-action">Log in</a></li>
 			<li><a href="#register" class="register-action">Register</a></li>
 			<?php else:
 			$user = Helper::get_current_user();
 			$has_sessions = Helper::has_sessions();
 			$has_tests = $has_sessions || Helper::has_tests();
+			$route = Route::currentRouteName();
 			?>
-			<li><a href="<?php echo URL::route('create'); ?>" class="create-action">Create a Test</a></li>
+			<li<?php echo 'create' === $route ? ' class="active"' : ''; ?>><a href="<?php echo URL::route('create'); ?>" class="create-action">Create a Test</a></li>
 			<?php if ( $has_tests ) : ?>
-			<li><a href="<?php echo URL::route('tests.index'); ?>" class="tests-action">Tests</a></li>
+			<li<?php echo 'tests.index' === $route ? ' class="active"' : ''; ?>><a href="<?php echo URL::route('tests.index'); ?>" class="tests-action">Tests</a></li>
 			<?php endif; ?>
 			<?php if ( $has_sessions ) : ?>
-			<li><a href="<?php echo URL::route('sessions.index'); ?>" class="sessions-action">Sessions</a></li>
+			<li<?php echo 'sessions.index' === $route ? ' class="active"' : ''; ?>><a href="<?php echo URL::route('sessions.index'); ?>" class="sessions-action">Sessions</a></li>
 			<?php endif; ?>
-			<li><a href="<?php echo URL::route('account.index'); ?>" class="account-action">Account</a></li>
+			<li<?php echo 'account.index' === $route ? ' class="active"' : ''; ?>><a href="<?php echo URL::route('account.index'); ?>" class="account-action">Account</a></li>
 			<li><a href="<?php echo URL::route('logout'); ?>" class="logout-action">Log out</a></li>
 			<?php endif; ?>
 		</ul>
