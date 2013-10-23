@@ -14,15 +14,15 @@ class CreateTestTestsTable extends Migration {
 	{
 		$prefix = Config::get('database.connections.mysql.prefix');
 		DB::statement("CREATE TABLE `{$prefix}test_tests` (
-			  `id` int(11) NOT NULL AUTO_INCREMENT,
+			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `title` varchar(255) NOT NULL,
 			  `alias` varchar(255) NOT NULL,
 			  `sub_title` varchar(255) NOT NULL,
-			  `catid` int(11) unsigned NOT NULL,
-			  `anon` tinyint(3) NOT NULL DEFAULT '0' COMMENT 'Tells if test can be submitted anonymously',
-			  `published` tinyint(3) NOT NULL,
+			  `catid` int(10) unsigned NOT NULL,
+			  `anon` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Tells if test can be submitted anonymously',
+			  `published` tinyint(1) NOT NULL,
 			  `created` datetime NOT NULL,
-			  `created_by` int(11) NOT NULL,
+			  `created_by` int(10) unsigned NOT NULL,
 			  `modified` datetime NOT NULL,
 			  `modified_by` int(11) NOT NULL,
 			  `checked_out` int(11) NOT NULL,

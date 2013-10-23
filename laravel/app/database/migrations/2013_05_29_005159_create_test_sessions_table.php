@@ -14,11 +14,11 @@ class CreateTestSessionsTable extends Migration {
 	{
 		$prefix = Config::get('database.connections.mysql.prefix');
 		DB::statement("CREATE TABLE `{$prefix}test_sessions` (
-			   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			   `test_id` int(11) unsigned NOT NULL,
-			   `user_id` int(11) unsigned NOT NULL,
+			   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			   `test_id` int(10) unsigned NOT NULL,
+			   `user_id` int(10) unsigned NOT NULL,
 			   `unique_id` varchar(32) NOT NULL,
-			   `is_active` tinyint(3) NOT NULL,
+			   `is_active` tinyint(1) NOT NULL,
 			   `date` datetime NOT NULL,
 			   PRIMARY KEY (`id`),
 			   KEY `user_id` (`user_id`),

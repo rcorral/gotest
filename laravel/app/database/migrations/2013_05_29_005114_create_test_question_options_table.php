@@ -14,8 +14,8 @@ class CreateTestQuestionOptionsTable extends Migration {
 	{
 		$prefix = Config::get('database.connections.mysql.prefix');
 		DB::statement("CREATE TABLE `{$prefix}test_question_options` (
-			  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			  `question_id` int(11) unsigned NOT NULL,
+			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			  `question_id` int(10) unsigned NOT NULL,
 			  `title` varchar(255) NOT NULL,
 			  `valid` tinyint(3) NOT NULL COMMENT 'If 1 then it means the answer is a correct one.',
 			  PRIMARY KEY (`id`),

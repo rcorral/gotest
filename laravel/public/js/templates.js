@@ -130,9 +130,11 @@ Templates = (function()
 				break;
 
 			case 'youtube':
+				// http://stackoverflow.com/questions/3392993/php-regex-to-get-youtube-video-id
+				var yt = question.media.match(/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/);
 				_return = '<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><div class="video-container">'
 					+ '<iframe id="ytplayer" '
-					+ 'src="https://www.youtube.com/embed/' +question.media+ '" '
+					+ 'src="https://www.youtube.com/embed/' +(yt[1] ? yt[1] : question.media)+ '" '
 					+ 'frameborder="0"></iframe>'
 					+ '</div></div><div class="clearfix"></div>';
 				break;

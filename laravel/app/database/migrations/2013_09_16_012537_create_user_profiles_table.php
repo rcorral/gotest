@@ -16,7 +16,7 @@ class CreateUserProfilesTable extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->string('profile_key', 100);
 			$table->string('profile_value', 255);
-			$table->integer('ordering')->default(0);
+			$table->integer('ordering')->default(0)->unsigned();
 			$table->unique(array('user_id', 'profile_key'));
 		});
 	}

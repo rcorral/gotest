@@ -8,9 +8,10 @@ Things to do:
 	x View data
 	x Categories
 	x Change seconds to minutes
-	- Interactive tests checkbox
-	- Timed tests as well as timed questions
-	- Fixed answer types, some don't need radio buttons
+	x Interactive tests checkbox
+	x Timed tests as well as timed questions
+	x Fixed answer types, some don't need radio buttons
+	- Active navigation items
 	- Points per question
 	- Reorganize create a test form
 	- Have a help section with what everything means. Maybe use tooltips.

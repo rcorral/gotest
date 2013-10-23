@@ -14,15 +14,15 @@ class CreateTestQuestionsTable extends Migration {
 	{
 		$prefix = Config::get('database.connections.mysql.prefix');
 		DB::statement("CREATE TABLE `{$prefix}test_questions` (
-			    `id` int(11) NOT NULL AUTO_INCREMENT,
+			    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			    `title` varchar(255) NOT NULL,
-			    `test_id` int(11) NOT NULL,
-			    `question_type` int(11) NOT NULL,
-			    `seconds` int(11) NOT NULL,
-			    `min_answers` tinyint(3) NOT NULL,
+			    `test_id` int(10) unsigned NOT NULL,
+			    `question_type` tinyint(3) unsigned NOT NULL,
+			    `seconds` smallint(5) unsigned NOT NULL,
+			    `min_answers` tinyint(3) unsigned NOT NULL,
 			    `media` varchar(255) NOT NULL,
 			    `media_type` enum('','link','image','youtube') NOT NULL,
-			    `order` int(11) NOT NULL,
+			    `order` int(10) unsigned NOT NULL,
 			    PRIMARY KEY (`id`),
 			    KEY `question_type` (`question_type`,`order`),
 			    KEY `test_id` (`test_id`)

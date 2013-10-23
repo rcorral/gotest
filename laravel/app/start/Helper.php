@@ -92,7 +92,7 @@ class Helper
 				break;
 
 			case 'mcma':
-				$options['answer_type'] = 'radio';
+				$options['answer_type'] = 'checkbox';
 				break;
 
 			case 'fitb':
@@ -100,7 +100,7 @@ class Helper
 				break;
 
 			case 'fitbma':
-				$options['answer_type'] = 'radio';
+				$options['answer_type'] = 'checkbox';
 				break;
 
 			case 'essay':

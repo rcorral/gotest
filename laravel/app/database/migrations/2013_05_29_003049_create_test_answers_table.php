@@ -14,11 +14,11 @@ class CreateTestAnswersTable extends Migration {
 	{
 		$prefix = Config::get('database.connections.mysql.prefix');
 		DB::statement("CREATE TABLE `{$prefix}test_answers` (
-			  `user_id` int(11) unsigned NOT NULL COMMENT 'Relation to _users',
+			  `user_id` int(10) unsigned NOT NULL COMMENT 'Relation to _users',
 			  `anon_user_id` varchar(8) NOT NULL COMMENT 'Unique ids for anonymous tests.',
-			  `session_id` int(11) unsigned NOT NULL COMMENT 'Relation to _test_sessions',
-			  `question_id` int(11) unsigned NOT NULL COMMENT 'Relation to _test_questions',
-			  `answer_id` int(11) NOT NULL COMMENT 'Relation to _test_question_options',
+			  `session_id` int(10) unsigned NOT NULL COMMENT 'Relation to _test_sessions',
+			  `question_id` int(10) unsigned NOT NULL COMMENT 'Relation to _test_questions',
+			  `answer_id` int(10) unsigned NOT NULL COMMENT 'Relation to _test_question_options',
 			  `answer_text` mediumtext NOT NULL COMMENT 'For text type answers (essay)',
 			  KEY `session_id` (`session_id`),
 			  KEY `question_id` (`question_id`),

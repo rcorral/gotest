@@ -8,15 +8,15 @@ jQuery('.js-questions-wrapper')
 
 		if ( val.match(/^https?:\/\/(www\.)?youtube\.com/) || val.match(/^https?:\/\/youtu\.be/) )
 		{
-			jQuery('#media-yt-' + qid).prop({checked: 'checked'});
+			jQuery('#media-yt-' + qid).prop({checked: 'checked'}).click();
 		}
 		else if ( val.match(/^https?:\/\/.*?\.(jpg|jpeg|png|gif)$/) )
 		{
-			jQuery('#media-image-' + qid).prop({checked: 'checked'});
+			jQuery('#media-image-' + qid).prop({checked: 'checked'}).click();
 		}
 		else if ( val.match(/^https?:\/\//) )
 		{
-			jQuery('#media-link-' + qid).prop({checked: 'checked'});
+			jQuery('#media-link-' + qid).prop({checked: 'checked'}).click();
 		}
 	})
 	.on('click', '.question-wrapper h4', function()
@@ -178,3 +178,6 @@ jQuery(document)
 		if ( jQuery(this).is(':checked') ) option.html('Please select a parent...');
 		else option.html('');
 	});
+
+// Initialize media buttons
+jQuery('.media-group input:checked').parent().addClass('active');
