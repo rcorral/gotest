@@ -58,9 +58,9 @@ Form::macro('cb_id', function( $row_num, $value, $name = 'cid' )
  */
 Form::macro('item_state', function( $state, $id, $item_type )
 {
-	$current_state = $state ? Lang::get('Active') : Lang::get('Inactive');
+	$current_state = $state ? (Lang::get('Active') . '&nbsp;&nbsp;') : Lang::get('Inactive');
 	$state_to_be = $state ? Lang::get('Inactivate') : Lang::get('Active');
-	$btn_class = $state ? 'success' : 'default';
+	$btn_class = $state ? 'success' : 'warning';
 	$glyph = $state ? 'glyphicon-ok' : 'glyphicon-remove';
 	return '<button title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
 		. $id. '" data-action="change_state" data-call="' .$item_type. '.' .strtolower($state_to_be)

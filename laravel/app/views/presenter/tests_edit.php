@@ -28,7 +28,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 			<?php echo Form::label('', 'Test type'); ?>
 		</div>
 		<div class="btn-group" data-toggle="buttons">
-			<label class="tooltips btn btn-default<?php echo !$test->interactive ? ' active' : ''; ?>" data-title="Self Administered" data-content="This options allows students to take the test on their own. You'll just need to provide them with a link to the test.">
+			<label class="tooltips btn btn-default<?php echo !$test->interactive ? ' active' : ''; ?>" data-title="Self Administered" data-content="This option allows students to take the test on their own. All you'll need to do is provide them with a link to the test.">
 				<?php echo Form::radio('interactive', 0, !$test->interactive); ?> Self Administered
 			</label>
 

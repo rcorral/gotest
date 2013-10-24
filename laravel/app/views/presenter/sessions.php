@@ -62,7 +62,7 @@
 					<?php echo $session->count; ?>
 				</td>
 				<td>
-					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank" class="btn btn-default">Download</a>
+					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank" class="btn btn-primary">Download</a>
 				</td>
 				<td align="center"><button type="button" href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger btn-sm js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
 			</tr>
