@@ -31,7 +31,7 @@ Form::macro('categories', function( $name = 'catid', $value = 0, $options = arra
 	{
 		foreach ( $children as $child )
 		{
-			$array[$child->id] = str_repeat( '-', $depth ) . ' ' . $child->name;
+			$array[$child->id] = str_repeat('&ndash;', $depth) . ' ' . $child->name;
 
 			$_children = $child->getChildren();
 			if ( !empty($_children) )

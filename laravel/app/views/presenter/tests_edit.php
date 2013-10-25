@@ -118,15 +118,20 @@ echo Form::close();
 ?>
 <div id="create-subject-frm-wrapper" style="display:none;">
 <?php
-echo Form::open(array('url' => '/subjects', 'method' => 'post', 'class' => 'create-subject-frm ajax-frm'));
-echo Form::label('subject', 'Please enter a new subject name:');
-echo Form::text('subject');
+echo Form::open(array('url' => '/subjects', 'method' => 'post', 'class' => 'create-subject-frm ajax-frm', 'role' => 'form'));
+echo '<div class="form-group">';
+	echo Form::label('subject', 'Please enter a new subject name:');
+	echo Form::text('subject', '', array('class' => 'form-control', 'placeholder' => 'New subject'));
+echo '</div>';
 if ( $cats = Form::categories('nested_catid', 0, array('default_opt' => array(0 => ''), 'return_on_empty' => true)) )
 {
-	echo '<br />';
-	echo Form::checkbox('nest', '1', false, array('class' => 'nest'));
-	echo Form::label('nest', 'Nest label under:');
-	echo $cats;
+	echo '<div class="form-group">';
+		echo '<label>';
+			echo Form::checkbox('nest', '1', false, array('class' => 'nest'));
+			echo ' Nest label under:';
+		echo '</label>';
+		echo $cats;
+	echo '</div>';
 }
 echo Form::close();
 ?>
