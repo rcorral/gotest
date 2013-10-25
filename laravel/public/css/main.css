@@ -63,6 +63,9 @@ div.popover {
 .panel .table-hover > tbody > tr:hover > td, .panel .table-hover > tbody > tr:hover > th {
     background-color: #f5f5f5;
 }
+.panel .table > thead > tr > th, .panel .table > tbody > tr > th, .panel .table > tfoot > tr > th, .panel .table > thead > tr > td, .panel .table > tbody > tr > td, .panel .table > tfoot > tr > td {
+	border-color: #ddd;
+}
 
 /******************
  *   Glyphicons   *

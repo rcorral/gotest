@@ -13,6 +13,8 @@ Things to do:
 	x Fixed answer types, some don't need radio buttons
 	x Active navigation items
 	- Input enter on an animation? or no animation?
+	- Group actions together?
+	- Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
 	- Points per question
 	- Reorganize create a test form
 	- Have a help section with what everything means. Maybe use tooltips.
@@ -22,7 +24,6 @@ Things to do:
 		- true/false
 	- Symbols help
 		- Allow copy pasta of symbols, such as exponents and other math ones
-	- Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
 
 - Audience
 	x Login some identifier (id or name)
