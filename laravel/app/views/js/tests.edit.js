@@ -132,7 +132,9 @@ function trigger_login_first()
 jQuery('.add-question').on('click', function(){
 	core.modal({
 		header: 'Select type of question',
-		body: '<form class="question-selection" role="form"><div class="checkbox"><label for="type-mcsa"><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> Multiple choice single answer</label></div><div class="checkbox"><label for="type-mcma"><input type="radio" name="question_type" value="mcma" id="type-mcma" /> Multiple choice multiple answer</label></div><div class="checkbox"><label for="type-fitb"><input type="radio" name="question_type" value="fitb" id="type-fitb" /> Fill in the blank</label></div><div class="checkbox"><label for="type-fitbma"><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> Fill in the blank multiple answer</label></div><div class="checkbox"><label for="type-essay"><input type="radio" name="question_type" value="essay" id="type-essay" /> Essay</label></div></form>',
+		body: '<div class="pull-right"><a class="help question-types"><span class="glyphicon glyphicon-question-sign"></span></a></div><form class="question-selection" role="form"><div class="checkbox"><label for="type-mcsa"><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> Multiple choice single answer</label></div><div class="checkbox"><label for="type-mcma"><input type="radio" name="question_type" value="mcma" id="type-mcma" /> Multiple choice multiple answer</label></div>'
+			//'<div class="checkbox"><label for="type-fitb"><input type="radio" name="question_type" value="fitb" id="type-fitb" /> Fill in the blank</label></div>'+
+			+ '<div class="checkbox"><label for="type-fitbma"><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> Fill in the blank</label></div><div class="checkbox"><label for="type-essay"><input type="radio" name="question_type" value="essay" id="type-essay" /> Essay</label></div></form>',
 		footer: '<button class="btn btn-primary form-submit" data-form-submit="question-selection">Select</button>'
 	});
 	return false;
@@ -177,6 +179,19 @@ jQuery(document)
 
 		if ( jQuery(this).is(':checked') ) option.html('Please select a parent...');
 		else option.html('');
+	})
+
+	// Show quesiton types
+	.on('click', 'a.question-types', function(){
+		core.modal_close();
+		setTimeout(function(){
+			jQuery('#help_modal').modal().on('hide.bs.modal', function(){
+				setTimeout(function(){
+					jQuery('.add-question').click();
+				}, 300);
+				jQuery(this).off('hide.bs.modal');
+			});
+		}, 400);
 	});
 
 // Initialize media buttons

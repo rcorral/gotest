@@ -57,14 +57,20 @@ form select.form-control {
 	padding-top: 11px;
 }
 
-.pointer {
+.pointer, .help {
 	cursor: pointer;
+}
+
+.glyphicon-question-sign {
+	font-size: 20px;
+	color: #56A0BE;
 }
 
 div.popover {
 	z-index: 99999;
 }
 
+/* Reset table styles to defaults */
 .panel .table-striped > tbody > tr:nth-child(2n+1) > td, .panel .table-striped > tbody > tr:nth-child(2n+1) > th {
     background-color: #f9f9f9;
 }

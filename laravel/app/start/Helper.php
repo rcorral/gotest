@@ -49,8 +49,8 @@ class Helper
 		$types = array(
 			'mcsa' => (object) array('id' => 1, 'type' => 'mcsa', 'title' => 'Multiple choice single answer'),
 			'mcma' => (object) array('id' => 2, 'type' => 'mcma', 'title' => 'Multiple choice multiple answer'),
-			'fitb' => (object) array('id' => 3, 'type' => 'fitb', 'title' => 'Fill in the blank'),
-			'fitbma' => (object) array('id' => 4, 'type' => 'fitbma', 'title' => 'Fill in the blank multiple answer'),
+			// 'fitb' => (object) array('id' => 3, 'type' => 'fitb', 'title' => 'Fill in the blank'),
+			'fitbma' => (object) array('id' => 4, 'type' => 'fitbma', 'title' => 'Fill in the blank'),
 			'essay' => (object) array('id' => 5, 'type' => 'essay', 'title' => 'Essay')
 			);
 
@@ -96,6 +96,7 @@ class Helper
 				break;
 
 			case 'fitb':
+				return false;
 				$options['minimum_answers'] = false;
 				break;
 

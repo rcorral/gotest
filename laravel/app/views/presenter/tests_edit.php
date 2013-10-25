@@ -108,33 +108,122 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 		<?php endif; ?>
 		</div>
 	</div>
-<?php
-echo Form::hidden('id', $test->id);
-echo '<div class="form-group pull-right">';
-	echo '<a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a> ';
-	echo Form::button('Save', array('type' => 'submit', 'class' => 'btn btn-primary'));
-echo '</div>';
-echo Form::close();
-?>
-<div id="create-subject-frm-wrapper" style="display:none;">
-<?php
-echo Form::open(array('url' => '/subjects', 'method' => 'post', 'class' => 'create-subject-frm ajax-frm', 'role' => 'form'));
-echo '<div class="form-group">';
-	echo Form::label('subject', 'Please enter a new subject name:');
-	echo Form::text('subject', '', array('class' => 'form-control', 'placeholder' => 'New subject'));
-echo '</div>';
-if ( $cats = Form::categories('nested_catid', 0, array('default_opt' => array(0 => ''), 'return_on_empty' => true)) )
-{
-	echo '<div class="form-group">';
-		echo '<label>';
-			echo Form::checkbox('nest', '1', false, array('class' => 'nest'));
-			echo ' Nest label under:';
-		echo '</label>';
-		echo $cats;
+	<?php
+	echo Form::hidden('id', $test->id);
+	echo '<div class="form-group pull-right">';
+		echo '<a href="' . Url::route('tests.index') . '" class="btn btn-default js-dbl-chk">' . Lang::get('Cancel') . '</a> ';
+		echo Form::button('Save', array('type' => 'submit', 'class' => 'btn btn-primary'));
 	echo '</div>';
-}
-echo Form::close();
-?>
+	echo Form::close();
+	?>
+	<div id="create-subject-frm-wrapper" style="display:none;">
+	<?php
+	echo Form::open(array('url' => '/subjects', 'method' => 'post', 'class' => 'create-subject-frm ajax-frm', 'role' => 'form'));
+	echo '<div class="form-group">';
+		echo Form::label('subject', 'Please enter a new subject name:');
+		echo Form::text('subject', '', array('class' => 'form-control', 'placeholder' => 'New subject'));
+	echo '</div>';
+	if ( $cats = Form::categories('nested_catid', 0, array('default_opt' => array(0 => ''), 'return_on_empty' => true)) )
+	{
+		echo '<div class="form-group">';
+			echo '<label>';
+				echo Form::checkbox('nest', '1', false, array('class' => 'nest'));
+				echo ' Nest label under:';
+			echo '</label>';
+			echo $cats;
+		echo '</div>';
+	}
+	echo Form::close();
+	?>
+	</div>
 </div>
 </div>
-</div>
+
+<!-- Finish Modal -->
+<div class="modal fade" id="help_modal" tabindex="-1" role="dialog" aria-labelledby="help_label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="help_label" class="modal-title">Help</h4>
+			</div>
+			<div class="modal-body">
+				<p class="lead">
+					These are some question examples:
+				</p>
+
+				<h4>&dash; Multiple choice single answer</h4>
+				<blockquote>
+
+					<div class="form-group">
+						<label>Question title</label>
+						<div class="radio">
+							<label>
+								<input type="radio" name="radio" /> Option 1
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="radio" /> Option 2
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="radio" /> Option 3
+							</label>
+						</div>
+						<span class="help-block">Students can only pick one of the options.</span>
+					</div>
+				</blockquote>
+
+				<h4>&dash; Multiple choice multiple answer</h4>
+				<blockquote>
+
+					<div class="form-group">
+						<label>Question title</label>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" /> Option 1
+							</label>
+						</div>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" /> Option 2
+							</label>
+						</div>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" /> Option 3
+							</label>
+						</div>
+						<span class="help-block">Students can pick multiple options.</span>
+					</div>
+				</blockquote>
+
+				<h4>&dash; Fill in the blank</h4>
+				<blockquote>
+
+					<div class="form-group">
+						<label>Question title</label>
+						<input type="text" class="form-control" placeholder="Answer" />
+						<span class="help-block">Students will be able to enter an answer in the text box.</span>
+					</div>
+				</blockquote>
+
+				<h4>&dash; Essay</h4>
+				<blockquote>
+
+					<div class="form-group">
+						<label>Question title</label>
+						<textarea rows="4" placeholder="Answer...." class="form-control"></textarea>
+						<span class="help-block">Students will be able to enter an essay into the text area.</span>
+					</div>
+				</blockquote>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">No yet</button>
+				<button class="btn btn-primary">Submit</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
