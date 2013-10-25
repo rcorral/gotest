@@ -13,8 +13,9 @@ Things to do:
 	x Fixed answer types, some don't need radio buttons
 	x Active navigation items
 	x Input enter on an animation? or no animation?
+	x Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
+	- Sample questions
 	- Group actions together?
-	- Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
 	- Points per question
 	- Reorganize create a test form
 	- Have a help section with what everything means. Maybe use tooltips.

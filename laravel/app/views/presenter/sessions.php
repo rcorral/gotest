@@ -30,9 +30,9 @@
 				</th>*/ ?>
 				<th>Test</th>
 				<th>Session title</th>
-				<th width="10%">Status</th>
-				<th width="152px">Date</th>
-				<th width="8%">Tests taken</th>
+				<th width="9%">Status</th>
+				<th width="168px">Date</th>
+				<th width="92px">Tests taken</th>
 				<th width="138px">Download Results</th>
 				<th width="58px">Delete</th>
 			</tr>
@@ -56,12 +56,12 @@
 					<?php echo Form::item_state($session->is_active, $session->id, 'sessions'); ?>
 				</td>
 				<td>
-					<?php echo date( 'm/d/Y g:ia', strtotime( $session->created_at ) ); ?>
+					<?php echo format_time(strtotime($session->created_at)); ?>
 				</td>
 				<td align="center">
 					<?php echo $session->count; ?>
 				</td>
-				<td>
+				<td align="center">
 					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank" class="btn btn-primary">Download</a>
 				</td>
 				<td align="center"><button type="button" href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger btn-sm js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
