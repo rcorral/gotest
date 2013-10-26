@@ -14,7 +14,7 @@ Things to do:
 	x Active navigation items
 	x Input enter on an animation? or no animation?
 	x Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
-	- Sample questions
+	x Sample questions
 	- Group actions together?
 	- Points per question
 	- Reorganize create a test form
@@ -43,6 +43,9 @@ Things to do:
 - Server
 	- Install new relic
 	- Setup mail
+	- Google analytics
+	- User voice
+	- Browser version check
 
 Roadmap:
 x Move away from Joomla.
@@ -55,6 +58,7 @@ Build, manage and give tests online.
 
 Ideas
 	- Maybe after a student logs in, rather than showing the current "Create a test page" We would show a page that has a text box where they would enter the unique URL to the test they need to take
+	- Find funding? YCombinator
 
 Inspiration
 	- http://expo.getbootstrap.com/
