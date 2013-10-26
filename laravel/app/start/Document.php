@@ -65,6 +65,14 @@ class Document
 			'js' => "SITEPATH/packages/bootstrap/js/bootstrap.min.js",
 			'css' => array(
 				"SITEPATH/packages/bootstrap/css/bootstrap.min.css",
+				"SITEPATH/packages/bootstrap/css/bootstrap-theme.min.css",
+				)
+			),
+		'bootstrap-clean' => array(
+			'js' => "SITEPATH/packages/bootstrap/js/bootstrap.min.js",
+			'css' => array(
+				"SITEPATH/packages/bootstrap/css-clean/bootstrap.min.css",
+				"SITEPATH/packages/bootstrap/css-clean/bootstrap-theme.min.css",
 				)
 			),
 		'colorbox' => array(

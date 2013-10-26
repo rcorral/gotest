@@ -81,6 +81,14 @@ div.popover {
 	border-color: #ddd;
 }
 
+.panel-default > .panel-heading {
+	background-image: none;
+}
+
+.navbar-default {
+	background-image: none;
+}
+
 /******************
  *   Glyphicons   *
  *****************/

@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
  */
 class TestController extends \BaseController {
 
-	protected $libs = array('jquery', 'bootstrap', 'main');
+	protected $libs = array('jquery', 'bootstrap-clean', 'main');
 
 	/**
 	 * Present a test
