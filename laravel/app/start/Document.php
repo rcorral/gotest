@@ -286,7 +286,7 @@ class Document
 
 					case 'bootstrap':
 						$this->add_meta(array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge'), 1);
-						$this->add_meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'), 1);
+						$this->add_meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'), 1);
 						break;
 
 					default:

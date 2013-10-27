@@ -9,7 +9,7 @@
 						</div>
 					</noscript>
 
-					<h1 class="home-title">Create Unlimited Tests. For Free.</h1>
+					<h1 class="home-title">Create Unlimited Tests. <span class="no-wrap">For Free.</span></h1>
 					<div class="col-sm-offset-1 col-md-offset-2 col-lg-offset-2 col-xs-12 col-sm-10 col-md-8 col-lg-8">
 						<?php echo Form::open(array('route' => 'create', 'method' => 'get', 'class' => 'intro-form', 'role' => 'form')); ?>
 							<div class="input-group">

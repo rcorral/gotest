@@ -7,8 +7,7 @@ var $wrap = jQuery('#wrap')
 
 function sizing()
 {
-console.log(($wrap.outerHeight(true) - 300));
-	$home_block.css({height: 0}).css({height: ($wrap.outerHeight(true) - 250)});
+	$home_block.css({height: 0}).css({height: ($wrap.outerHeight(true) > 500 ? ($wrap.outerHeight(true) - 150) : ($wrap.outerHeight(true) - 50))});
 
 	if ( window.innerWidth <= 767 )
 	{

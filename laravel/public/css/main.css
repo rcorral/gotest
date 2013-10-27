@@ -70,6 +70,10 @@ div.popover {
 	z-index: 99999;
 }
 
+.no-wrap {
+	white-space: nowrap;
+}
+
 /************************
  *   Bootstrap Resets   *
  ************************/
