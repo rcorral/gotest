@@ -70,7 +70,10 @@ div.popover {
 	z-index: 99999;
 }
 
-/* Reset table styles to defaults */
+/************************
+ *   Bootstrap Resets   *
+ ************************/
+
 .panel .table-striped > tbody > tr:nth-child(2n+1) > td, .panel .table-striped > tbody > tr:nth-child(2n+1) > th {
     background-color: #f9f9f9;
 }
@@ -126,6 +129,10 @@ div.popover {
 	background-color: #8CBEB2;
 }
 
+.navbar-nav > li > a {
+	font-weight: 100;
+}
+
 /**************
  *   Footer   *
  *************/
@@ -164,9 +171,34 @@ footer > .container {
  *   Home   *
  ***********/
 
+/* This parent can be any width and height */
+#home-block {
+	text-align: center;
+	height: 200px;
+	font-size: 0;
+}
+ 
+/* The ghost, nudged to maintain perfect centering */
+#home-block:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	/*margin-right: -0.05em;  /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */ 
+#home-centered {
+	display: inline-block;
+	vertical-align: middle;
+	width: 100%%;
+	font-size: 14px;
+}
+
 .home-title {
 	text-align: center;
-	margin: 200px 0 25px 0;
+	margin: 0 0 25px 0;
 	position: relative;
 	top: -1000px;
 }
@@ -269,4 +301,35 @@ footer > .container {
 }
 #form-data legend.lead {
 	font-size: 25px;
+}
+
+/**************
+ * Responsive *
+ **************/
+
+/* Large desktop */
+@media (min-width: 1200px) {}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 992px) and (max-width: 1199px) {}
+ 
+/* Landscape phone to portrait tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+	h1 {
+		font-size: 47px;
+	}
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 767px) {
+	h1 {
+		font-size: 31px;
+	}
+}
+
+/* Portrait phones */
+@media (max-width: 456px) {
+	h1 {
+		font-size: 24px;
+	}
 }
