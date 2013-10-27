@@ -62,7 +62,7 @@ jQuery('.js-questions-wrapper')
 
 	// Remove question
 	.on('click', '.remove-question', function(){
-		jQuery(this).parent().parent().slideUp('slow', function(){ jQuery(this).remove(); });
+		jQuery(this).parent().parent().slideUp('slow', function(){jQuery(this).remove();});
 
 		return false;
 	})
@@ -73,10 +73,10 @@ jQuery('.js-questions-wrapper')
 
 		// Check to see if it is the last answer on the questions
 		if ( el.siblings()[0] ) {
-			el.slideUp('slow', function(){ jQuery(this).remove(); });
+			el.slideUp('slow', function(){jQuery(this).remove();});
 		} else {
 			el.parent().parent().parent().parent()
-				.slideUp('slow', function(){ jQuery(this).remove(); });
+				.slideUp('slow', function(){jQuery(this).remove();});
 		}
 
 		return false;
@@ -84,9 +84,14 @@ jQuery('.js-questions-wrapper')
 
 jQuery('form.create-form')
 	// Create a new subject listener on the dropdown
-	.on('click', '#catid option[value="-1"]', function(e) {
+	.on('change', '#catid', function(e) {
 		var $this = jQuery(this);
-		$this.parent().val(0);
+
+		if ( -1 != $this.val() ) return;
+
+		// Mobile safari has issues.. so I've gotta do this
+		var $that = $this;
+		setTimeout(function(){$that.val(0);}, 200);
 
 		if ( !is_loggedin ) return trigger_login_first();
 
@@ -128,15 +133,17 @@ function trigger_login_first()
 	jQuery('.register-action').prop({href: '/register?preaction=1'}).click();
 	return false;
 }
+
 // Add new question popup form
 jQuery('.add-question').on('click', function(){
 	core.modal({
-		header: 'Select type of question',
+		header: 'Select a question type',
 		body: '<div class="pull-right"><a class="help question-types"><span class="glyphicon glyphicon-question-sign"></span></a></div><form class="question-selection" role="form"><div class="checkbox"><label for="type-mcsa"><input type="radio" name="question_type" value="mcsa" id="type-mcsa" /> Multiple choice single answer</label></div><div class="checkbox"><label for="type-mcma"><input type="radio" name="question_type" value="mcma" id="type-mcma" /> Multiple choice multiple answer</label></div>'
 			//'<div class="checkbox"><label for="type-fitb"><input type="radio" name="question_type" value="fitb" id="type-fitb" /> Fill in the blank</label></div>'+
 			+ '<div class="checkbox"><label for="type-fitbma"><input type="radio" name="question_type" value="fitbma" id="type-fitbma" /> Fill in the blank</label></div><div class="checkbox"><label for="type-essay"><input type="radio" name="question_type" value="essay" id="type-essay" /> Essay</label></div></form>',
 		footer: '<button class="btn btn-primary form-submit" data-form-submit="question-selection">Select</button>'
 	});
+
 	return false;
 });
 

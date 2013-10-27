@@ -15,6 +15,7 @@ Things to do:
 	x Input enter on an animation? or no animation?
 	x Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
 	x Sample questions
+	- Better confirmations when actions happen. After saving a test, there should be some sort of banner that says "Test saved."
 	- Group actions together?
 	- Points per question
 	- Reorganize create a test form

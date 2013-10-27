@@ -83,6 +83,7 @@ class Helper
 			'minimum_answers' => true,
 			'media' => true,
 			'answers' => true,
+			'valid' => true,
 			'answer_type' => 'radio', // radio or checkbox
 			);
 
@@ -101,6 +102,7 @@ class Helper
 				break;
 
 			case 'fitbma':
+				$options['valid'] = false;
 				$options['answer_type'] = 'checkbox';
 				break;
 

@@ -136,6 +136,9 @@ class TestsController extends \BaseController {
 
 		if ( !isset($input['anon']) || $input['anon'] != 1 ) $test->anon = 0;
 
+		// For now we must do this for all tests to show up
+		$test->published = 1;
+
 		try
 		{
 			$test->save();

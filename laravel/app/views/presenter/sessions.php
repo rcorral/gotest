@@ -30,11 +30,11 @@
 				</th>*/ ?>
 				<th>Test</th>
 				<th>Session title</th>
-				<th width="9%">Status</th>
-				<th width="168px">Date</th>
-				<th width="92px">Tests taken</th>
-				<th width="138px">Download Results</th>
-				<th width="58px">Delete</th>
+				<th>Status</th>
+				<th class="hidden-xs hidden-sm">Date</th>
+				<th width="93px">Tests taken</th>
+				<th width="138px" class="hidden-xs hidden-sm">Download Results</th>
+				<th width="58px" class="hidden-xs">Delete</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -55,16 +55,16 @@
 				<td>
 					<?php echo Form::item_state($session->is_active, $session->id, 'sessions'); ?>
 				</td>
-				<td>
+				<td class="hidden-xs hidden-sm">
 					<?php echo format_time(strtotime($session->created_at)); ?>
 				</td>
 				<td align="center">
 					<?php echo $session->count; ?>
 				</td>
-				<td align="center">
+				<td align="center" class="hidden-xs hidden-sm">
 					<a href="<?php echo Url::route('sessions.show', $session->id); ?>" target="_blank" class="btn btn-primary">Download</a>
 				</td>
-				<td align="center"><button type="button" href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger btn-sm js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
+				<td align="center" class="hidden-xs"><button type="button" href="<?php echo Url::route('sessions.destroy', $session->id); ?>" class="btn btn-danger btn-sm js-delete" title="Delete"><span class="glyphicon glyphicon-remove"></span></button></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>

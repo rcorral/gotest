@@ -9,7 +9,7 @@ echo '</div>';
 if ( !Request::ajax() )
 {
 	echo '<div class="pull-right">';
-		echo Form::button('Recover', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'recover-form'));
+		echo Form::button('Recover', array('class' => 'btn btn-primary form-ajax-submit', 'data-form-ajax-submit' => 'recover-form', 'type' => 'submit'));
 	echo '</div>';
 }
 echo Form::close();

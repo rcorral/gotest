@@ -212,7 +212,8 @@ class Test extends ModelBase
 							array(
 								'question_id' => $qid,
 								'title' => $option,
-								'valid' => @in_array($option_id, @$question['answers']) ? 1 : 0
+								// If the question type is fill in the blank then they are all correct
+								'valid' => (@in_array($option_id, @$question['answers']) || 4 == $question['type_id']) ? 1 : 0
 							))
 							;
 					}

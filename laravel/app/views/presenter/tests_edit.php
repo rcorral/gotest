@@ -1,9 +1,9 @@
 <div class="row">
-<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-lg-offset-3">
+<div class="col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-8 col-md-6 col-lg-6">
 <?php
 echo Form::model((array) $test, array('route' => array('tests.store'), 'method' => 'post', 'class' => 'create-form', 'role' => 'form')); ?>
 	<div class="form-group">
-		<?php echo Form::label('title', 'Title'); ?>
+		<?php echo Form::label('title', 'Title'); ?><span class="required">*</span>
 		<?php echo Form::text('title', $test->title, array('class' => 'form-control', 'placeholder' => 'Title')); ?>
 	</div>
 
@@ -19,7 +19,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 	</div>
 
 	<div class="form-group">
-		<?php echo Form::label('catid', 'Subject'); ?>
+		<?php echo Form::label('catid', 'Subject'); ?><span class="required">*</span>
 		<?php echo Form::categories('catid', $test->catid); ?>
 	</div>
 
@@ -48,7 +48,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 		<?php echo Form::checkbox('anon', 1, ($test->anon == 1)); ?>*/ ?>
 
 	<div class="panel panel-default">
-		<div class="panel-heading"><h3>Questions<button class="add-question btn btn-info pull-right">Add new question</button></h3></div>
+		<div class="panel-heading"><h3>Questions<button class="add-question btn btn-info pull-right" type="button">Add new question</button></h3></div>
 
 		<div id="questions-wrapper" class="form-group list-group js-questions-wrapper">
 		<?php if ( !empty( $test->questions ) ): ?>
@@ -139,7 +139,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 </div>
 </div>
 
-<!-- Finish Modal -->
+<!-- Help Modal -->
 <div class="modal fade" id="help_modal" tabindex="-1" role="dialog" aria-labelledby="help_label" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -221,8 +221,7 @@ echo Form::model((array) $test, array('route' => array('tests.store'), 'method' 
 				</blockquote>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">No yet</button>
-				<button class="btn btn-primary">Submit</button>
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

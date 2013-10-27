@@ -83,7 +83,18 @@ class ModelBase extends Eloquent
 	public function save( array $options = array() )
 	{
 		if ( !$this->check() )
+		{
 			return false;
+		}
+
+		if ( $this->timestamps )
+		{
+			if ( !$this->exists )
+			{
+				unset($this->created_at);
+			}
+			unset($this->updated_at);
+		}
 
 		return parent::save($options);
 	}

@@ -10,6 +10,12 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 	document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
 }
 
+// Don't make the navbar fixed on mobile
+if ( window.innerWidth <= 767 )
+{
+	jQuery('.navbar-fixed-top').css({position: 'absolute'});
+}
+
 jQuery(function(){
 	jQuery(document)
 		.on('click', '.login-action', function()
@@ -80,7 +86,7 @@ jQuery(function(){
 			if ( $form[0] ) $form.submit();
 		})
 		// This is just so that the form is not submited via the normal browser function
-		.on('submit', '.ajax-frm', function(event)
+		.on('submit', '.ajax-frm', function()
 		{
 			return false;
 		})

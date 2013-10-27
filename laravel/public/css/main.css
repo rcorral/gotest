@@ -74,6 +74,16 @@ div.popover {
 	white-space: nowrap;
 }
 
+td.middle {
+	vertical-align: middle;
+}
+
+span.required {
+	color: #FF0000;
+	left: 3px;
+	position: relative;
+}
+
 /************************
  *   Bootstrap Resets   *
  ************************/
@@ -268,16 +278,15 @@ footer > .container {
 	top: -2px;
 }
 
-.media-group .input-group {
-	width: 100%;
-}
-.media-group .input-group input {
-	float: left;
-	max-width: 348px;
+.media-group .input-group input[type="text"]
+{
+	height: 34px;
 }
 .media-group .input-group .input-group-btn {
-	float: left;
-	min-width: 190px;
+	min-width: 117px;
+}
+.media-group .input-group-btn > .btn + .btn {
+	margin-left: -1px;
 }
 
 /*************

@@ -62,9 +62,13 @@ Form::macro('item_state', function( $state, $id, $item_type )
 	$state_to_be = $state ? Lang::get('Inactivate') : Lang::get('Active');
 	$btn_class = $state ? 'success' : 'warning';
 	$glyph = $state ? 'glyphicon-ok' : 'glyphicon-remove';
-	return '<button title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. '" data-id="'
+	return '<button title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. ' hidden-xs hidden-sm" data-id="'
 		. $id. '" data-action="change_state" data-call="' .$item_type. '.' .strtolower($state_to_be)
-		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span> <span>' .$current_state. '</span></button>';
+		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span> <span>' .$current_state. '</span></button>'
+		// For extra small
+		. '<button title="' .$state_to_be. ' ' .Lang::get('Session'). '" class="js-change-state btn btn-' .$btn_class. ' visible-xs visible-sm" data-id="'
+		. $id. '" data-action="change_state" data-call="' .$item_type. '.' .strtolower($state_to_be)
+		. '" href="javascript:void(0);"><span class="glyphicon ' .$glyph. '"></span></button>';
 });
 
 /**

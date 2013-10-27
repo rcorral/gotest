@@ -5,7 +5,7 @@
 
 		<div class="row js-qtitle-minutes">
 			<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-<?php echo $is_interactive ? 10 : 12; ?>" data-classes="form-group col-xs-12 col-sm-12 col-md-12 col-lg-10">
-				<?php echo Form::label('question-QID', 'Question'); ?>
+				<?php echo Form::label('question-QID', 'Question'); ?><span class="required">*</span>
 				<?php echo Form::text('questions[QID][question]', 'QUESTION_TITLE', array('id' => 'question-QID', 'class' => 'form-control', 'placeholder' => 'Question title')); ?>
 			</div>
 			<?php if ( $seconds ): ?>
@@ -25,17 +25,17 @@
 		<div class="form-group media-group">
 			<?php echo Form::label('media-QID', 'Media'); ?>
 			<div class="input-group">
-				<?php echo Form::text('questions[QID][media]', 'QUESTION_MEDIA', array('id' => 'media-QID', 'class' => 'form-control js-media-text', 'placeholder' => 'Link, image or YouTube url')); ?>
+				<?php echo Form::text('questions[QID][media]', 'QUESTION_MEDIA', array('id' => 'media-QID', 'class' => 'form-control js-media-text', 'placeholder' => 'Link, image, YouTube')); ?>
 
 				<div class="input-group-btn btn-group" data-toggle="buttons">
 					<label class="btn btn-default" for="media-link-QID">
-						<input type="radio" id="media-link-QID" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK />Link
+						<input type="radio" id="media-link-QID" name="questions[QID][media_type]" value="link" OPTION_VALID_LINK /><span title="Link" class="glyphicon glyphicon-link"></span>
 					</label>
 					<label class="btn btn-default" for="media-image-QID">
-						<input type="radio" id="media-image-QID" name="questions[QID][media_type]" value="image" OPTION_VALID_IMAGE />Image
+						<input type="radio" id="media-image-QID" name="questions[QID][media_type]" value="image" OPTION_VALID_IMAGE /><span title="Image" class="glyphicon glyphicon-picture"></span>
 					</label>
 					<label class="btn btn-default" for="media-yt-QID">
-						<input type="radio" id="media-yt-QID" name="questions[QID][media_type]" value="youtube" OPTION_VALID_YOUTUBE />YouTube
+						<input type="radio" id="media-yt-QID" name="questions[QID][media_type]" value="youtube" OPTION_VALID_YOUTUBE /><span title="YouTube" class="glyphicon glyphicon-facetime-video"></span>
 					</label>
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 				<thead>
 					<tr>
 						<th>Options</th>
-						<th width="42px">Valid</th>
+						<th width="42px"<?php if ( !$valid ): ?>class="hidden"<?php endif; ?>>Valid</th>
 						<th colspan="2">&nbsp;</th>
 					</tr>
 				</thead>
@@ -58,13 +58,13 @@
 						<td>
 							<?php echo Form::text('questions[QID][options][COUNTER]', 'OPTION_TITLE', array('class' => 'form-control input-increment clear-input', 'placeholder' => 'Answer')); ?>
 						</td>
-						<td align="center" class="middle">
+						<td align="center" class="middle<?php if ( !$valid ): ?> hidden<?php endif; ?>">
 							<input type="<?php echo $answer_type; ?>" name="questions[QID][answers][]" value="COUNTER" class="val-auto-increment" OPTION_VALID title="Select if this is a correct answer." />
 						</td>
-						<td class="middle">
+						<td class="middle" align="center">
 							<span class="add-new-answer glyphicon glyphicon-plus green pointer" title="Add"><span>Add</span></span>
 						</td>
-						<td class="middle">
+						<td class="middle" align="center">
 							<span class="remove-answer glyphicon glyphicon-minus red pointer" title="Remove"><span>Remove</span></span>
 						</td>
 					</tr>
