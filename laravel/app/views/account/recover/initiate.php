@@ -1,10 +1,8 @@
 <?php
-echo Form::open(array('url' => 'recover', 'method' => 'post', 'class' => 'recover-form ajax-frm form-horizontal', 'role' => 'form'));
+echo Form::open(array('url' => 'recover', 'method' => 'post', 'class' => 'recover-form ajax-frm', 'role' => 'form'));
 echo '<div class="form-group">';
-	echo Form::label('email', 'E-Mail Address', array('class' => 'col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label'));
-	echo '<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">';
-		echo Form::text('email', '', array('class' => 'form-control', 'placeholder' => 'Email'));
-	echo '</div>';
+	echo Form::label('email', 'E-Mail Address');
+	echo Form::text('email', '', array('class' => 'form-control', 'placeholder' => 'Email'));
 echo '</div>';
 if ( !Request::ajax() )
 {

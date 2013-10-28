@@ -1,16 +1,12 @@
 <?php
-echo Form::open(array('url' => 'login', 'method' => 'post', 'class' => 'login-form form-horizontal', 'role' => 'form'));
+echo Form::open(array('url' => 'login', 'method' => 'post', 'class' => 'login-form', 'role' => 'form'));
 echo '<div class="form-group">';
-	echo Form::label('email', 'E-Mail Address', array('class' => 'col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label'));
-	echo '<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">';
-		echo Form::text('email', '', array('class' => 'form-control', 'placeholder' => 'Email'));
-	echo '</div>';
+	echo Form::label('email', 'E-Mail Address');
+	echo Form::text('email', '', array('class' => 'form-control', 'placeholder' => 'Email'));
 echo '</div>';
 echo '<div class="form-group">';
-	echo Form::label('password', 'Password', array('class' => 'col-xs-3 col-sm-3 col-md-3 col-lg-3 control-label'));
-	echo '<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">';
-		echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Password'));
-	echo '</div>';
+	echo Form::label('password', 'Password');
+	echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Password'));
 echo '</div>';
 ?>
 <a href="<?php echo URL::to('recover'); ?>" class="js-ajax-link pull-right">Forgot your password?</a>
