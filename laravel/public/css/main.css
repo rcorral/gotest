@@ -15,8 +15,6 @@ body {
 	padding-top: 70px;
 }
 
-.simple { padding-top: 0; }
-
 noscript {
 	font-size: 24px;
 }
@@ -316,6 +314,21 @@ footer > .container {
 	font-size: 25px;
 }
 
+/**********
+ * Simple *
+ **********/
+
+.simple { padding-top: 0; }
+
+.simple .page-header h1 {
+	font-size: 35px;
+	margin-top: 35px;
+}
+
+.simple .page-header .row > div + div {
+	padding-left: 0;
+}
+
 /**************
  * Responsive *
  **************/
@@ -337,6 +350,9 @@ footer > .container {
 @media (max-width: 767px) {
 	h1 {
 		font-size: 31px;
+	}
+	.simple .page-header .row > div + div {
+		padding-left: 15px;
 	}
 }
 

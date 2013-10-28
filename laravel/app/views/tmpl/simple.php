@@ -19,12 +19,12 @@ $content_span = 12;
 	<div class="container">
 		<?php if ( $error ): ?>
 		<div class="row">
-			<div class="error-msg span<?php echo $content_span; ?>"><?php echo $error; ?></div>
+			<div class="error-msg col-xs-<?php echo $content_span; ?> col-sm-<?php echo $content_span; ?> col-md-<?php echo $content_span; ?> col-lg-<?php echo $content_span; ?>"><?php echo $error; ?></div>
 		</div>
 		<?php endif; ?>
 
 		<div class="row">
-			<section class="content span<?php echo $content_span; ?>">
+			<section class="content col-xs-<?php echo $content_span; ?> col-sm-<?php echo $content_span; ?> col-md-<?php echo $content_span; ?> col-lg-<?php echo $content_span; ?>">
 				<?php echo $contents; ?>
 			</section>
 		</div>

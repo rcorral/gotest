@@ -1,35 +1,37 @@
 <?php
 $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => substr($unique_id, 0, 6)));
 ?>
-<div id="test-active" class="container">
+<div id="test-active">
 	<div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<form id="presenter-form" onSubmit="return false;">
 			<div class="row">
-			<div class="page-header col-xs-12 col-sm-12 col-md-12 col-lg-12 pre-test-hide">
-				<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 clearfix">
-					<h1><?php echo $test->title; ?>
-					<?php if ( $test->sub_title ) { ?>
-					<small><?php echo $test->sub_title; ?></small>
-					<?php } ?>
-					</h1>
-				</div>
-				<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 clearfix">
-					<!-- Next/Prev buttons -->
-					<div class="form-group well well-sm pull-left controls">
-						<button type="button" name="previous" onclick="xclick.change_question(this.name);" id="btn-previous" class="btn btn-default disabled" disabled="disabled"><i class="glyphicon glyphicon-arrow-left"></i></button>
-						<button type="button" name="next" onclick="xclick.change_question(this.name);" id="btn-next" class="btn btn-default disabled">Next <i class="glyphicon glyphicon-arrow-right"></i></button>
-						<button type="button" id="complete-test-btn" onclick="xclick.complete_prompt();" class="btn btn-danger disabled"><i class="glyphicon glyphicon-remove"></i></button>
+				<div class="page-header col-xs-12 col-sm-12 col-md-12 col-lg-12 pre-test-hide">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-7 col-lg-7 clearfix">
+							<h1><?php echo $test->title; ?>
+							<?php if ( $test->sub_title ) { ?>
+							<small><?php echo $test->sub_title; ?></small>
+							<?php } ?>
+							</h1>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 clearfix">
+							<!-- Next/Prev buttons -->
+							<div class="form-group well well-sm pull-left controls">
+								<button type="button" name="previous" onclick="xclick.change_question(this.name);" id="btn-previous" class="btn btn-default disabled" disabled="disabled"><i class="glyphicon glyphicon-arrow-left"></i></button>
+								<button type="button" name="next" onclick="xclick.change_question(this.name);" id="btn-next" class="btn btn-default disabled">Next <i class="glyphicon glyphicon-arrow-right"></i></button>
+								<button type="button" id="complete-test-btn" onclick="xclick.complete_prompt();" class="btn btn-danger disabled"><i class="glyphicon glyphicon-remove"></i></button>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 pull-right">
+							<div class="well well-lg text-muted pull-left" id="counter" style="display:none;">
+								<span class="digit"></span><span class="units"></span>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-					<div class="well well-lg text-muted pull-left" id="counter" style="display:none;">
-						<span class="digit"></span><span class="units"></span>
-					</div>
-				</div>
-				</div>
-			</div>
 			</div>
 			<div class="row pre-test-hide" id="start-timer">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -41,23 +43,24 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 			<p class="post-test-hide"></p>
 			<div class="row post-test-hide" id="pre-test-info">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<div class="jumbotron">
-				<div class="container">
-					<h1><?php echo $test->interactive ? 'Let\'s get started!' : 'Start testing!'; ?></h1>
-					<p></p>
-					<p>Give this link to students:</p>
-					<p><a href="<?php echo $unique_url; ?>" onclick="return false;"><?php echo $unique_url; ?></a></p>
-					<?php if ( $test->interactive ): ?>
-					<p>
-						<button type="button" class="btn btn-primary btn-lg" onclick="xclick.start_test();">Start testing</button>
-					</p>
-					<?php else: ?>
-					<p>
-						When you're ready, you can deactivate the test from the <a href="<?php echo URL::route('sessions.index'); ?>" class="js-sessions-page">sessions</a> page.
-					</p>
-					<?php endif; ?>
-				</div>
-				</div>
+					<div class="jumbotron">
+						<h1><?php echo $test->interactive ? 'Let\'s get started!' : 'Start testing!'; ?></h1>
+						<p></p>
+						<p>Give this link to students:</p>
+						<p>
+							<a href="<?php echo $unique_url; ?>" onclick="return false;" class="hidden-xs"><?php echo $unique_url; ?></a>
+							<a href="<?php echo $unique_url; ?>" onclick="return false;" class="visible-xs"><?php echo str_replace('http://', '', $unique_url); ?></a>
+						</p>
+						<?php if ( $test->interactive ): ?>
+						<p>
+							<button type="button" class="btn btn-primary btn-lg" onclick="xclick.start_test();">Start testing</button>
+						</p>
+						<?php else: ?>
+						<p>
+							When you're ready, you can deactivate the test from the <a href="<?php echo URL::route('sessions.index'); ?>" class="js-sessions-page">sessions</a> page.
+						</p>
+						<?php endif; ?>
+					</div>
 				</div>
 			</div>
 			<div class="row" id="form-data"></div>
@@ -69,14 +72,12 @@ $unique_url = Url::route('take_test', array('id' => $test->id, 'unique' => subst
 	</div>
 	</div>
 </div>
-<div id="test-completed" class="container hide">
+<div id="test-completed" class="hide">
 	<p></p>
 	<div class="jumbotron">
-	<div class="container">
 		<h1>Test completed</h1>
 		<p></p>
 		<p>All done!</p>
-	</div>
 	</div>
 </div>
 

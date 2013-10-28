@@ -67,7 +67,7 @@ Templates = (function()
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">';
+		html += '<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">';
 		html += '<div class="form-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge form-control" />';
 		html += '</div>';
@@ -85,7 +85,7 @@ Templates = (function()
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">';
+		html += '<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">';
 		html += '<div class="form-group">';
 		html += '<input type="text" name="answer" value="" placeholder="Answer..." class="input-xlarge form-control" />';
 		html += '</div>';
@@ -103,7 +103,7 @@ Templates = (function()
 		// Display media
 		html += this.render_media( question );
 
-		html += '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">';
+		html += '<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">';
 		html += '<div class="form-group">';
 		html += '<textarea name="answer" rows="10" placeholder="Answer...." class="form-control"></textarea>';
 		html += '</div>';
@@ -120,19 +120,19 @@ Templates = (function()
 		switch ( question.media_type )
 		{
 			case 'link':
-				_return = '<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><p><a href="' + question.media + '">'
+				_return = '<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7"><p><a href="' + question.media + '">'
 					+ question.media + '</a></p></div><div class="clearfix"></div>';
 				break;
 
 			case 'image':
-				_return = '<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><p><img src="'
-					+ question.media + '" class="img-polaroid" /></p></div><div class="clearfix"></div>';
+				_return = '<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7"><p><img src="'
+					+ question.media + '" class="img-responsive img-thumbnail" /></p></div><div class="clearfix"></div>';
 				break;
 
 			case 'youtube':
 				// http://stackoverflow.com/questions/3392993/php-regex-to-get-youtube-video-id
 				var yt = question.media.match(/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/);
-				_return = '<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7"><div class="video-container">'
+				_return = '<div class="col-xs-8 col-sm-7 col-md-7 col-lg-7"><div class="video-container">'
 					+ '<iframe id="ytplayer" '
 					+ 'src="https://www.youtube.com/embed/' +(yt[1] ? yt[1] : question.media)+ '" '
 					+ 'frameborder="0"></iframe>'
