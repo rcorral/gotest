@@ -26,9 +26,9 @@ class CreateGroupsTable extends Migration {
 
 		DB::statement("INSERT INTO `{$prefix}groups` (`id`, `name`, `permissions`, `created_at`, `updated_at`)
 		VALUES
-			(1,'Admin','{\"superuser\":1,\"teacher\":1,\"student\":1}','2013-05-27 03:02:51','2013-05-27 03:02:51'),
-			(2,'Teacher','{\"teacher\":1,\"student\":1}','2013-05-27 03:00:20','2013-05-27 03:00:20'),
-			(3,'User','{\"student\":1}','2013-05-27 03:04:04','2013-05-27 03:04:04');
+			(1,'admin','{\"superuser\":1,\"teacher\":1,\"student\":1}','2013-05-27 03:02:51','2013-05-27 03:02:51'),
+			(2,'teacher','{\"teacher\":1,\"student\":1}','2013-05-27 03:00:20','2013-05-27 03:00:20'),
+			(3,'student','{\"student\":1}','2013-05-27 03:04:04','2013-05-27 03:04:04');
 		");
 
 	}

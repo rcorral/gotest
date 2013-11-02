@@ -237,13 +237,13 @@ class Helper
 	{
 		if ( is_int( $identifier ) ) {
 			try {
-				return Sentry::getGroupProvider()->findById($identifier);
+				return Sentry::findGroupById($identifier);
 			} catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
 				return false;
 			}
 		} else {
 			try {
-				return Sentry::getGroupProvider()->findByName($identifier);
+				return Sentry::findGroupByName($identifier);
 			} catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
 				return false;
 			}

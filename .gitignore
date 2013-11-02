@@ -7,3 +7,5 @@
 /build/export/
 /build/com_tests*
 vendor
+
+/.vagrant/
