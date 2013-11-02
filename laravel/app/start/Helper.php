@@ -57,6 +57,19 @@ class Helper
 		return $types;
 	}
 
+	public static function get_question_type_from_id( $id )
+	{
+		foreach ( self::get_question_types() as $question )
+		{
+			if ( $id == $question->id )
+			{
+				return $question->type;
+			}
+		}
+
+		return false;
+	}
+
 	static function get_question_templates()
 	{
 		$types = self::get_question_types();

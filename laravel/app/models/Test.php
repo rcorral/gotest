@@ -66,8 +66,7 @@ class Test extends ModelBase
 
 		$questions = DB::table('test_questions')
 			->select('test_questions.*')
-			->addSelect('test_question_types.type AS tqt_type')
-			->join('test_question_types', 'test_question_types.id', '=', 'test_questions.question_type', 'left')
+			->addSelect('test_questions.question_type')
 			->where('test_questions.test_id', (int) $this->id)
 			->orderBy('test_questions.order')
 			->get()
@@ -75,11 +74,15 @@ class Test extends ModelBase
 
 		foreach ( $questions as &$question )
 		{
+			$question->tqt_type = Helper::get_question_type_from_id($question->question_type);
+			unset($question->question_type);
+
 			$question->options = DB::table('test_question_options')
 				->where('question_id', $question->id)
 				->get()
 				;
 		}
+
 		$this->questions = $questions;
 	}
 

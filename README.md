@@ -16,3 +16,7 @@ Required node.js modules
 Starting node server
 --------------------------
 node app.js --domain=myexam.local
+
+Adding the database
+-----------------------------
+CREATE DATABASE clicker CHARACTER SET utf8 COLLATE utf8_bin;

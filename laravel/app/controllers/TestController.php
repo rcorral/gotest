@@ -184,10 +184,9 @@ class TestController extends \BaseController {
 				->select('test_tests.id AS test_id', 'test_tests.anon', 'test_tests.interactive', 'test_tests.seconds',
 					'test_sessions.id AS session_id', 'test_sessions.last_question',
 					'test_questions.id AS question_id',
-					'test_question_types.type AS qtype')
+					'test_questions.question_type')
 				->join('test_sessions', 'test_sessions.test_id', '=', 'test_tests.id' )
 				->join('test_questions', 'test_questions.test_id', '=', 'test_tests.id' )
-				->join('test_question_types', 'test_question_types.id', '=', 'test_questions.question_type')
 				->where('test_tests.id', (int) $data['test_id'])
 				->where('test_sessions.unique_id', $data['unique_id'])
 				->where('test_sessions.is_active', '1')
@@ -206,6 +205,9 @@ class TestController extends \BaseController {
 			{
 				throw new Exception('Unable to submit answer for this question.', 400);
 			}
+
+			// Setup the question type
+			$test_data->qtype = Helper::get_question_type_from_id($test_data->question_type);
 
 			// Delete all previous answers to this question for this test session
 			$query = DB::table('test_answers')
