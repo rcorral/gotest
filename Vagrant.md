@@ -28,6 +28,23 @@ Required node.js modules
 > cd node
 > npm install
 
+Clone repo
+------------------
+mkdir /var/sites && cd /var/sites
+git clone git@bitbucket.org:rcorral/clicker.git
+
+Setup server configs
+---------------------
+cd clicker/server
+./symlink.sh
+
+Setup public dirs
+-------------------
+cd ..
+sudo ln -s `pwd`/laravel/public /var/www/gotest.org
+sudo mkdir /var/www/empty
+sudo touch /var/www/empty/index.html
+
 Setup cron
 --------------
 Setup cron for node to start on reboot - http://stackoverflow.com/questions/13385029/automatically-start-forever-node-on-system-restart
