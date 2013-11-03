@@ -8,6 +8,15 @@ class BaseController extends Controller
 	protected $libs = array('jquery', 'bootstrap', 'deparam', 'core', 'main');
 
 	/**
+	 * Meta tags to be added
+	 */
+	protected $meta_tags = array(
+		array('name' => 'language', 'content' => 'en'),
+		array('name' => 'description', 'content' => 'Create and administer tests online for free.'),
+		array('name' => 'keywords', 'content' => 'Online testing, free online testing, web testing, online exams, teachers, students, fill in the blank, multiple choice, quizzes, administer exams')
+		);
+
+	/**
 	 * Buffer  object of child controller
 	 */
 	protected $_buffer;
@@ -31,6 +40,11 @@ class BaseController extends Controller
 	{
 		$doc = Document::get_instance();
 		$doc->add_lib($this->libs);
+
+		foreach ( $this->meta_tags as $meta )
+		{
+			$doc->add_meta($meta, 2);
+		}
 
 		// return $this->_buffer;
 

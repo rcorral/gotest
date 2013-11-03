@@ -82,3 +82,4 @@ Setup cron
 --------------
 Setup cron for node to start on reboot - http://stackoverflow.com/questions/13385029/automatically-start-forever-node-on-system-restart
  - @reboot /vagrant/node/server.sh start dev
+ 
