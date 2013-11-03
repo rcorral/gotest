@@ -15,6 +15,7 @@ $content_span = 12;
 <![endif]-->
 </head>
 <body class="simple">
+<?php echo $doc->google_analytics(); ?>
 <div id="wrap">
 	<div class="container">
 		<?php if ( $error ): ?>

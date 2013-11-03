@@ -20,6 +20,7 @@ if ( $sidebarr ) $content_span -= 2;
 <![endif]-->
 </head>
 <body>
+<?php echo $doc->google_analytics(); ?>
 <?php include $tmpl_path . '/nav.php'; ?>
 
 <div id="wrap">
