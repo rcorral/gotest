@@ -2,7 +2,7 @@
 	ServerAdmin rafael@gotest.org
 
 	DocumentRoot /var/www/gotest.org
-	ServerName gotest.local
+	ServerName gotest.org
 
 	<Directory /var/www/gotest.org>
 		Options Indexes FollowSymLinks MultiViews

@@ -23,6 +23,11 @@ Install node
 -------------
 Instal node and npm: http://stackoverflow.com/questions/16302436/install-nodejs-on-ubuntu-12-10
 
+Required node.js modules
+-----------------------------
+> cd node
+> npm install
+
 Setup cron
 --------------
 Setup cron for node to start on reboot - http://stackoverflow.com/questions/13385029/automatically-start-forever-node-on-system-restart
