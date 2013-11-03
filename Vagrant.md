@@ -9,7 +9,7 @@ GoTest Vagrant VM Setup
 Adding the database
 -----------------------------
 CREATE DATABASE clicker CHARACTER SET utf8 COLLATE utf8_bin;
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON clicker.* TO 'clicker'@'localhost' IDENTIFIED BY 'JE928#J!($haoP!-3';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON clicker.* TO 'USER'@'localhost' IDENTIFIED BY 'PASS';
 
 Install apc
 ---------------
@@ -44,6 +44,11 @@ cd ..
 sudo ln -s `pwd`/laravel/public /var/www/gotest.org
 sudo mkdir /var/www/empty
 sudo touch /var/www/empty/index.html
+
+Setup database config in laravel
+--------------------------------
+cp laravel/app/config/database.php-sample laravel/app/config/database.php
+vi laravel/app/config/database.php
 
 Setup cron
 --------------
