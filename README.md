@@ -15,7 +15,7 @@ Required node.js modules
 
 Starting node server
 --------------------------
-node app.js --domain=myexam.local
+server.sh start [dev]
 
 Adding the database
 -----------------------------
