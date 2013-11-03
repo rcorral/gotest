@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+	ServerAdmin rafael@gotest.org
+
+	DocumentRoot /var/www/gotest.org
+	ServerName gotest.local
+
+	<Directory /var/www/gotest.org>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error-gotest.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access-gotest.log combined
+
+</VirtualHost>

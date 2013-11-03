@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    ServerAdmin rafael@gotest.org
+    DocumentRoot "/var/www/empty"
+    ServerName 192.168.33.20
+    ErrorLog "${APACHE_LOG_DIR}/empty-error_log"
+    CustomLog "${APACHE_LOG_DIR}/empty-access_log" common
+</VirtualHost>
