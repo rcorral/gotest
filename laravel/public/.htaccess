@@ -2,6 +2,9 @@
 	Options -MultiViews
 	RewriteEngine On
 
+	RewriteCond %{HTTP_HOST} !^gotest\.org
+	RewriteRule (.*) http://gotest.org/$1 [R=301,L]
+
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]
 </IfModule>
