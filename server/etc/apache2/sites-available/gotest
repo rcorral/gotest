@@ -3,6 +3,7 @@
 
 	DocumentRoot /var/www/gotest.org
 	ServerName gotest.org
+	ServerAlias www.gotest.org
 
 	<Directory /var/www/gotest.org>
 		Options Indexes FollowSymLinks MultiViews
