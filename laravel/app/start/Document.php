@@ -246,7 +246,8 @@ class Document
 		$site_path = URL::to('/');
 		$host = Request::getHttpHost();
 
-		if ( 'local' != App::environment() )
+		// TODO: Fix this
+		if ( false && 'local' != App::environment() )
 		{
 			if ( !$called )
 			{
@@ -371,7 +372,6 @@ class Document
 		Event::fire('head.before_compile');
 
 		$buffer = '';
-		$is_dev = ('local' != App::environment());
 
 		// Sort by priority
 		ksort($this->_meta);
@@ -474,7 +474,6 @@ class Document
 		Event::fire('footer.before_compile');
 
 		$buffer = '';
-		$is_dev = ('local' != App::environment());
 
 		// Sort by priority
 		ksort($this->_scripts);
