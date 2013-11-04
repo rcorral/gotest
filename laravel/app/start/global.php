@@ -50,7 +50,7 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
 App::error(function(Exception $exception, $code)
 {
-	if ( 'Exception' == get_class($exception) )
+	if ( 'local' != App::environment() && 'Exception' == get_class($exception) )
 	{
 		if ( Request::ajax() )
 		{
@@ -72,7 +72,7 @@ App::error(function(Exception $exception, $code)
 
 App::fatal(function($exception)
 {
-	if ( Request::ajax() )
+	if ( 'local' != App::environment() && Request::ajax() )
 	{
 		return Helper::json_error_response(array('message' => $exception->getMessage()), $exception->getCode());
 	}

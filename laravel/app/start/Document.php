@@ -130,7 +130,8 @@ class Document
 		'main' => array(
 			'js' => "SITEPATH/js/main.js",
 			'css' => "SITEPATH/css/main.css"
-			)
+			),
+		'uservoice' => array()
 		);
 
 	public static $io_port = 8080;
@@ -291,6 +292,10 @@ class Document
 						$this->add_meta(array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'), 1);
 						break;
 
+					case 'uservoice':
+						$this->add_script_declaration($this->add_uservoice());
+						break;
+
 					default:
 						break;
 				}
@@ -339,6 +344,49 @@ class Document
 			. "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');"
 			. "ga('create', 'UA-45359842-1', 'gotest.org');ga('send', 'pageview');"
 			. "</script>";
+	}
+
+	function add_uservoice()
+	{
+		// Include the UserVoice JavaScript SDK (only needed once on a page)
+		$return = "var UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;"
+			. "uv.src='//widget.uservoice.com/zZamS3mkYWZSXyIfjC8A.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();"
+
+			// UserVoice Javascript SDK developer documentation:
+			// https://www.uservoice.com/o/javascript-sdk
+
+			// Set colors
+			. "UserVoice.push(['set', {"
+			  . "accent_color: '#808283',"
+			  . "trigger_color: 'white',"
+			  . "trigger_background_color: 'rgba(46, 49, 51, 0.6)'"
+			. "}]);"
+			;
+
+		if ( Helper::is_logged_in() )
+		{
+			$user = Helper::get_current_user();
+			// Identify the user and pass traits
+			// To enable, replace sample data with actual user traits and uncomment the line
+			$return .= "UserVoice.push(['identify', {"
+			  . "email:'{$user->email}',"
+			  . "name:'{$user->first_name} {$user->last_name}',"
+			  . "created_at:" . strtotime($user->created_at) . ","
+			  // type:       'Owner', // Optional: segment your users by type
+			. "}]);"
+			;
+		}
+
+		// Add default trigger to the bottom-right corner of the window:
+		$return .= "UserVoice.push(['addTrigger', {mode: 'contact', trigger_position: 'bottom-right'}]);";
+
+		// Or, use your own custom trigger:
+		//UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
+
+		// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+		$return .= "UserVoice.push(['autoprompt', {}]);";
+
+		return $return;
 	}
 
 	function js_variables()

@@ -40,11 +40,12 @@ Things to do:
 	x Welcome email
 	x My account page
 	- Go through database schema and make sure everything has unsigned where it needs to
+	- Create about page
 
 - Server
 	- Install new relic
 	x Setup mail
-	- Google analytics
+	x Google analytics
 	- User voice
 	- Browser version check
 
