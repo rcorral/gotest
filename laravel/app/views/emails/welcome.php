@@ -6,7 +6,7 @@
 		<meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
 		<!-- <link rel="icon" type="image/x-icon" href=""> -->
 		<style type="text/css">
-			body {font:16px/30px Georgia, 'Times New Roman', serif; min-width:400px; margin:0; padding:75px 0 0 0; text-align:center;}
+			body {font:16px/30px Georgia, 'Times New Roman', serif; min-width:450px; margin:0; padding:45px 0 0 0; text-align:center;}
 			h1 {font-weight:normal; font-size:45px; line-height:60px; margin-bottom:5px; padding:0; margin-top:0; }
 			p {padding:0 0 10px 0;}
 			a {color:#336699;}
@@ -14,8 +14,8 @@
 			
 			.header {padding-bottom:15px;}
 			.header span {font-size:22px;}
-			.wrapper {width:540px; margin:0 auto 80px auto; text-align:left;}
-			.container {position:relative; border-width:0 !important; border-color:transparent !important; margin:0; text-align:left; background-color:#ffffff; background:rgba(255,255,255,.9); padding:60px; line-height:150%; -moz-box-shadow:0 1px 1px rgba(0, 0, 0, .5); -webkit-box-shadow:0 1px 1px rgba(0, 0, 0, .5); box-shadow:0 1px 1px rgba(0, 0, 0, .5); }
+			.wrapper {width:400px; margin:0 auto 30px auto; text-align:left;}
+			.container {position:relative; border-width:0 !important; border-color:transparent !important; margin:0; text-align:left; background-color:#ffffff; background:rgba(255,255,255,.9); padding:20px 20px 40px 20px; line-height:150%; -moz-box-shadow:0 1px 1px rgba(0, 0, 0, .5); -webkit-box-shadow:0 1px 1px rgba(0, 0, 0, .5); box-shadow:0 1px 1px rgba(0, 0, 0, .5); }
 			.clear {clear:both;}
 
 			/* Form */
