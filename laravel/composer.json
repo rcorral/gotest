@@ -10,7 +10,8 @@
 	"require": {
 		"laravel/framework": "4.0.*",
 		"cartalyst/sentry": "2.0.*",
-		"cartalyst/nested-sets": "2.0.*"
+		"cartalyst/nested-sets": "2.0.*",
+		"phpoffice/phpexcel": "1.7.9"
 	},
 	"autoload": {
 		"classmap": [

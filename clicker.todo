@@ -46,7 +46,7 @@ Things to do:
 	- Install new relic
 	x Setup mail
 	x Google analytics
-	- User voice
+	x User voice
 	- Browser version check
 
 Roadmap:
@@ -65,9 +65,14 @@ Ideas
 Inspiration
 	- http://expo.getbootstrap.com/
 
+Marketing
+	- Google ad works
+	- create a facebook page
 
 
-
+Bugs
+	- Don't allow removal of last answer in question
+	- Text inside double quotes is removed when submted for a question title
 
 
 

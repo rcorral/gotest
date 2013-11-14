@@ -25,6 +25,10 @@ Install apc
 ---------------
 sudo apt-get install php-apc
 
+Install PHPExcel requirements
+-----------------------------
+sudo apt-get install php-xml-parser php5-gd libphp-pclzip
+
 Install git
 -------------
 sudo apt-get install git-core

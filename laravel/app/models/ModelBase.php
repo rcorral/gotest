@@ -10,7 +10,9 @@ class ModelBase extends Eloquent
 		$instance = new static;
 
 		if ( ($object = $instance->get_object_from_db($id, coalesce($key, $instance->primary_key))) === null )
+		{
 			$object = array();
+		}
 		elseif ( isset($object->{$instance->primary_key}) && $object->{$instance->primary_key} )
 		{
 			$instance->setAttribute($instance->primary_key, $object->{$instance->primary_key});
@@ -38,13 +40,17 @@ class ModelBase extends Eloquent
 		static $cache = null;
 
 		if ( $cache )
+		{
 			return $cache;
+		}
 
 		$cols = $this->_get_table_columns( $this->table );
 		$cache = array();
 
 		foreach ( $cols as $name => $col )
+		{
 			$cache[$name] = $col->Default ? $col->Default : ( false !== strpos($col->Type, 'int') ? 0 : $col->Default );
+		}
 
 		if ( empty($this->fillable) )
 		{
