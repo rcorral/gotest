@@ -1,17 +1,5 @@
 Things to do:
 - Presenter
-	x Login
-	x Upload questions
-	x Download questions
-	x Create questions
-	x Present questions
-	x View data
-	x Categories
-	x Change seconds to minutes
-	x Interactive tests checkbox
-	x Timed tests as well as timed questions
-	x Fixed answer types, some don't need radio buttons
-	x Active navigation items
 	x Input enter on an animation? or no animation?
 	x Make dates in sessions view more readable (1 day ago, 5 minutes ago...etc...)
 	x Sample questions
@@ -28,29 +16,16 @@ Things to do:
 		- Allow copy pasta of symbols, such as exponents and other math ones
 
 - Audience
-	x Login some identifier (id or name)
-	x Answer questions
-	x Limited by timer
 
 - General
-	x Forgot password
-	x Handle Exceptions
-	x Email validation when registering
-	x Sign up or Register? - http://ux.stackexchange.com/questions/11936/when-to-use-join-register-or-sign-up - register sounds better?
-	x Welcome email
-	x My account page
 	- Go through database schema and make sure everything has unsigned where it needs to
 	- Create about page
 
 - Server
 	- Install new relic
-	x Setup mail
-	x Google analytics
-	x User voice
 	- Browser version check
 
 Roadmap:
-x Move away from Joomla.
 - Allow to login with other authentications that allow us to pull email address.
 
 Slogan:
@@ -66,7 +41,7 @@ Inspiration
 	- http://expo.getbootstrap.com/
 
 Marketing
-	- Google ad works
+	- Google ad words
 	- create a facebook page
 
 
