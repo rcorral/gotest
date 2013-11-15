@@ -37,6 +37,7 @@ class SessionsController extends \BaseController {
 
 		$this->_buffer = View::make('presenter.sessions_results', array(
 			'test' => $test,
+			'session' => $session,
 			'student_answers' => $session->get_student_answers($test->anon)
 		));
 
